@@ -2,7 +2,7 @@ import * as React from 'react';
 import WelcomeContent from "./WelcomeContent";
 import AuthContent from "./AuthContent";
 import LoginForm from "./LoginForm";
-import { request } from "../axios_helper";
+import { request, setAuthToken } from "../axios_helper";
 import Buttons from "./Buttons";
 
 
@@ -32,19 +32,21 @@ export default class AppContent extends React.Component {
             {login: username, password: password}
             ).then((response) => {
                 this.setState({componentToShow:"messages"});
+            setAuthToken(response.data.token);
         }).catch((error) => {
             this.setState({componentToShow:"welcome"});
         })
     }
 
-    onRegister = (e, firstname, lastname, username, password) => {
+    onRegister = (e, firstName, lastName, login, password) => {
         e.preventDefault();
         request(
             "POST",
             "/register",
-            {firstname:firstname, lastname: lastname, username, password: password}
+            {firstName:firstName, lastName: lastName, login, password: password}
         ).then((response) => {
             this.setState({componentToShow:"messages"});
+            setAuthToken(response.data.token);
         }).catch((error) => {
             this.setState({componentToShow:"welcome"});
         })
