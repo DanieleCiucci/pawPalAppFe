@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -8,24 +8,24 @@ export default class LoginForm extends React.Component {
         this.state = {
             active: "login",
             firstName: "",
-            lastName:"",
-            login: "",  // Added this line to track login
+            lastName: "",
+            login: "",
             password: "",
             onLogin: props.onLogin,
             onRegister: props.onRegister,
-        }
+        };
     }
 
     onChangeHandler = (event) => {
         let name = event.target.name;
         let value = event.target.value;
-        this.setState({[name]: value});
+        this.setState({ [name]: value });
     };
 
     onSubmitLogin = (e) => {
         e.preventDefault();
         this.state.onLogin(e, this.state.login, this.state.password);
-    }
+    };
 
     onSubmitRegister = (e) => {
         e.preventDefault();
@@ -36,14 +36,14 @@ export default class LoginForm extends React.Component {
             this.state.login,
             this.state.password,
         );
-    }
+    };
 
     setActiveTab = (tab) => {
         this.setState({ active: tab });
-    }
+    };
 
-    render(){
-        return(
+    render() {
+        return (
             <div className="row justify-content-center">
                 <div className="col-4">
                     <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
@@ -77,7 +77,7 @@ export default class LoginForm extends React.Component {
                                         name="login"
                                         className="form-control"
                                         value={this.state.login}
-
+                                        onChange={this.onChangeHandler}  // Add onChange handler here
                                     />
                                     <label className="form-label" htmlFor="loginName">Username</label>
                                 </div>
