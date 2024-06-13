@@ -22,7 +22,7 @@
 
 .AuthHome {
     background-color: #FAFAE2;
-    height: 100vh;
+    height: 100%;
     width: 100%;
 }
 
@@ -33,6 +33,7 @@
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #FAFAE2; /* Set background color for the entire body */
+    height: 50rem;
 }
 .homeButton {
     background-color: #7F5539;
@@ -53,4 +54,26 @@ body {
 
 .homeButton:hover {
     background-color: #8B4513; /* Darker background color on hover */
+}
+
+.footer {
+    background-color: #FAFAE2;
+    height: 100%;
+}
+.footerHomeDog1img{
+    width: 12rem;
+}
+
+.footerHomeDog2img{
+    width: 16rem;
+}
+.footerBackGroudLogo{
+    width: 23rem;
+    margin-right: -12rem;
+}
+
+.customHeader{
+    background-color: white;
+    border-radius: 26rem;
+
 }
