@@ -5,8 +5,6 @@ import LoginForm from "./LoginForm";
 import { request, setAuthToken } from "../axios_helper";
 import Buttons from "./Buttons";
 
-
-
 export default class AppContent extends React.Component {
     constructor(props) {
         super(props);
@@ -14,14 +12,14 @@ export default class AppContent extends React.Component {
         this.state = {
             componentToShow: "welcome",
         };
-    };
-
-    login = () =>{
-        this.setState({componentToShow:"login"});
     }
 
-    logout = () =>{
-        this.setState({componentToShow:"welcome"});
+    login = () => {
+        this.setState({ componentToShow: "login" });
+    }
+
+    logout = () => {
+        this.setState({ componentToShow: "welcome" });
     }
 
     onLogin = (e, username, password) => {
@@ -29,12 +27,12 @@ export default class AppContent extends React.Component {
         request(
             "POST",
             "/login",
-            {login: username, password: password}
-            ).then((response) => {
-                this.setState({componentToShow:"messages"});
+            { login: username, password: password }
+        ).then((response) => {
+            this.setState({ componentToShow: "messages" });
             setAuthToken(response.data.token);
         }).catch((error) => {
-            this.setState({componentToShow:"welcome"});
+            this.setState({ componentToShow: "welcome" });
         })
     }
 
@@ -43,28 +41,25 @@ export default class AppContent extends React.Component {
         request(
             "POST",
             "/register",
-            {firstName:firstName, lastName: lastName, login, password: password}
+            { firstName: firstName, lastName: lastName, login, password: password }
         ).then((response) => {
-            this.setState({componentToShow:"messages"});
+            this.setState({ componentToShow: "messages" });
             setAuthToken(response.data.token);
         }).catch((error) => {
-            this.setState({componentToShow:"welcome"});
+            this.setState({ componentToShow: "welcome" });
         })
     }
 
+    render() {
+        const { componentToShow } = this.state;
 
-
-
-
-    render(){
-        return(
+        return (
             <div>
-                <Buttons login={this.login} logout={this.logout}/>
-                {this.state.componentToShow === "welcome" && <WelcomeContent/>}
-                {this.state.componentToShow === "messages" && <AuthContent/>}
-                {this.state.componentToShow === "login" && <LoginForm onLogin={this.onLogin} onRegister={this.onRegister}/>}
+                {componentToShow !== "messages" && <Buttons login={this.login} logout={this.logout} />}
+                {componentToShow === "welcome" && <WelcomeContent />}
+                {componentToShow === "messages" && <AuthContent logout={this.logout}/>}
+                {componentToShow === "login" && <LoginForm onLogin={this.onLogin} onRegister={this.onRegister} />}
             </div>
-        )
+        );
     }
-
 }

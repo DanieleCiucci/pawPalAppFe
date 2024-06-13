@@ -1,23 +1,20 @@
-import './App.css'
-import logo from '../logo.svg'
-import Header from './Header'
+import './App.css';
+import logo from '../logo.svg';
 import AppContent from "./AppContent";
 
 function App() {
-    return(
+    return (
         <div>
-
-            <Header pageTitile="Front en authericared with JWT" logoSrc={logo} />
+            {/* <Header pageTitle="Front end authenticated with JWT" logoSrc={logo} /> */}
             <div className="container-fluid">
                 <div className="row">
                     <div className="col">
                         <AppContent />
                     </div>
                 </div>
-
             </div>
         </div>
-        );
-        }
+    );
+}
 
-        export default App;
+export default App;
