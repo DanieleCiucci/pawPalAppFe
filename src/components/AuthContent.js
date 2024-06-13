@@ -52,8 +52,8 @@ export default class AuthContent extends React.Component {
                          width: 'auto'
                      }}/>
 
-                <div className="row justify-content-md-center">
-                    <div className="row">
+                <div className="row justify-content-md-center mt-5">
+                    <div className="row mt-5">
                         <div className="col-12 d-flex flex-column align-items-center"
                              style={{marginTop: 'rem', textAlign: 'center'}}>
                             <h1 style={{fontWeight: 'bold'}}>
