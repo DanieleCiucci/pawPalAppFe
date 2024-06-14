@@ -16,12 +16,18 @@ export default class AuthContent extends React.Component {
         };
     }
 
+    logState() {
+        console.log('Current state:', this.state);
+        console.log('User details:', this.props.user);  // Log user details from props
+    }
+
     componentDidMount() {
+        this.logState(); // Log state after mounting
         if (this.state.isAuthenticated) {
             request("GET", "/messages", {})
                 .then((response) => {
                     if (Array.isArray(response.data)) {
-                        this.setState({ data: response.data });
+                        this.setState({ data: response.data }, () => this.logState()); // Log state after setting data
                     } else {
                         console.error("Response data is not an array:", response.data);
                     }
@@ -35,7 +41,8 @@ export default class AuthContent extends React.Component {
     }
 
     render() {
-        const { logout } = this.props; // Destructure logout from props
+        const { logout, user } = this.props;  // Destructure user from props
+        const buttonText = user && user.role === 0 ? "YOUR APPOINTMENT" : "SCHEDULE APPOINTMENT"; // Determine button text
 
         return (
             <div className="AuthHome">
@@ -43,13 +50,7 @@ export default class AuthContent extends React.Component {
                 <img src={logoBackground} alt="Logo Background"
                      style={{position: 'absolute', top: '0', left: '0', zIndex: '100', height: '6rem', width: 'auto'}}/>
                 <img src={logo} alt="App Logo"
-                     style={{
-                         position: 'absolute',
-                         top: '1rem',
-                         left: '1rem',
-                         zIndex: '100',
-                         height: '3rem',
-                         width: 'auto'
+                     style={{position: 'absolute', top: '1rem', left: '1rem', zIndex: '100', height: '3rem', width: 'auto'
                      }}/>
 
                 <div className="row justify-content-md-center mt-5">
@@ -62,7 +63,7 @@ export default class AuthContent extends React.Component {
                             </h1>
                             <div className="mt-3">
                                 <p style={{fontSize: '1.5rem'}}>Because every dog deserves <br/> a new best friend.</p>
-                                <button className="homeButton">YOUR APPOINTMENT</button>
+                                <button className="homeButton">{buttonText}</button> {/* Render button text based on user role */}
                             </div>
                         </div>
                     </div>

@@ -11,6 +11,7 @@ export default class AppContent extends React.Component {
 
         this.state = {
             componentToShow: "welcome",
+            user: null,  // Add user to the state
         };
     }
 
@@ -19,7 +20,7 @@ export default class AppContent extends React.Component {
     }
 
     logout = () => {
-        this.setState({ componentToShow: "welcome" });
+        this.setState({ componentToShow: "welcome", user: null });
     }
 
     onLogin = (e, username, password) => {
@@ -29,21 +30,23 @@ export default class AppContent extends React.Component {
             "/login",
             { login: username, password: password }
         ).then((response) => {
-            this.setState({ componentToShow: "messages" });
+            const user = { username, role: response.data.role };  // Assume role is returned in response
+            this.setState({ componentToShow: "messages", user });
             setAuthToken(response.data.token);
         }).catch((error) => {
             this.setState({ componentToShow: "welcome" });
         })
     }
 
-    onRegister = (e, firstName, lastName, login, password) => {
+    onRegister = (e, firstName, lastName, login, password, role) => {
         e.preventDefault();
         request(
             "POST",
             "/register",
-            { firstName: firstName, lastName: lastName, login, password: password }
+            { firstName, lastName, login, password, role }
         ).then((response) => {
-            this.setState({ componentToShow: "messages" });
+            const user = { username: login, role };  // Set user details
+            this.setState({ componentToShow: "messages", user });
             setAuthToken(response.data.token);
         }).catch((error) => {
             this.setState({ componentToShow: "welcome" });
@@ -51,13 +54,13 @@ export default class AppContent extends React.Component {
     }
 
     render() {
-        const { componentToShow } = this.state;
+        const { componentToShow, user } = this.state;
 
         return (
             <div>
                 {componentToShow !== "messages" && <Buttons login={this.login} logout={this.logout} />}
                 {componentToShow === "welcome" && <WelcomeContent />}
-                {componentToShow === "messages" && <AuthContent logout={this.logout}/>}
+                {componentToShow === "messages" && <AuthContent logout={this.logout} user={user} />}  {/* Pass user as a prop */}
                 {componentToShow === "login" && <LoginForm onLogin={this.onLogin} onRegister={this.onRegister} />}
             </div>
         );

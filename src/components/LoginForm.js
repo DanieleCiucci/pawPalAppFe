@@ -11,15 +11,20 @@ export default class LoginForm extends React.Component {
             lastName: "",
             login: "",
             password: "",
+            role: 0,
             onLogin: props.onLogin,
             onRegister: props.onRegister,
         };
     }
 
     onChangeHandler = (event) => {
-        let name = event.target.name;
-        let value = event.target.value;
+        const name = event.target.name;
+        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
         this.setState({ [name]: value });
+    };
+
+    onRoleChangeHandler = (event) => {
+        this.setState({ role: event.target.value });
     };
 
     onSubmitLogin = (e) => {
@@ -35,6 +40,7 @@ export default class LoginForm extends React.Component {
             this.state.lastName,
             this.state.login,
             this.state.password,
+            parseInt(this.state.role)  // Ensure role is sent as integer
         );
     };
 
@@ -77,7 +83,7 @@ export default class LoginForm extends React.Component {
                                         name="login"
                                         className="form-control"
                                         value={this.state.login}
-                                        onChange={this.onChangeHandler}  // Add onChange handler here
+                                        onChange={this.onChangeHandler}
                                     />
                                     <label className="form-label" htmlFor="loginName">Username</label>
                                 </div>
@@ -141,6 +147,30 @@ export default class LoginForm extends React.Component {
                                         onChange={this.onChangeHandler}
                                     />
                                     <label className="form-label" htmlFor="registerPassword">Password</label>
+                                </div>
+                                <div className="form-check mb-3">
+                                    <input
+                                        type="radio"
+                                        id="roleSitter"
+                                        name="role"
+                                        className="form-check-input"
+                                        value="0"
+                                        checked={this.state.role === "0"}
+                                        onChange={this.onRoleChangeHandler}
+                                    />
+                                    <label className="form-check-label" htmlFor="roleSitter">Sitter</label>
+                                </div>
+                                <div className="form-check mb-3">
+                                    <input
+                                        type="radio"
+                                        id="roleOwner"
+                                        name="role"
+                                        className="form-check-input"
+                                        value="1"
+                                        checked={this.state.role === "1"}
+                                        onChange={this.onRoleChangeHandler}
+                                    />
+                                    <label className="form-check-label" htmlFor="roleOwner">Owner</label>
                                 </div>
                                 <button type="submit" className="btn btn-primary btn-block">Register</button>
                             </form>
