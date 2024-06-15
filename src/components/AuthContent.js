@@ -5,42 +5,46 @@ import logo from '../assets/appLogo.svg';
 import dogFooter from '../assets/dogFooter.svg';
 import dogFooter2 from '../assets/dogFooter2.svg';
 import backGroudFooterImage from '../assets/backGroudLogoFooter.svg';
-import AuthHeader from "./AuthHeader";
+import AuthHeader from './AuthHeader';
+import { Routes, Route } from 'react-router-dom';
+import Appointment from './Appointment'; // Ensure Appointment is imported correctly
 
 export default class AuthContent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
-            isAuthenticated: true  // You might want to initialize this based on actual authentication status
+            isAuthenticated: true, // Assuming you manage authentication state
         };
     }
 
     componentDidMount() {
+        // Fetch data or handle authentication-related tasks here if needed
         if (this.state.isAuthenticated) {
-            request("GET", "/messages", {})
+            request('GET', '/messages', {})
                 .then((response) => {
                     if (Array.isArray(response.data)) {
                         this.setState({ data: response.data });
                     } else {
-                        console.error("Response data is not an array:", response.data);
+                        console.error('Response data is not an array:', response.data);
                     }
                 })
                 .catch((error) => {
-                    console.error("Error fetching data:", error);
+                    console.error('Error fetching data:', error);
                 });
         } else {
-            console.error("User is not authenticated.");
+            console.error('User is not authenticated.');
         }
     }
 
     render() {
         const { logout, user } = this.props;
-        const buttonText = user && user.role === 0 ? "YOUR APPOINTMENT" : "SCHEDULE APPOINTMENT";
+        const buttonText = user && user.role === 0 ? 'YOUR APPOINTMENT' : 'SCHEDULE APPOINTMENT';
 
         return (
             <div className="AuthHome">
                 <AuthHeader logout={logout} />
+
                 <img src={logoBackground} alt="Logo Background" style={{ position: 'absolute', top: '0', left: '0', zIndex: '100', height: '6rem', width: 'auto' }} />
                 <img src={logo} alt="App Logo" style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: '100', height: '3rem', width: 'auto' }} />
 

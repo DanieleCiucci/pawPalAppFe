@@ -5,6 +5,7 @@ import LoginFormWrapper from "./LoginForm";
 import { request, setAuthToken } from "../axios_helper";
 import Buttons from "./Buttons";
 import { Routes, Route, Navigate } from 'react-router-dom';
+import Appointment from "./Appointment";
 
 export default class AppContent extends React.Component {
     constructor(props) {
@@ -76,6 +77,10 @@ export default class AppContent extends React.Component {
                 <Routes>
                     <Route path="/" element={<WelcomeContent />} />
                     <Route path="/auth" element={user ? <AuthContent logout={this.logout} user={user} /> : <Navigate to="/" />} />
+                    <Route path="/appointment" element={user ? <Appointment /> : <Navigate to="/" /> }/>
+                    <Route path="/yourdogs" element={user ? <div>Your Dogs Component</div> : <Navigate to="/" />}/>
+                    <Route path="/findnewowner" element={user ? <div>Find a New Owner Component</div> : <Navigate to="/" />}/>
+                    <Route path="/profile" element={user ? <div>Profile Component</div> : <Navigate to="/" />} />
                 </Routes>
                 {componentToShow === "login" && <LoginFormWrapper onLogin={this.onLogin} onRegister={this.onRegister} />}
             </div>
