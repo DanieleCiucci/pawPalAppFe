@@ -1,8 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
 
-export default class LoginForm extends React.Component {
+class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -181,3 +182,19 @@ export default class LoginForm extends React.Component {
         );
     }
 }
+
+const LoginFormWrapper = (props) => {
+    const navigate = useNavigate();
+
+    const handleLogin = (e, username, password) => {
+        props.onLogin(e, username, password, () => navigate('/auth'));
+    };
+
+    const handleRegister = (e, firstName, lastName, login, password, role) => {
+        props.onRegister(e, firstName, lastName, login, password, role, () => navigate('/auth'));
+    };
+
+    return <LoginForm {...props} onLogin={handleLogin} onRegister={handleRegister} />;
+};
+
+export default LoginFormWrapper;
