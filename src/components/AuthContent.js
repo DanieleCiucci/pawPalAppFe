@@ -38,7 +38,7 @@ export default class AuthContent extends React.Component {
         const buttonText = user && user.role === 0 ? 'YOUR APPOINTMENT' : 'SCHEDULE APPOINTMENT';
 
         return (
-            <div className="container">
+            <div className="AuthHome">
                 <AuthHeader logout={logout} />
                 <div className="row justify-content-md-center mt-5">
                     <div className="row mt-5">
