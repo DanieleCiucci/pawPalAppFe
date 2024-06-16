@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AuthHeader from "./AuthHeader";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const InsertDogForm = ({ logout }) => {
     const [formData, setFormData] = useState({
@@ -11,7 +12,7 @@ const InsertDogForm = ({ logout }) => {
             idGender: "",
             breeds: "",
             dateAdoption: "",
-            dateOfBirdth: "",
+            dateOfBirth: "",
             description: ""
         },
         owner: {
@@ -70,91 +71,108 @@ const InsertDogForm = ({ logout }) => {
     return (
         <div className="AuthHome">
             <AuthHeader logout={logout}/>
-            <div className="row">
-                <div className="col-2"></div>
-                <div className="col-5 m-lg-5">
-                    <h1 style={{fontWeight: 'bold'}}>
-                        Insert dog page
-                    </h1>
-                    <div className="mt-2">
-                        <p style={{fontSize: '1rem', color:'#686565'}}>
+            <div className="container mt-5">
+                <div className="row">
+                    <div className="col-2"></div>
+                    <div className="col-8">
+                        <h1 className="font-weight-bold">Insert Dog Page</h1>
+                        <p className="text-muted" style={{ fontSize: '1rem' }}>
                             In this section you can view the dog to assist that you insert. <br />
                             You can insert a dog with the button Insert new dog.
                         </p>
+                        <form onSubmit={handleSubmit}>
+                            <h2>Dog Information</h2>
+                            <div className="row">
+                                <div className="col-6 form-group">
+                                    <label>Name:</label>
+                                    <input type="text" className="form-control" name="dog.name" value={formData.dog.name} onChange={handleChange} />
+                                </div>
+                                <div className="col-6 form-group">
+                                    <label>Age in Years:</label>
+                                    <input type="number" className="form-control" name="dog.ageInYear" value={formData.dog.ageInYear} onChange={handleChange} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-6 form-group">
+                                    <label>Age in Months:</label>
+                                    <input type="number" className="form-control" name="dog.ageMonth" value={formData.dog.ageMonth} onChange={handleChange} />
+                                </div>
+                                <div className="col-6 form-group">
+                                    <label>Weight:</label>
+                                    <input type="number" className="form-control" name="dog.weight" value={formData.dog.weight} onChange={handleChange} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-6 form-group">
+                                    <label>Gender ID:</label>
+                                    <input type="number" className="form-control" name="dog.idGender" value={formData.dog.idGender} onChange={handleChange} />
+                                </div>
+                                <div className="col-6 form-group">
+                                    <label>Breeds:</label>
+                                    <input type="text" className="form-control" name="dog.breeds" value={formData.dog.breeds} onChange={handleChange} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-6 form-group">
+                                    <label>Date of Adoption:</label>
+                                    <input type="date" className="form-control" name="dog.dateAdoption" value={formData.dog.dateAdoption} onChange={handleChange} />
+                                </div>
+                                <div className="col-6 form-group">
+                                    <label>Date of Birth:</label>
+                                    <input type="date" className="form-control" name="dog.dateOfBirth" value={formData.dog.dateOfBirth} onChange={handleChange} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-12 form-group">
+                                    <label>Description:</label>
+                                    <input type="text" className="form-control" name="dog.description" value={formData.dog.description} onChange={handleChange} />
+                                </div>
+                            </div>
+
+                            <h2>Owner Information</h2>
+                            <div className="row">
+                                <div className="col-6 form-group">
+                                    <label>Name:</label>
+                                    <input type="text" className="form-control" name="owner.name" value={formData.owner.name} onChange={handleChange} />
+                                </div>
+                                <div className="col-6 form-group">
+                                    <label>Surname:</label>
+                                    <input type="text" className="form-control" name="owner.surname" value={formData.owner.surname} onChange={handleChange} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-6 form-group">
+                                    <label>Email:</label>
+                                    <input type="email" className="form-control" name="owner.email" value={formData.owner.email} onChange={handleChange} />
+                                </div>
+                                <div className="col-6 form-group">
+                                    <label>Phone Number:</label>
+                                    <input type="tel" className="form-control" name="owner.phoneNumber" value={formData.owner.phoneNumber} onChange={handleChange} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-6 form-group">
+                                    <label>City:</label>
+                                    <input type="text" className="form-control" name="owner.city" value={formData.owner.city} onChange={handleChange} />
+                                </div>
+                                <div className="col-6 form-group">
+                                    <label>Address:</label>
+                                    <input type="text" className="form-control" name="owner.address" value={formData.owner.address} onChange={handleChange} />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-12 form-group">
+                                    <label>Photo URL:</label>
+                                    <input type="text" className="form-control" name="owner.photo" value={formData.owner.photo} onChange={handleChange} />
+                                </div>
+                            </div>
+
+                            <button type="submit" className="btn btn-primary">Insert Dog</button>
+                        </form>
                     </div>
+                    <div className="col-2"></div>
                 </div>
             </div>
-            <form onSubmit={handleSubmit}>
-                <h2>Dog Information</h2>
-                <label>
-                    Name:
-                    <input type="text" name="dog.name" value={formData.dog.name} onChange={handleChange} />
-                </label>
-                <label>
-                    Age in Years:
-                    <input type="number" name="dog.ageInYear" value={formData.dog.ageInYear} onChange={handleChange} />
-                </label>
-                <label>
-                    Age in Months:
-                    <input type="number" name="dog.ageMonth" value={formData.dog.ageMonth} onChange={handleChange} />
-                </label>
-                <label>
-                    Weight:
-                    <input type="number" name="dog.weight" value={formData.dog.weight} onChange={handleChange} />
-                </label>
-                <label>
-                    Gender ID:
-                    <input type="number" name="dog.idGender" value={formData.dog.idGender} onChange={handleChange} />
-                </label>
-                <label>
-                    Breeds:
-                    <input type="text" name="dog.breeds" value={formData.dog.breeds} onChange={handleChange} />
-                </label>
-                <label>
-                    Date of Adoption:
-                    <input type="date" name="dog.dateAdoption" value={formData.dog.dateAdoption} onChange={handleChange} />
-                </label>
-                <label>
-                    Date of Birth:
-                    <input type="date" name="dog.dateOfBirdth" value={formData.dog.dateOfBirdth} onChange={handleChange} />
-                </label>
-                <label>
-                    Description:
-                    <input type="text" name="dog.description" value={formData.dog.description} onChange={handleChange} />
-                </label>
-
-                <h2>Owner Information</h2>
-                <label>
-                    Name:
-                    <input type="text" name="owner.name" value={formData.owner.name} onChange={handleChange} />
-                </label>
-                <label>
-                    Surname:
-                    <input type="text" name="owner.surname" value={formData.owner.surname} onChange={handleChange} />
-                </label>
-                <label>
-                    Email:
-                    <input type="email" name="owner.email" value={formData.owner.email} onChange={handleChange} />
-                </label>
-                <label>
-                    Phone Number:
-                    <input type="tel" name="owner.phoneNumber" value={formData.owner.phoneNumber} onChange={handleChange} />
-                </label>
-                <label>
-                    City:
-                    <input type="text" name="owner.city" value={formData.owner.city} onChange={handleChange} />
-                </label>
-                <label>
-                    Address:
-                    <input type="text" name="owner.address" value={formData.owner.address} onChange={handleChange} />
-                </label>
-                <label>
-                    Photo URL:
-                    <input type="text" name="owner.photo" value={formData.owner.photo} onChange={handleChange} />
-                </label>
-
-                <button type="submit">Insert Dog</button>
-            </form>
         </div>
     );
 };
