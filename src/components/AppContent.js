@@ -6,6 +6,8 @@ import { request, setAuthToken } from "../axios_helper";
 import Buttons from "./Buttons";
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Appointment from "./Appointment";
+import YourDog from "./YourDog"
+import InsertDog from "./InsertDog";
 
 export default class AppContent extends React.Component {
     constructor(props) {
@@ -78,7 +80,10 @@ export default class AppContent extends React.Component {
                     <Route path="/" element={<WelcomeContent />} />
                     <Route path="/auth" element={user ? <AuthContent logout={this.logout} user={user} /> : <Navigate to="/" />} />
                     <Route path="/appointment" element={user ? <Appointment /> : <Navigate to="/" /> }/>
-                    <Route path="/yourdogs" element={user ? <div>Your Dogs Component</div> : <Navigate to="/" />}/>
+
+                    <Route path="/yourdogs" element={user ? <YourDog logout={this.logout} user={user} /> : <Navigate to="/" />}/>
+                    <Route path="/yourdogs/insert" element={user ? <InsertDog /> : <Navigate to="/" />} />
+
                     <Route path="/findnewowner" element={user ? <div>Find a New Owner Component</div> : <Navigate to="/" />}/>
                     <Route path="/profile" element={user ? <div>Profile Component</div> : <Navigate to="/" />} />
                 </Routes>

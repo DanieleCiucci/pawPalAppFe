@@ -1,13 +1,9 @@
 import React from 'react';
 import { request } from '../axios_helper';
-import logoBackground from '../assets/logoBackgroud.svg';
-import logo from '../assets/appLogo.svg';
 import dogFooter from '../assets/dogFooter.svg';
 import dogFooter2 from '../assets/dogFooter2.svg';
 import backGroudFooterImage from '../assets/backGroudLogoFooter.svg';
 import AuthHeader from './AuthHeader';
-import { Routes, Route } from 'react-router-dom';
-import Appointment from './Appointment'; // Ensure Appointment is imported correctly
 
 export default class AuthContent extends React.Component {
     constructor(props) {
@@ -42,12 +38,8 @@ export default class AuthContent extends React.Component {
         const buttonText = user && user.role === 0 ? 'YOUR APPOINTMENT' : 'SCHEDULE APPOINTMENT';
 
         return (
-            <div className="AuthHome">
+            <div className="container">
                 <AuthHeader logout={logout} />
-
-                <img src={logoBackground} alt="Logo Background" style={{ position: 'absolute', top: '0', left: '0', zIndex: '100', height: '6rem', width: 'auto' }} />
-                <img src={logo} alt="App Logo" style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: '100', height: '3rem', width: 'auto' }} />
-
                 <div className="row justify-content-md-center mt-5">
                     <div className="row mt-5">
                         <div className="col-12 d-flex flex-column align-items-center" style={{ marginTop: 'rem', textAlign: 'center' }}>
