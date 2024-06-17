@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import AuthHeader from "./AuthHeader";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import defaultImg from "../assets/defaultImg.svg";
 
 const InsertDogForm = ({ logout }) => {
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+    const fileInputRef = useRef(null);
+
     const [formData, setFormData] = useState({
         dog: {
             name: "",
@@ -68,18 +73,39 @@ const InsertDogForm = ({ logout }) => {
             });
     };
 
+    const handleFileButtonClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+        setSelectedFileUrl(URL.createObjectURL(file));
+    };
+
     return (
         <div className="AuthHome">
             <AuthHeader logout={logout}/>
-            <div className="container mt-5">
+            <div className="container">
                 <div className="row">
                     <div className="col-2"></div>
                     <div className="col-8">
-                        <h1 className="font-weight-bold">Insert Dog Page</h1>
-                        <p className="text-muted" style={{ fontSize: '1rem' }}>
-                            In this section you can view the dog to assist that you insert. <br />
-                            You can insert a dog with the button Insert new dog.
-                        </p>
+                        <div className="position-relative">
+                            <div className="image-preview-container mb-4">
+                                <img src={selectedFileUrl || defaultImg} alt="Dog Preview"  style={{ height: '19rem', width:'100%', border: '1px solid #ccc', borderRadius: '8px', objectFit: 'cover' }} />
+                                <div className="position-absolute bottom-0 end-0 p-3">
+                                    <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>Select Image</button>
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        className="form-control-file"
+                                        onChange={handleFileChange}
+                                        accept="image/*"
+                                        style={{ display: "none" }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                         <form onSubmit={handleSubmit}>
                             <h2>Dog Information</h2>
                             <div className="row">
@@ -166,8 +192,9 @@ const InsertDogForm = ({ logout }) => {
                                     <input type="text" className="form-control" name="owner.photo" value={formData.owner.photo} onChange={handleChange} />
                                 </div>
                             </div>
-
-                            <button type="submit" className="btn btn-primary">Insert Dog</button>
+                            <div className="mt-5">
+                                <button type="submit" className="btn btn-primary">Insert Dog</button>
+                            </div>
                         </form>
                     </div>
                     <div className="col-2"></div>
