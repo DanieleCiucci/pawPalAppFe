@@ -7,7 +7,7 @@ import Buttons from "./Buttons";
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Appointment from "./Appointment";
 import YourDog from "./YourDog"
-import InsertDog from "./InsertDog";
+import InsertDog from "./insertDog/InsertDogForm";
 
 export default class AppContent extends React.Component {
     constructor(props) {

@@ -77,3 +77,20 @@ body {
     border-radius: 26rem;
 
 }
+
+.CustomNav{
+    gap: 5rem;
+}
+
+.CustomNav .nav-link.active {
+    background-color:  #FAFAE2 !important;
+    border-color: #FAFAE2 !important;
+    color: black !important;
+}
+
+.CustomNav .nav-link {
+    background-color:  #FAFAE2 !important;
+    border-color: #FAFAE2 !important;
+    color:  #1877F2 !important;
+
+}
