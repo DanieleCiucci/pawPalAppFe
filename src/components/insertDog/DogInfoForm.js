@@ -1,12 +1,9 @@
 import React from "react";
-
-
+import '../App.css';
 
 const DogInfoForm = ({ formData, handleChange }) => {
-
-
     return (
-        <div>
+        <div className="form-container">
             <div className="row">
                 <div className="col-6 form-group">
                     <label>Name:</label>
