@@ -6,53 +6,62 @@ const AdditionalDetailForm = ({ formData, handleChange }) => {
         <div className="form-container">
             <div className="row">
                 <div className="col-6 form-group">
-                    <label>Name:</label>
-                    <input type="text" className="form-control" name="dog.name" value={formData.dog.name} onChange={handleChange} />
-                </div>
-                <div className="col-6 form-group">
-                    <label>Age in Years:</label>
-                    <input type="number" className="form-control" name="dog.ageInYear" value={formData.dog.ageInYear} onChange={handleChange} />
-                </div>
-            </div>
-            <div className="row mt-3">
-                <div className="col-6 form-group">
-                    <label>Age in Months:</label>
-                    <input type="number" className="form-control" name="dog.ageMonth" value={formData.dog.ageMonth} onChange={handleChange} />
-                </div>
-                <div className="col-6 form-group">
-                    <label>Weight:</label>
-                    <input type="number" className="form-control" name="dog.weight" value={formData.dog.weight} onChange={handleChange} />
-                </div>
-            </div>
-            <div className="row mt-3">
-                <div className="col-6 form-group">
-                    <label>Gender:</label>
+                    <label>Does it relieve itself outside?</label>
                     <select
                         className="form-select"
-                        name="dog.idGender"
-                        value={formData.dog.idGender}
+                        name="dog.idReleve"
+                        value={formData.dog.idReleve}
                         onChange={handleChange}>
                         <option selected>Select a choice</option>
-                        <option value="0">Female</option>
-                        <option value="1">Male</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
                     </select>
                 </div>
                 <div className="col-6 form-group">
-                    <label>Breeds:</label>
-                    <input type="text" className="form-control" name="dog.breeds" value={formData.dog.breeds}
-                           onChange={handleChange}/>
+                    <label>Does it get along with children?</label>
+                    <select
+                        className="form-select"
+                        name="dog.idChildren"
+                        value={formData.dog.idChildren}
+                        onChange={handleChange}>
+                        <option selected>Select a choice</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
                 </div>
             </div>
-            <div className="row mt-4 mb-4">
+            <div className="row mt-4">
                 <div className="col-6 form-group">
-                    <label>Date of Adoption:</label>
-                    <input type="date" className="form-control" name="dog.dateAdoption" value={formData.dog.dateAdoption} onChange={handleChange} />
+                    <label>Does it get along with cat?</label>
+                    <select
+                        className="form-select"
+                        name="dog.idCat"
+                        value={formData.dog.idCat}
+                        onChange={handleChange}>
+                        <option selected>Select a choice</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
                 </div>
                 <div className="col-6 form-group">
-                    <label>Date of Birth:</label>
-                    <input type="date" className="form-control" name="dog.dateOfBirth" value={formData.dog.dateOfBirth} onChange={handleChange} />
+                    <label>Does it get along with other dog?</label>
+                    <select
+                        className="form-select"
+                        name="dog.idOtherDog"
+                        value={formData.dog.idOtherDog}
+                        onChange={handleChange}>
+                        <option selected>Select a choice</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
                 </div>
             </div>
+            <div className="form-floating col-12 mt-5 mb-3">
+                <textarea className="form-control" placeholder="Leave a comment here" id="commentDetail"
+                        style={{height:"8rem"}} ></textarea>
+                <label htmlFor="commentDetail">Comments</label>
+            </div>
+
         </div>
     );
 };

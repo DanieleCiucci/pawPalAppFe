@@ -4,6 +4,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import defaultImg from "../../assets/defaultImg.svg";
 import DogInfoForm from "./DogInfoForm";
 import OwnerInfoForm from "./OwnerInfoForm";
+import AdditionalDetailForm from "./AdditionalDetailForm";
+import InfoCareForm from "./InfoCareForm";
+
+
+/*
+
+TODO
+
+HANFDLE THE NEW FIELD OF THE DOG INSERT AND INPROVE THE FOLDER SECTION
+
+ */
+
 
 const InsertDogForm = ({ logout }) => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -93,9 +105,9 @@ const InsertDogForm = ({ logout }) => {
             case 'owner':
                 return <OwnerInfoForm formData={formData} handleChange={handleChange} />;
             case 'additionalDetail':
-                return <OwnerInfoForm formData={formData} handleChange={handleChange} />;
+                return <AdditionalDetailForm formData={formData} handleChange={handleChange} />;
             case 'infoCare':
-                return <OwnerInfoForm formData={formData} handleChange={handleChange} />;
+                return <InfoCareForm formData={formData} handleChange={handleChange} />;
             default:
                 return <DogInfoForm formData={formData} handleChange={handleChange} />;
         }
@@ -149,7 +161,6 @@ const InsertDogForm = ({ logout }) => {
                                         onClick={() => setActiveTab('owner')}>Owner
                                 </button>
                             </li>
-                            {/* Add more tabs for additional sections when needed */}
                         </ul>
 
                         <div className="tab-content mt-4">
