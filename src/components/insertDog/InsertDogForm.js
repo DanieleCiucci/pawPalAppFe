@@ -96,7 +96,6 @@ const InsertDogForm = ({ logout }) => {
                 return <OwnerInfoForm formData={formData} handleChange={handleChange} />;
             case 'infoCare':
                 return <OwnerInfoForm formData={formData} handleChange={handleChange} />;
-            // Add more cases for additional tabs when needed
             default:
                 return <DogInfoForm formData={formData} handleChange={handleChange} />;
         }
@@ -109,7 +108,9 @@ const InsertDogForm = ({ logout }) => {
                 <div className="row">
                     <div className="col-2"></div>
                     <div className="col-8">
-                        <div className="position-relative">
+                        <h1  style={{fontWeight:'bold'}}>Insert dog</h1>
+                        <p>In this section you can insert your dog's information</p>
+                        <div className="position-relative mt-4">
                             <div className="image-preview-container mb-4">
                                 <img src={selectedFileUrl || defaultImg} alt="Dog Preview"  style={{ height: '19rem', width:'100%', border: '1px solid #ccc', borderRadius: '8px', objectFit: 'cover' }} />
                                 <div className="position-absolute bottom-0 end-0 p-3">

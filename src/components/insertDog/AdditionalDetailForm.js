@@ -1,7 +1,7 @@
 import React from "react";
 import '../App.css';
 
-const DogInfoForm = ({ formData, handleChange }) => {
+const AdditionalDetailForm = ({ formData, handleChange }) => {
     return (
         <div className="form-container">
             <div className="row">
@@ -25,18 +25,18 @@ const DogInfoForm = ({ formData, handleChange }) => {
                 </div>
             </div>
             <div className="row mt-3">
-                    <div className="col-6 form-group">
-                        <label>Gender:</label>
-                        <select
-                            className="form-select"
-                            name="dog.idGender"
-                            value={formData.dog.idGender}
-                            onChange={handleChange}>
-                            <option selected>Select a choice</option>
-                            <option value="0">Female</option>
-                            <option value="1">Male</option>
-                        </select>
-                    </div>
+                <div className="col-6 form-group">
+                    <label>Gender:</label>
+                    <select
+                        className="form-select"
+                        name="dog.idGender"
+                        value={formData.dog.idGender}
+                        onChange={handleChange}>
+                        <option selected>Select a choice</option>
+                        <option value="0">Female</option>
+                        <option value="1">Male</option>
+                    </select>
+                </div>
                 <div className="col-6 form-group">
                     <label>Breeds:</label>
                     <input type="text" className="form-control" name="dog.breeds" value={formData.dog.breeds}
@@ -57,4 +57,4 @@ const DogInfoForm = ({ formData, handleChange }) => {
     );
 };
 
-export default DogInfoForm;
+export default AdditionalDetailForm;
