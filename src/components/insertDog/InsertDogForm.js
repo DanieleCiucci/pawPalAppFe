@@ -7,16 +7,6 @@ import OwnerInfoForm from "./OwnerInfoForm";
 import AdditionalDetailForm from "./AdditionalDetailForm";
 import InfoCareForm from "./InfoCareForm";
 
-
-/*
-
-TODO
-
-HANFDLE THE NEW FIELD OF THE DOG INSERT AND INPROVE THE FOLDER SECTION
-
- */
-
-
 const InsertDogForm = ({ logout }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
@@ -33,7 +23,7 @@ const InsertDogForm = ({ logout }) => {
             breeds: "",
             dateAdoption: "",
             dateOfBirth: "",
-            description: ""
+            description: "",
         },
         owner: {
             name: "",
@@ -42,19 +32,36 @@ const InsertDogForm = ({ logout }) => {
             phoneNumber: "",
             city: "",
             address: "",
-            photo: ""
-        }
+            photo: "",
+        },
+        dogAdditionalDetail: {
+            getAlongWellWithOtherDog: false,
+            getAlongWellWithOtherCat: false,
+            getAlongWellWithChildren: false,
+            needsOutside: false,
+            detail: "",
+        },
+        /*
+        infoCare: {
+            idReleve: "",
+            idTypeOfEnergy: "",
+            idCareDrugs:"",
+            idLeftAlone:"",
+            description:"",
+        } */
     });
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, type, checked } = e.target;
         const [section, field] = name.split(".");
+
+        const fieldValue = type === 'checkbox' ? checked : value;
 
         setFormData((prevData) => ({
             ...prevData,
             [section]: {
                 ...prevData[section],
-                [field]: value
+                [field]: fieldValue
             }
         }));
     };
@@ -63,13 +70,24 @@ const InsertDogForm = ({ logout }) => {
         e.preventDefault();
         const token = localStorage.getItem('authToken');
 
+        const formattedData = {
+            ...formData,
+            dogAdditionalDetail: {
+                ...formData.dogAdditionalDetail,
+                getAlongWellWithOtherDog: formData.dogAdditionalDetail.getAlongWellWithOtherDog ? 1 : 0,
+                getAlongWellWithOtherCat: formData.dogAdditionalDetail.getAlongWellWithOtherCat ? 1 : 0,
+                getAlongWellWithChildren: formData.dogAdditionalDetail.getAlongWellWithChildren ? 1 : 0,
+                needsOutside: formData.dogAdditionalDetail.needsOutside ? 1 : 0,
+            }
+        };
+
         fetch("http://localhost:8080/api/dog/insert", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(formattedData)
         })
             .then(async (response) => {
                 if (!response.ok) {
@@ -120,11 +138,11 @@ const InsertDogForm = ({ logout }) => {
                 <div className="row">
                     <div className="col-2"></div>
                     <div className="col-8">
-                        <h1  style={{fontWeight:'bold'}}>Insert dog</h1>
+                        <h1 style={{fontWeight:'bold'}}>Insert dog</h1>
                         <p>In this section you can insert your dog's information</p>
                         <div className="position-relative mt-4">
                             <div className="image-preview-container mb-4">
-                                <img src={selectedFileUrl || defaultImg} alt="Dog Preview"  style={{ height: '19rem', width:'100%', border: '1px solid #ccc', borderRadius: '8px', objectFit: 'cover' }} />
+                                <img src={selectedFileUrl || defaultImg} alt="Dog Preview" style={{ height: '19rem', width:'100%', border: '1px solid #ccc', borderRadius: '8px', objectFit: 'cover' }} />
                                 <div className="position-absolute bottom-0 end-0 p-3">
                                     <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>Select Image</button>
                                     <input
@@ -164,7 +182,7 @@ const InsertDogForm = ({ logout }) => {
                         </ul>
 
                         <div className="tab-content mt-4">
-                        {renderTabContent()}
+                            {renderTabContent()}
                         </div>
 
                         <div className="mt-5">

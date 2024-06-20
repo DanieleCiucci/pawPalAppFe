@@ -9,8 +9,8 @@ const AdditionalDetailForm = ({ formData, handleChange }) => {
                     <label>Does it relieve itself outside?</label>
                     <select
                         className="form-select"
-                        name="dog.idReleve"
-                        value={formData.dog.idReleve}
+                        name="dogAdditionalDetail.needsOutside"
+                        value={formData.dogAdditionalDetail.needsOutside}
                         onChange={handleChange}>
                         <option selected>Select a choice</option>
                         <option value="0">No</option>
@@ -21,11 +21,11 @@ const AdditionalDetailForm = ({ formData, handleChange }) => {
                     <label>Does it get along with children?</label>
                     <select
                         className="form-select"
-                        name="dog.idChildren"
-                        value={formData.dog.idChildren}
+                        name="dogAdditionalDetail.getAlongWellWithChildren"
+                        value={formData.dogAdditionalDetail.getAlongWellWithChildren}
                         onChange={handleChange}>
                         <option selected>Select a choice</option>
-                        <option value="0">No</option>
+                        <option value="1">No</option>
                         <option value="1">Yes</option>
                     </select>
                 </div>
@@ -35,8 +35,8 @@ const AdditionalDetailForm = ({ formData, handleChange }) => {
                     <label>Does it get along with cat?</label>
                     <select
                         className="form-select"
-                        name="dog.idCat"
-                        value={formData.dog.idCat}
+                        name="dogAdditionalDetail.getAlongWellWithOtherCat"
+                        value={formData.dogAdditionalDetail.getAlongWellWithOtherCat}
                         onChange={handleChange}>
                         <option selected>Select a choice</option>
                         <option value="0">No</option>
@@ -47,8 +47,8 @@ const AdditionalDetailForm = ({ formData, handleChange }) => {
                     <label>Does it get along with other dog?</label>
                     <select
                         className="form-select"
-                        name="dog.idOtherDog"
-                        value={formData.dog.idOtherDog}
+                        name="dogAdditionalDetail.getAlongWellWithOtherDog"
+                        value={formData.dogAdditionalDetail.getAlongWellWithOtherDog}
                         onChange={handleChange}>
                         <option selected>Select a choice</option>
                         <option value="0">No</option>
@@ -57,9 +57,16 @@ const AdditionalDetailForm = ({ formData, handleChange }) => {
                 </div>
             </div>
             <div className="form-floating col-12 mt-5 mb-3">
-                <textarea className="form-control" placeholder="Leave a comment here" id="commentDetail"
-                        style={{height:"8rem"}} ></textarea>
-                <label htmlFor="commentDetail">Comments</label>
+                <textarea
+                    className="form-control"
+                    placeholder="Leave a comment here"
+                    id="commentCare"
+                    name="dogAdditionalDetail.detail"
+                    value={formData.dogAdditionalDetail.detail}
+                    onChange={handleChange}
+                    style={{height: "8rem"}}
+                ></textarea>
+                <label htmlFor="commentCare">Comments</label>
             </div>
 
         </div>
