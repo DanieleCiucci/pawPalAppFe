@@ -22,7 +22,7 @@ const InsertDogForm = ({ logout }) => {
             idGender: "",
             breeds: "",
             dateAdoption: "",
-            dateOfBirth: "",
+            dateOfBirdth: "",
             description: "",
         },
         owner: {
@@ -41,14 +41,15 @@ const InsertDogForm = ({ logout }) => {
             needsOutside: false,
             detail: "",
         },
-        /*
-        infoCare: {
-            idReleve: "",
-            idTypeOfEnergy: "",
+
+        dogInfoCare: {
+            idLeftAlone: "",
+            idTypeOfEnergy:"",
+            idFeedsSchedule: "",
+            idNeedsSchedule:"",
             idCareDrugs:"",
-            idLeftAlone:"",
-            description:"",
-        } */
+            detail:"",
+        }
     });
 
     const handleChange = (e) => {

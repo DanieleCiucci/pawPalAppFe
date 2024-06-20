@@ -6,26 +6,25 @@ const InfoCareForm = ({ formData, handleChange }) => {
         <div className="form-container">
             <div className="row">
                 <div className="col-6 form-group">
-                    <label>Needs schedule:</label>
+                    <label>Can be left alone?</label>
                     <select
                         className="form-select"
-                        name="dog.idSchedule"
-                        value={formData.dog.idSchedule}
+                        name="dogInfoCare.idLeftAlone"
+                        value={formData.dogInfoCare.idLeftAlone}
                         onChange={handleChange}>
                         {/* check the value in the db */}
                         <option>Select a choice</option>
-                        <option value="0"> each hours</option>
-                        <option value="1"> > 1 hour </option>
-                        <option value="1"> > 3 hours </option>
-                        <option value="1"> every 8 hours</option>
+                        <option value="0"> No</option>
+                        <option value="1">  Yes </option>
+
                     </select>
                 </div>
                 <div className="col-6 form-group">
                     <label>Level of energy:</label>
                     <select
                         className="form-select"
-                        name="dog.idEnergy"
-                        value={formData.dog.idEnergy}
+                        name="dogInfoCare.idTypeOfEnergy"
+                        value={formData.dogInfoCare.idTypeOfEnergy}
                         onChange={handleChange}>
                         {/* check the value in the db */}
                         <option selected>Level of energy</option>
@@ -40,26 +39,28 @@ const InfoCareForm = ({ formData, handleChange }) => {
                     <label>Feeds schedule</label>
                     <select
                         className="form-select"
-                        name="dog.idFeeds"
-                        value={formData.dog.idFeeds}
+                        name="dogInfoCare.idFeedsSchedule"
+                        value={formData.dogInfoCare.idFeedsSchedule}
                         onChange={handleChange}>
                         <option selected>Needs schedule</option>
                         <option value="0"> each hours</option>
                         <option value="1"> > 1 hour</option>
-                        <option value="1"> > 3 hours</option>
-                        <option value="1"> every 8 hours</option>
+                        <option value="2"> > 3 hours</option>
+                        <option value="3"> every 8 hours</option>
                     </select>
                 </div>
                 <div className="col-6 form-group">
-                    <label>Does it get along with other dog?</label>
+                    <label>Needs schedule</label>
                     <select
                         className="form-select"
-                        name="dog.idOtherDoge"
-                        value={formData.dog.idOtherDoge}
+                        name="dogInfoCare.idNeedsSchedule"
+                        value={formData.dogInfoCare.idNeedsSchedule}
                         onChange={handleChange}>
                         <option selected>Select a choice</option>
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
+                        <option value="0"> each hours</option>
+                        <option value="1"> > 1 hour</option>
+                        <option value="2"> > 3 hours</option>
+                        <option value="3"> every 8 hours</option>
                     </select>
                 </div>
             </div>
@@ -68,8 +69,8 @@ const InfoCareForm = ({ formData, handleChange }) => {
                     <label>Medicines</label>
                     <select
                         className="form-select"
-                        name="dog.idMedicines"
-                        value={formData.dog.idMedicines}
+                        name="dogInfoCare.idCareDrugs"
+                        value={formData.dogInfoCare.idCareDrugs}
                         onChange={handleChange}>
                         <option selected>Select a choice</option>
                         <option value="0">Pills</option>
@@ -79,9 +80,16 @@ const InfoCareForm = ({ formData, handleChange }) => {
                 </div>
             </div>
             <div className="form-floating col-12 mt-5 mb-3">
-                <textarea className="form-control" placeholder="Leave a comment here" id="commentCare"
-                          style={{height: "8rem"}}></textarea>
-                <label htmlFor="commentCare">Comments</label>
+                <textarea
+                    className="form-control"
+                    placeholder="Leave a comment here"
+                    id="dogInfoCare.detail"
+                    name="dogInfoCare.detail"
+                    value={formData.dogInfoCare.detail}
+                    onChange={handleChange}
+                    style={{height: "8rem"}}
+                ></textarea>
+                <label htmlFor="dogInfoCare.description">Comments</label>
             </div>
 
         </div>
