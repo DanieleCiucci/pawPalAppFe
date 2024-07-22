@@ -32,8 +32,9 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #FAFAE2; /* Set background color for the entire body */
+    background-color: #FAFAE2;
     height: 50rem;
+    color: #FAFAE2;
 }
 .homeButton {
     background-color: #7F5539;
@@ -100,4 +101,28 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top{
+    padding: 1rem;
+    border-radius: 2.5rem !important;
+    margin-bottom: -1rem !important;
+    height: 12rem;
+}
+
+.card {
+    width: 19rem;
+    border-radius: 1rem !important;
+    height: 31rem;
+}
+.card-text{
+    font-size: medium;
+}
+
+.btn-outline-primary {
+    border-color: #7F5539 !important;
+    color: #7F5539 !important;
+}
+.btn-outline-primary:hover{
+    background-color: white !important;
 }
