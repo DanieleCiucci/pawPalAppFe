@@ -24,6 +24,7 @@ const InsertDogForm = ({ logout }) => {
             dateAdoption: "",
             dateOfBirdth: "",
             description: "",
+            image: "",
         },
         owner: {
             name: "",
@@ -115,6 +116,21 @@ const InsertDogForm = ({ logout }) => {
         const file = event.target.files[0];
         setSelectedFile(file);
         setSelectedFileUrl(URL.createObjectURL(file));
+
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            const base64String = reader.result.split(',')[1];  // Remove data:image/jpeg;base64,
+            setFormData(prevData => ({
+                ...prevData,
+                dog: {
+                    ...prevData.dog,
+                    image: base64String
+                }
+            }));
+        };
+
+        reader.readAsDataURL(file);
     };
 
     const renderTabContent = () => {
