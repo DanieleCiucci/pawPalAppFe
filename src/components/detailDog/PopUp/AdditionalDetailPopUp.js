@@ -1,17 +1,37 @@
 import React, { useState, useEffect } from "react";
 
 const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
-    const [formData, setFormData] = useState(dog);
+    const [formData, setFormData] = useState({});
     const [alert, setAlert] = useState(null);
 
     useEffect(() => {
-        setFormData(dog);
+        if (dog) {
+            setFormData({
+                ...dog,
+                needsOutside: convertToBooleanValue(dog.needsOutside),
+                getAlongWellWithOtherCat: convertToBooleanValue(dog.getAlongWellWithOtherCat),
+                getAlongWellWithOtherDog: convertToBooleanValue(dog.getAlongWellWithOtherDog),
+                getAlongWellWithChildren: convertToBooleanValue(dog.getAlongWellWithChildren)
+            });
+        }
     }, [dog]);
 
+    const convertToBooleanValue = (value) => {
+        return value === "Yes" ? 1 : (value === "No" ? 0 : null);
+    };
+
+    const convertToStringValue = (value) => {
+        return value === 1 ? "Yes" : (value === 0 ? "No" : "");
+    };
+
     const handleChange = (field, value) => {
+        const newValue = field.includes('needsOutside') || field.includes('getAlongWellWith')
+            ? convertToBooleanValue(value)
+            : value;
+
         setFormData(prevState => ({
             ...prevState,
-            [field]: value
+            [field]: newValue
         }));
     };
 
@@ -19,6 +39,7 @@ const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
         const token = localStorage.getItem('authToken');
         if (!token) {
             console.error("No token found in local storage");
+            setAlert({ type: 'danger', message: 'Authentication token is missing.' });
             return;
         }
 
@@ -34,7 +55,7 @@ const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
         };
 
         try {
-            const response = await fetch("http://localhost:8080/api/dog/update-additional-info", {
+            const response = await fetch("http://localhost:8080/api/dog/update-additional-detail", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -47,11 +68,6 @@ const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const responseBody = await response.text();
-            const result = responseBody ? JSON.parse(responseBody) : {};
-            console.log("Update successful", result);
-
-            // Show success alert and refresh the page
             setAlert({ type: 'success', message: 'Update successful!' });
             setTimeout(() => {
                 setAlert(null);
@@ -60,7 +76,6 @@ const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
             }, 1500);
         } catch (error) {
             console.error("Error updating additional info:", error);
-            // Show error alert
             setAlert({ type: 'danger', message: 'Error updating additional info.' });
             setTimeout(() => {
                 setAlert(null);
@@ -71,11 +86,7 @@ const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
     if (!show) return null;
 
     const formatDateForInput = (timestamp) => {
-        if (timestamp) {
-            const date = new Date(timestamp);
-            return date.toISOString().split('T')[0]; // Formats the date to YYYY-MM-DD for input fields
-        }
-        return "";
+        return timestamp ? new Date(timestamp).toISOString().split('T')[0] : "";
     };
 
     return (
@@ -102,12 +113,12 @@ const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
                         <select
                             className="form-select"
                             name="needsOutside"
-                            value={formData.needsOutside}
+                            value={convertToStringValue(formData.needsOutside)}
                             onChange={e => handleChange('needsOutside', e.target.value)}
                         >
                             <option value="" disabled>Select</option>
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
                         </select>
                     </div>
                     <div className="col-6 form-group">
@@ -138,12 +149,12 @@ const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
                         <select
                             className="form-select"
                             name="getAlongWellWithOtherCat"
-                            value={formData.getAlongWellWithOtherCat}
+                            value={convertToStringValue(formData.getAlongWellWithOtherCat)}
                             onChange={e => handleChange('getAlongWellWithOtherCat', e.target.value)}
                         >
                             <option value="" disabled>Select</option>
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
                         </select>
                     </div>
                 </div>
@@ -154,12 +165,12 @@ const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
                         <select
                             className="form-select"
                             name="getAlongWellWithOtherDog"
-                            value={formData.getAlongWellWithOtherDog}
+                            value={convertToStringValue(formData.getAlongWellWithOtherDog)}
                             onChange={e => handleChange('getAlongWellWithOtherDog', e.target.value)}
                         >
                             <option value="" disabled>Select</option>
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
                         </select>
                     </div>
                     <div className="col-6 form-group">
@@ -167,12 +178,12 @@ const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
                         <select
                             className="form-select"
                             name="getAlongWellWithChildren"
-                            value={formData.getAlongWellWithChildren}
+                            value={convertToStringValue(formData.getAlongWellWithChildren)}
                             onChange={e => handleChange('getAlongWellWithChildren', e.target.value)}
                         >
                             <option value="" disabled>Select</option>
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
                         </select>
                     </div>
                 </div>

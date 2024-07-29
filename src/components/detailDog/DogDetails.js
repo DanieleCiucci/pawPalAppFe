@@ -5,18 +5,24 @@ import defaultImg from "../../assets/defaultImg.svg";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import DetailDogInfoForm from "./DetailDogInfoForm";
 import DetailsOwnerInfoForm from "./DetailsOwnerInfoForm";
-import DetailsAdditionalDetailForm from  "./DetailsAdditionalDetailForm";
-import DetailsInfoCareForm from "./DetailsInfoCareForm"
-
+import DetailsAdditionalDetailForm from "./DetailsAdditionalDetailForm";
+import DetailsInfoCareForm from "./DetailsInfoCareForm";
+import NamePopUp from "../detailDog/PopUp/NamePopUp";
+import AdditionalDetailPopUp from "./PopUp/AdditionalDetailPopUp"; // Ensure this path is correct
 
 const DogDetails = (props) => {
     const { id } = useParams();
     const [dog, setDog] = useState(null);
+    const [showNamePopUp, setShowNamePopUp] = useState(false);
     const { logout } = props;
     const fileInputRef = useRef(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [activeTab, setActiveTab] = useState('general');
+
+    const [showPopup, setShowPopup] = useState(false);
+
+
 
     useEffect(() => {
         const fetchDogDetails = async () => {
@@ -38,7 +44,6 @@ const DogDetails = (props) => {
                 setDog(responseBody);
             } catch (error) {
                 console.error("Error fetching dog details:", error);
-                // Handle error, e.g., show an error message
             }
         };
 
@@ -51,23 +56,15 @@ const DogDetails = (props) => {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        setSelectedFile(file);
-        setSelectedFileUrl(URL.createObjectURL(file));
-
-        const reader = new FileReader();
-
-        reader.onloadend = () => {
-            const base64String = reader.result.split(',')[1];  // Remove data:image/jpeg;base64,
-
-        };
-
-        reader.readAsDataURL(file);
+        if (file) {
+            setSelectedFile(file);
+            setSelectedFileUrl(URL.createObjectURL(file));
+        }
     };
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         const [section, field] = name.split(".");
-
         const fieldValue = type === 'checkbox' ? checked : value;
 
         setDog((prevDog) => ({
@@ -78,6 +75,9 @@ const DogDetails = (props) => {
             }
         }));
     };
+
+
+
 
     const renderTabContent = () => {
         switch (activeTab) {
@@ -93,11 +93,17 @@ const DogDetails = (props) => {
                 return <DetailDogInfoForm dog={dog} handleChange={handleChange} />;
         }
     };
+    const handleIconClick = () => {
+        setShowPopup(true);
+    };
 
+    const handleClosePopup = () => {
+        setShowPopup(false);
+    };
 
     return (
         <div className="DogDetails">
-            <AuthHeader logout={logout} />
+            <AuthHeader logout={props.logout} />
             <div className="container">
                 <div className="row">
                     <div className="col-2"></div>
@@ -140,14 +146,17 @@ const DogDetails = (props) => {
                                     </div>
 
                                     <div className="col-7 mt-3">
-                                        <i className="bi bi-pencil fs-5"></i>
+                                        <i
+                                            className="bi bi-pencil fs-5"
+                                            onClick={handleIconClick}
+                                        ></i>
                                     </div>
                                 </div>
 
-                                <hr style={{ borderTop: "1px solid #838383" }} />
+                                <hr style={{borderTop: "1px solid #838383"}}/>
 
-                                <ul className="nav nav-tabs CustomNav" style={{ borderBottom: 'none' }}>
-                                    <li className="nav-item">
+                                <ul className="nav nav-tabs CustomNav" style={{borderBottom: 'none'}}>
+                                <li className="nav-item">
                                         <button className={`nav-link ${activeTab === 'general' ? 'active' : ''}`}
                                                 onClick={() => setActiveTab('general')}>General Information
                                         </button>
@@ -173,6 +182,8 @@ const DogDetails = (props) => {
                                 <div className="tab-content mt-4">
                                     {renderTabContent()}
                                 </div>
+
+                                <NamePopUp show={showPopup} handleClose={handleClosePopup} dog={dog}/>
                             </>
                         ) : (
                             <p>Loading...</p>
