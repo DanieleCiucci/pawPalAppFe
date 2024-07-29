@@ -8,6 +8,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Appointment from "./Appointment";
 import YourDog from "./YourDog"
 import InsertDog from "./insertDog/InsertDogForm";
+import DogDetails from "./detailDog/DogDetails";
 
 export default class AppContent extends React.Component {
     constructor(props) {
@@ -86,6 +87,7 @@ export default class AppContent extends React.Component {
 
                     <Route path="/findnewowner" element={user ? <div>Find a New Owner Component</div> : <Navigate to="/" />}/>
                     <Route path="/profile" element={user ? <div>Profile Component</div> : <Navigate to="/" />} />
+                    <Route path="/yourdogs/:id" element={<DogDetails />} />
                 </Routes>
                 {componentToShow === "login" && <LoginFormWrapper onLogin={this.onLogin} onRegister={this.onRegister} />}
             </div>

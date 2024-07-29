@@ -120,9 +120,69 @@ body {
 }
 
 .btn-outline-primary {
-    border-color: #7F5539 !important;
-    color: #7F5539 !important;
+    border-color: #8B4513 !important;
+    color: #8B4513 !important;
 }
 .btn-outline-primary:hover{
     background-color: white !important;
+}
+
+.btn-primary{
+    background-color: #8B4513 !important;
+    border-color: #8B4513 !important;
+}
+
+.bi-pencil::before{
+    content: "\f4cb" !important;
+    padding: 0.75rem !important;
+    background: #8B4513 !important;
+    border-radius: 20% !important;
+    color: #F5F5CB !important;
+}
+
+.generalInfoContainer{
+    border-radius: 8px;
+    background: #FFF;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.10);
+}
+
+.photoGallery{
+    border-radius: 8px;
+    background: #FFF;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.10);
+}
+
+.boxGeneralInfo{
+    height: 36rem;
+}
+
+.boxPhoto{
+    height: 36rem;
+}
+
+.popupStyle{
+
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 60rem;
+    position: relative;
+}
+
+.seeAllCopy{
+    text-decoration: none;
+}
+
+.overlayStyle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }

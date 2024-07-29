@@ -82,7 +82,8 @@ const YourDog = (props) => {
                                             <p className="card-text">{dog.dogBreeds} owner: {dog.ownerName} {dog.ownerSurname}</p>
                                             <p className="card-text">{dog.dogDescription}</p>
                                             <div className="d-flex justify-content-end">
-                                                <a href="#" className="btn btn-outline-primary">Details</a>
+                                                <a href={`/yourdogs/${dog.idDog}`} className="btn btn-outline-primary">Details</a>
+
                                             </div>
                                         </div>
                                     </div>
