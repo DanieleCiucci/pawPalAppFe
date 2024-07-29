@@ -21,8 +21,6 @@ const InsertDogForm = ({ logout }) => {
             weight: "",
             idGender: "",
             breeds: "",
-            dateAdoption: "",
-            dateOfBirdth: "",
             description: "",
             image: "",
         },
@@ -41,6 +39,8 @@ const InsertDogForm = ({ logout }) => {
             getAlongWellWithChildren: false,
             needsOutside: false,
             detail: "",
+            dateAdoption: "",
+            dateOfBirdth: "",
         },
 
         dogInfoCare: {

@@ -46,11 +46,11 @@ const DogInfoForm = ({ formData, handleChange }) => {
             <div className="row mt-4 mb-4">
                 <div className="col-6 form-group">
                     <label>Date of Adoption:</label>
-                    <input type="date" className="form-control" name="dog.dateAdoption" value={formData.dog.dateAdoption} onChange={handleChange} />
+                    <input type="date" className="form-control" name="dogAdditionalDetail.dateAdoption" value={formData.dogAdditionalDetail.dateAdoption} onChange={handleChange} />
                 </div>
                 <div className="col-6 form-group">
                     <label>Date of Birth:</label>
-                    <input type="date" className="form-control" name="dog.dateOfBirth" value={formData.dog.dateOfBirdth} onChange={handleChange} />
+                    <input type="date" className="form-control" name="dogAdditionalDetail.dateOfBirdth" value={formData.dogAdditionalDetail.dateOfBirdth} onChange={handleChange} />
                 </div>
             </div>
         </div>

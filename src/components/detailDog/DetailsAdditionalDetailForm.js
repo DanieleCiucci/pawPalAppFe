@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
-import GeneralInfoPopUp from "./PopUp/GeneralInfoPopUp";
 import infoIcon from "../../assets/infoIcon.svg";
+import AdditionalDetailPopUp from "./PopUp/AdditionalDetailPopUp";
 
 const DetailAddtionalDetailForm = (props) => {
     const [showPopup, setShowPopup] = useState(false);
@@ -74,7 +74,7 @@ const DetailAddtionalDetailForm = (props) => {
 
             <div className="col-1"></div>
 
-            <GeneralInfoPopUp show={showPopup} handleClose={handleClosePopup} dog={props.dog}/>
+            <AdditionalDetailPopUp show={showPopup} handleClose={handleClosePopup} dog={props.dog}/>
         </div>
     );
 }
