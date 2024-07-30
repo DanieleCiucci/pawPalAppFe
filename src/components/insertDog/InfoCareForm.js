@@ -12,7 +12,6 @@ const InfoCareForm = ({ formData, handleChange }) => {
                         name="dogInfoCare.idLeftAlone"
                         value={formData.dogInfoCare.idLeftAlone}
                         onChange={handleChange}>
-                        {/* check the value in the db */}
                         <option>Select a choice</option>
                         <option value="0"> No</option>
                         <option value="1">  Yes </option>
@@ -57,10 +56,9 @@ const InfoCareForm = ({ formData, handleChange }) => {
                         value={formData.dogInfoCare.idNeedsSchedule}
                         onChange={handleChange}>
                         <option selected>Select a choice</option>
-                        <option value="0"> each hours</option>
-                        <option value="1"> > 1 hour</option>
-                        <option value="2"> > 3 hours</option>
-                        <option value="3"> every 8 hours</option>
+                        <option value="0"> Morning</option>
+                        <option value="1">Evening</option>
+                        <option value="2">Twice daily</option>
                     </select>
                 </div>
             </div>
@@ -83,9 +81,9 @@ const InfoCareForm = ({ formData, handleChange }) => {
                 <textarea
                     className="form-control"
                     placeholder="Leave a comment here"
-                    id="dogInfoCare.detail"
-                    name="dogInfoCare.detail"
-                    value={formData.dogInfoCare.detail}
+                    id="dogInfoCare.infoCareDetail"
+                    name="dogInfoCare.infoCareDetail"
+                    value={formData.dogInfoCare.infoCareDetail}
                     onChange={handleChange}
                     style={{height: "8rem"}}
                 ></textarea>

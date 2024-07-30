@@ -38,7 +38,7 @@ const InsertDogForm = ({ logout }) => {
             getAlongWellWithOtherCat: false,
             getAlongWellWithChildren: false,
             needsOutside: false,
-            detail: "",
+            addtionalDetail: "",
             dateAdoption: "",
             dateOfBirdth: "",
         },
@@ -49,7 +49,7 @@ const InsertDogForm = ({ logout }) => {
             idFeedsSchedule: "",
             idNeedsSchedule:"",
             idCareDrugs:"",
-            detail:"",
+            infoCareDetail:"",
         }
     });
 

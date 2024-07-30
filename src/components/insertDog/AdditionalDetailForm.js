@@ -61,8 +61,8 @@ const AdditionalDetailForm = ({ formData, handleChange }) => {
                     className="form-control"
                     placeholder="Leave a comment here"
                     id="commentCare"
-                    name="dogAdditionalDetail.detail"
-                    value={formData.dogAdditionalDetail.detail}
+                    name="dogAdditionalDetail.addtionalDetail"
+                    value={formData.dogAdditionalDetail.addtionalDetail}
                     onChange={handleChange}
                     style={{height: "8rem"}}
                 ></textarea>

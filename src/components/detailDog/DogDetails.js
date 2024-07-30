@@ -8,7 +8,7 @@ import DetailsOwnerInfoForm from "./DetailsOwnerInfoForm";
 import DetailsAdditionalDetailForm from "./DetailsAdditionalDetailForm";
 import DetailsInfoCareForm from "./DetailsInfoCareForm";
 import NamePopUp from "../detailDog/PopUp/NamePopUp";
-import AdditionalDetailPopUp from "./PopUp/AdditionalDetailPopUp"; // Ensure this path is correct
+import AdditionalDetailPopUp from "./PopUp/AdditionalDetailPopUp";
 
 const DogDetails = (props) => {
     const { id } = useParams();
@@ -19,10 +19,7 @@ const DogDetails = (props) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [activeTab, setActiveTab] = useState('general');
-
     const [showPopup, setShowPopup] = useState(false);
-
-
 
     useEffect(() => {
         const fetchDogDetails = async () => {
@@ -56,10 +53,47 @@ const DogDetails = (props) => {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        if (file) {
-            setSelectedFile(file);
-            setSelectedFileUrl(URL.createObjectURL(file));
-        }
+        setSelectedFile(file);
+        setSelectedFileUrl(URL.createObjectURL(file));
+
+        const reader = new FileReader();
+
+        reader.onloadend = async () => {
+            const base64String = reader.result.split(',')[1];  // Remove data:image/jpeg;base64,
+            setDog(prevDog => ({
+                ...prevDog,
+                image: base64String
+            }));
+
+            const updateImage = {
+                id: dog.id,
+                image:base64String
+            }
+
+            // Send the base64 image to the backend
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch(`http://localhost:8080/api/dog/update-main-image`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(updateImage)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const responseBody = await response.json();
+                console.log("Image updated successfully:", responseBody);
+            } catch (error) {
+                console.error("Error updating image:", error);
+            }
+        };
+
+        reader.readAsDataURL(file);
     };
 
     const handleChange = (e) => {
@@ -76,9 +110,6 @@ const DogDetails = (props) => {
         }));
     };
 
-
-
-
     const renderTabContent = () => {
         switch (activeTab) {
             case 'general':
@@ -93,6 +124,7 @@ const DogDetails = (props) => {
                 return <DetailDogInfoForm dog={dog} handleChange={handleChange} />;
         }
     };
+
     const handleIconClick = () => {
         setShowPopup(true);
     };
@@ -113,7 +145,7 @@ const DogDetails = (props) => {
                                 <div className="position-relative mt-4">
                                     <div className="image-preview-container mb-4">
                                         <img
-                                            src={dog.image ? `data:image/jpeg;base64,${dog.image}` : defaultImg}
+                                            src={selectedFileUrl || (dog.image ? `data:image/jpeg;base64,${dog.image}` : defaultImg)}
                                             alt="Dog"
                                             style={{
                                                 height: '19rem',
@@ -125,7 +157,7 @@ const DogDetails = (props) => {
                                         />
                                         <div className="position-absolute bottom-0 end-0 p-3">
                                             <button type="button" className="btn btn-primary"
-                                                    onClick={handleFileButtonClick}>Select Image
+                                                    onClick={handleFileButtonClick}>Update Image
                                             </button>
                                             <input
                                                 ref={fileInputRef}
@@ -153,10 +185,10 @@ const DogDetails = (props) => {
                                     </div>
                                 </div>
 
-                                <hr style={{borderTop: "1px solid #838383"}}/>
+                                <hr style={{ borderTop: "1px solid #838383" }} />
 
-                                <ul className="nav nav-tabs CustomNav" style={{borderBottom: 'none'}}>
-                                <li className="nav-item">
+                                <ul className="nav nav-tabs CustomNav" style={{ borderBottom: 'none' }}>
+                                    <li className="nav-item">
                                         <button className={`nav-link ${activeTab === 'general' ? 'active' : ''}`}
                                                 onClick={() => setActiveTab('general')}>General Information
                                         </button>
@@ -183,7 +215,7 @@ const DogDetails = (props) => {
                                     {renderTabContent()}
                                 </div>
 
-                                <NamePopUp show={showPopup} handleClose={handleClosePopup} dog={dog}/>
+                                <NamePopUp show={showPopup} handleClose={handleClosePopup} dog={dog} />
                             </>
                         ) : (
                             <p>Loading...</p>
