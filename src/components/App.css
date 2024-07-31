@@ -208,3 +208,6 @@ body {
     pointer-events: none;
     width: 78% !important;
 }
+.inputFile{
+    margin-left: 0.5rem;
+}
