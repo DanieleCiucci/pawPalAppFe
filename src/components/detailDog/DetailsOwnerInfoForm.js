@@ -17,11 +17,14 @@ const DetailsOwnerInfoForm = (props) => {
         setShowPopup(false);
     };
 
-
     return (
         <div className="row mt-5">
             <div className="col-5 boxGeneralInfo position-relative">
-                <i className="bi bi-pencil fs-5 position-absolute" style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }} onClick={handleIconClick}></i>
+                <i
+                    className="bi bi-pencil fs-5 position-absolute"
+                    style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }}
+                    onClick={handleIconClick}
+                ></i>
                 <div className="generalInfoContainer">
                     <h5 className="p-3"><strong>Location & General info</strong></h5>
 
@@ -51,8 +54,7 @@ const DetailsOwnerInfoForm = (props) => {
                                     alignItems: 'baseline'
                                 }}
                             />
-                            <p className="p-3 mb-0"> ciao sono un test di importanza irrilevante e inoltre dovrei
-                                aggiungere un campo sulla strada</p>
+                            <p className="p-3 mb-0"> {props.dog.addressInfo}</p>
                         </div>
 
                         <div className="d-flex align-items-center">
@@ -75,24 +77,39 @@ const DetailsOwnerInfoForm = (props) => {
                             />
                             <p className="p-3 mb-0"> {props.dog.email}</p>
                         </div>
-
                     </div>
                 </div>
             </div>
 
             <div className="col-1"></div>
 
-            <div className="col-6 boxPhoto">
+            <div className="col-6 boxPhoto position-relative">
+                <i
+                    className="bi bi-pencil fs-5 position-absolute"
+                    style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }}
+                    onClick={handleIconClick}
+                ></i>
                 <div className="photoGallery">
                     <div className="row">
                         <div className="col-8">
-                            <h5 className="p-3"><strong> Owner information </strong></h5>
+                            <div className="d-flex align-items-center m-2">
+                                <img src={infoIcon} alt="info icon"/>
+                                <h5 className="p-3 mb-0"><strong>Owner Information</strong></h5>
+                            </div>
                         </div>
+                    </div>
+                    <div className="row m-2">
+                        <p><strong>About {props.dog.ownerName}</strong></p>
+                        <p>{props.dog.aboutOwner}</p>
+                    </div>
+                    <div className="row m-2">
+                        <p><strong>Personal note about the owner</strong></p>
+                        <p>{props.dog.personalNoteAboutOwner}</p>
                     </div>
                 </div>
             </div>
 
-            <GeneralInfoPopUp show={showPopup} handleClose={handleClosePopup} dog={props.dog} />
+            <GeneralInfoPopUp show={showPopup} handleClose={handleClosePopup} dog={props.dog}/>
         </div>
     );
 }
