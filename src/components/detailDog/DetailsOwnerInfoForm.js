@@ -18,7 +18,6 @@ const DetailsOwnerInfoForm = (props) => {
     };
 
 
-
     return (
         <div className="row mt-5">
             <div className="col-5 boxGeneralInfo position-relative">
