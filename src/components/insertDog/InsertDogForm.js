@@ -31,7 +31,10 @@ const InsertDogForm = ({ logout }) => {
             phoneNumber: "",
             city: "",
             address: "",
+            addressInfo:"",
             photo: "",
+            personalNoteAboutOwner:"",
+            aboutOwner:""
         },
         dogAdditionalDetail: {
             getAlongWellWithOtherDog: false,
