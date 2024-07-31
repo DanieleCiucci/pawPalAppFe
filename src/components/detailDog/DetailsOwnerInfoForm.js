@@ -1,18 +1,101 @@
-
 import * as React from "react";
+import { useState } from "react";
+import GeneralInfoPopUp from "./PopUp/GeneralInfoPopUp";
+import defaultImgMap from "../../assets/ownerMapMock.png";
+import infoIcon from "../../assets/infoIcon.svg";
+import phoneIcon from "../../assets/phoneIcon.svg";
+import mailIcon from "../../assets/mailIcon.svg";
 
-export default class WelcomeContent extends React.Component {
+const DetailsOwnerInfoForm = (props) => {
+    const [showPopup, setShowPopup] = useState(false);
 
-    render() {
-        return(
-            <div className="row justify-content-md-center">
-                <div className="jumbotron jumbotron-fluid">
-                    <div className="container">
-                        <h1 className="display-4">Owner info</h1>
+    const handleIconClick = () => {
+        setShowPopup(true);
+    };
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
+    };
+
+
+
+    return (
+        <div className="row mt-5">
+            <div className="col-5 boxGeneralInfo position-relative">
+                <i className="bi bi-pencil fs-5 position-absolute" style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }} onClick={handleIconClick}></i>
+                <div className="generalInfoContainer">
+                    <h5 className="p-3"><strong>Location & General info</strong></h5>
+
+                    <div className="row p-4 position-relative">
+                        <img
+                            src={defaultImgMap}
+                            alt="Dog"
+                            style={{
+                                height: '9rem',
+                                width: '100%',
+                                borderRadius: '8px',
+                                objectFit: 'cover'
+                            }}
+                        />
+                        <div className="addressBox">
+                            {props.dog.address + ", " + props.dog.city}
+                        </div>
+                    </div>
+
+                    <div className="row p-3">
+                        <div className="d-flex align-items-center">
+                            <img
+                                src={infoIcon}
+                                alt="info icon"
+                                style={{
+                                    height: '1.5rem',
+                                    alignItems: 'baseline'
+                                }}
+                            />
+                            <p className="p-3 mb-0"> ciao sono un test di importanza irrilevante e inoltre dovrei
+                                aggiungere un campo sulla strada</p>
+                        </div>
+
+                        <div className="d-flex align-items-center">
+                            <img
+                                src={phoneIcon}
+                                alt="phone icon"
+                                style={{
+                                    height: '1.5rem',
+                                }}
+                            />
+                            <p className="p-3 mb-0"> {props.dog.phoneNumber}</p>
+                        </div>
+                        <div className="d-flex align-items-center">
+                            <img
+                                src={mailIcon}
+                                alt="mail icon"
+                                style={{
+                                    height: '1.25rem',
+                                }}
+                            />
+                            <p className="p-3 mb-0"> {props.dog.email}</p>
+                        </div>
 
                     </div>
                 </div>
             </div>
-        )
-    }
+
+            <div className="col-1"></div>
+
+            <div className="col-6 boxPhoto">
+                <div className="photoGallery">
+                    <div className="row">
+                        <div className="col-8">
+                            <h5 className="p-3"><strong> Owner information </strong></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <GeneralInfoPopUp show={showPopup} handleClose={handleClosePopup} dog={props.dog} />
+        </div>
+    );
 }
+
+export default DetailsOwnerInfoForm;

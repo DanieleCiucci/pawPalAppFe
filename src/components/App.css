@@ -190,3 +190,21 @@ body {
 .optionSelected{
     display: none;
 }
+.cpoyOwnerGray{
+    color: #65676B;
+}
+
+.addressBox{
+    position: absolute;
+    top: 32%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    color: #1877F2;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-align: center;
+    z-index: 1;
+    pointer-events: none;
+    width: 78% !important;
+}

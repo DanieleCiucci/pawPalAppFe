@@ -8,7 +8,7 @@ import DetailsOwnerInfoForm from "./DetailsOwnerInfoForm";
 import DetailsAdditionalDetailForm from "./DetailsAdditionalDetailForm";
 import DetailsInfoCareForm from "./DetailsInfoCareForm";
 import NamePopUp from "../detailDog/PopUp/NamePopUp";
-import AdditionalDetailPopUp from "./PopUp/AdditionalDetailPopUp";
+import DetailsOwnerMainDetail from "./DetailsOwnerMainDetial"
 
 const DogDetails = (props) => {
     const { id } = useParams();
@@ -171,19 +171,24 @@ const DogDetails = (props) => {
                                     </div>
                                 </div>
 
-                                <div className="row">
-                                    <div className="col-3">
-                                        <h2><strong>{dog.name} </strong></h2>
-                                        <p className="mb-4">{dog.breeds}</p>
+                                {activeTab !== 'owner' ? (
+                                    <div className="row">
+                                        <div className="col-3">
+                                            <h2><strong>{dog.name} </strong></h2>
+                                            <p className="mb-4">{dog.breeds}</p>
+                                        </div>
+
+                                        <div className="col-7 mt-3">
+                                            <i
+                                                className="bi bi-pencil fs-5"
+                                                onClick={handleIconClick}
+                                            ></i>
+                                        </div>
                                     </div>
 
-                                    <div className="col-7 mt-3">
-                                        <i
-                                            className="bi bi-pencil fs-5"
-                                            onClick={handleIconClick}
-                                        ></i>
-                                    </div>
-                                </div>
+                                ):
+                                    <DetailsOwnerMainDetail dog={dog} />
+                                }
 
                                 <hr style={{ borderTop: "1px solid #838383" }} />
 
