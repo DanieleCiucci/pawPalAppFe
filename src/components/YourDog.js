@@ -1,48 +1,55 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AuthHeader from "./AuthHeader";
 import imageCard from "../assets/dog1.jpg"; // Placeholder image
+import Pagination from "./Paginator"; // Import the custom Pagination component
 
 const YourDog = (props) => {
-    const [data, setData] = React.useState([]);
-    const [isAuthenticated, setIsAuthenticated] = React.useState(true);
+    const [data, setData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchDogs = async () => {
-            const token = localStorage.getItem('authToken');
-            try {
-                const response = await fetch("http://localhost:8080/api/dog/all-dog-sitter", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+    const fetchDogs = async (page = 0) => {
+        const token = localStorage.getItem('authToken');
+        try {
+            const response = await fetch(`http://localhost:8080/api/dog/all-dog-sitter?page=${page}&size=9`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 }
+            });
 
-                const responseBody = await response.text();
-                const data = responseBody ? JSON.parse(responseBody) : [];
-                console.log("Fetched data:", data);
-                setData(data); // Update state with fetched data
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                // Handle error, e.g., show an error message
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        };
 
-        fetchDogs();
-    }, []);
+            const responseBody = await response.json();
+            const dogsData = responseBody.content || [];
+            setData(dogsData);
+            setTotalPages(responseBody.totalPages);
+            setCurrentPage(responseBody.number);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            // Handle error, e.g., show an error message
+        }
+    };
+
+    useEffect(() => {
+        fetchDogs(currentPage);
+    }, [currentPage]);
 
     const handleInsertDog = () => {
         navigate("/yourdogs/insert");
     };
 
-    const { logout, user } = props;
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const { logout } = props;
 
     return (
         <div className="AuthHome">
@@ -55,8 +62,8 @@ const YourDog = (props) => {
                     </h1>
                     <div className="mt-2">
                         <p style={{ fontSize: '1rem', color: '#686565' }}>
-                            In this section you can view the dog to assist that you insert. <br />
-                            You can insert a dog with the button Insert new dog.
+                            In this section, you can view the dogs that you have entered to assist. <br />
+                            You can add a new dog using the "Insert new dog" button.
                         </p>
                     </div>
                 </div>
@@ -83,7 +90,6 @@ const YourDog = (props) => {
                                             <p className="card-text">{dog.dogDescription}</p>
                                             <div className="d-flex justify-content-end">
                                                 <a href={`/yourdogs/${dog.idDog}`} className="btn btn-outline-primary">Details</a>
-
                                             </div>
                                         </div>
                                     </div>
@@ -94,6 +100,14 @@ const YourDog = (props) => {
                                 <p>No dogs available.</p>
                             </div>
                         )}
+                    </div>
+
+                    <div className="d-flex justify-content-end mt-4 m-lg-5">
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                        />
                     </div>
                 </div>
             </div>
