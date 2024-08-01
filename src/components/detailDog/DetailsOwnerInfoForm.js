@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import GeneralInfoPopUp from "./PopUp/GeneralInfoPopUp";
+import AboutOwnerPopUp from "./PopUp/AboutOnwerPopUp";
 import defaultImgMap from "../../assets/ownerMapMock.png";
 import infoIcon from "../../assets/infoIcon.svg";
 import phoneIcon from "../../assets/phoneIcon.svg";
@@ -109,7 +109,7 @@ const DetailsOwnerInfoForm = (props) => {
                 </div>
             </div>
 
-            <GeneralInfoPopUp show={showPopup} handleClose={handleClosePopup} dog={props.dog}/>
+            <AboutOwnerPopUp show={showPopup} handleClose={handleClosePopup} dog={props.dog}/>
         </div>
     );
 }

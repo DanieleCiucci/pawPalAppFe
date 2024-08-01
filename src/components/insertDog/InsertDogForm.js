@@ -206,7 +206,7 @@ const InsertDogForm = ({ logout }) => {
                         </div>
 
                         <div className="mt-5">
-                            <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Insert Dog</button>
+                            <button type="submit" className="btn btn-primary mb-5" onClick={handleSubmit}>Insert Dog</button>
                         </div>
                     </div>
                     <div className="col-2"></div>
