@@ -103,11 +103,11 @@ const InsertDogForm = ({ logout }) => {
             })
             .then((data) => {
                 console.log("Success:", data);
-                // Handle success, e.g., redirect to another page or show a success message
+
             })
             .catch((error) => {
                 console.error("Error:", error);
-                // Handle error, e.g., show an error message
+
             });
     };
 
