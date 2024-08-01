@@ -5,16 +5,26 @@ import defaultImgMap from "../../assets/ownerMapMock.png";
 import infoIcon from "../../assets/infoIcon.svg";
 import phoneIcon from "../../assets/phoneIcon.svg";
 import mailIcon from "../../assets/mailIcon.svg";
+import LocationAndGeneralInfoPopUp from "./PopUp/LocationAndGeneralInfoPopUp";
 
 const DetailsOwnerInfoForm = (props) => {
-    const [showPopup, setShowPopup] = useState(false);
+    const [showOwnerPopup, setShowOwnerPopup] = useState(false);
+    const [showLocationPopup, setShowLocationPopup] = useState(false);
 
-    const handleIconClick = () => {
-        setShowPopup(true);
+    const handleOwnerIconClick = () => {
+        setShowOwnerPopup(true);
     };
 
-    const handleClosePopup = () => {
-        setShowPopup(false);
+    const handleLocationIconClick = () => {
+        setShowLocationPopup(true);
+    };
+
+    const handleCloseOwnerPopup = () => {
+        setShowOwnerPopup(false);
+    };
+
+    const handleCloseLocationPopup = () => {
+        setShowLocationPopup(false);
     };
 
     return (
@@ -23,7 +33,7 @@ const DetailsOwnerInfoForm = (props) => {
                 <i
                     className="bi bi-pencil fs-5 position-absolute"
                     style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }}
-                    onClick={handleIconClick}
+                    onClick={handleLocationIconClick}
                 ></i>
                 <div className="generalInfoContainer">
                     <h5 className="p-3"><strong>Location & General info</strong></h5>
@@ -87,7 +97,7 @@ const DetailsOwnerInfoForm = (props) => {
                 <i
                     className="bi bi-pencil fs-5 position-absolute"
                     style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }}
-                    onClick={handleIconClick}
+                    onClick={handleOwnerIconClick}
                 ></i>
                 <div className="photoGallery">
                     <div className="row">
@@ -109,7 +119,13 @@ const DetailsOwnerInfoForm = (props) => {
                 </div>
             </div>
 
-            <AboutOwnerPopUp show={showPopup} handleClose={handleClosePopup} dog={props.dog}/>
+            {showOwnerPopup && (
+                <AboutOwnerPopUp show={showOwnerPopup} handleClose={handleCloseOwnerPopup} dog={props.dog}/>
+            )}
+            {showLocationPopup && (
+                <LocationAndGeneralInfoPopUp show={showLocationPopup} handleClose={handleCloseLocationPopup} dog={props.dog}/>
+            )}
+
         </div>
     );
 }
