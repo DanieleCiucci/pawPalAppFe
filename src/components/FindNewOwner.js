@@ -2,8 +2,16 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import AuthHeader from "./AuthHeader";
 import { fetchUserRole } from "../services/roleSerivces";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import 'leaflet/dist/leaflet.css';
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+
+import marker from '../assets/pin.svg';
+import { Icon } from 'leaflet'
+const popUpIcon = new Icon({
+    iconUrl: marker,
+    iconSize: [50,50]
+})
+
 
 const FindNewOwner = (props) => {
     const { logout } = props;
@@ -60,7 +68,7 @@ const FindNewOwner = (props) => {
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
-                            <Marker position={position}>
+                            <Marker position={position} icon={popUpIcon} >
                                 <Popup>
                                     A pretty CSS3 popup. <br /> Easily customizable.
                                 </Popup>
