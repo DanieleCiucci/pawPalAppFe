@@ -211,3 +211,12 @@ body {
 .inputFile{
     margin-left: 0.5rem;
 }
+
+.customPaginator{
+
+    --bs-pagination-active-bg: #8B4513 !important;
+    --bs-pagination-active-border-color: #8B4513 !important;
+    --bs-pagination-focus-box-shadow: none !important;
+    --bs-pagination-color:#8B4513 !important;
+    --bs-pagination-hover-color: #8B4513 !important;
+}

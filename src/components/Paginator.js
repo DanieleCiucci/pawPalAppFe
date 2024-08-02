@@ -12,7 +12,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
     return (
         <nav>
-            <ul className="pagination">
+            <ul className="pagination customPaginator">
                 <li className={`page-item ${currentPage === 0 ? "disabled" : ""}`}>
                     <button className="page-link" onClick={() => onPageChange(0)}>&laquo;</button>
                 </li>
