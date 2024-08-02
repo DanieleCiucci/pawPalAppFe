@@ -20,7 +20,7 @@ const YourDog = (props) => {
 
             if (role === 0) {
                 console.log("Fetching dogs for sitter");
-                response = await fetch(`http://localhost:8080/api/dog/all-dog-sitter?page=${page}&size=9`, {
+                response = await fetch(`http://localhost:8080/api/dog/all-dog-sitter?page=${page}&size=6`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ const YourDog = (props) => {
                 });
             } else if (role === 1) {
                 console.log("Fetching dogs for owner");
-                response = await fetch(`http://localhost:8080/api/dog/all-dog-owner?page=${page}&size=9`, {
+                response = await fetch(`http://localhost:8080/api/dog/all-dog-owner?page=${page}&size=6`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -148,7 +148,7 @@ const YourDog = (props) => {
                     </div>
 
                     {totalPages > 1 && (
-                        <div className="d-flex justify-content-end mt-4">
+                        <div className="d-flex justify-content-end mt-4 mb-4">
                             <Pagination
                                 currentPage={currentPage}
                                 totalPages={totalPages}
