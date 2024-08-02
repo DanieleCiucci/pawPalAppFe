@@ -9,6 +9,7 @@ import Appointment from "./Appointment";
 import YourDog from "./YourDog"
 import InsertDog from "./insertDog/InsertDogForm";
 import DogDetails from "./detailDog/DogDetails";
+import  FindNewOwner from "./FindNewOwner"
 
 export default class AppContent extends React.Component {
     constructor(props) {
@@ -85,7 +86,7 @@ export default class AppContent extends React.Component {
                     <Route path="/yourdogs" element={user ? <YourDog logout={this.logout} user={user} /> : <Navigate to="/" />}/>
                     <Route path="/yourdogs/insert" element={user ? <InsertDog /> : <Navigate to="/" />} />
 
-                    <Route path="/findnewowner" element={user ? <div>Find a New Owner Component</div> : <Navigate to="/" />}/>
+                    <Route path="/findnewowner" element={user ? <FindNewOwner /> : <Navigate to="/" />}/>
                     <Route path="/profile" element={user ? <div>Profile Component</div> : <Navigate to="/" />} />
                     <Route path="/yourdogs/:id" element={<DogDetails />} />
                 </Routes>
