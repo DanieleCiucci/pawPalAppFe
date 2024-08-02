@@ -1,9 +1,12 @@
+// src/components/YourDog.js
+
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AuthHeader from "./AuthHeader";
 import imageCard from "../assets/dog1.jpg";
 import Pagination from "./Paginator";
+import { fetchUserRole } from "../services/roleSerivces";  // Import the function
 
 const YourDog = (props) => {
     const [data, setData] = useState([]);
@@ -11,30 +14,6 @@ const YourDog = (props) => {
     const [totalPages, setTotalPages] = useState(1);
     const [userRole, setUserRole] = useState(null); // State for user role
     const navigate = useNavigate();
-
-    const fetchUserRole = async () => {
-        const token = localStorage.getItem('authToken');
-        try {
-            const response = await fetch("http://localhost:8080/role", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const role = await response.json(); // Assuming the role is returned as a JSON integer
-            setUserRole(role);
-            return role;
-        } catch (error) {
-            console.error("Error fetching user role:", error);
-            return null;
-        }
-    };
 
     const fetchDogs = async (page = 0, role) => {
         const token = localStorage.getItem('authToken');
@@ -51,7 +30,7 @@ const YourDog = (props) => {
                     }
                 });
             } else {
-                console.log("call by the owner");
+                console.log("Fetching dogs for owner");
                 return;
             }
 
@@ -73,6 +52,7 @@ const YourDog = (props) => {
         const initializePage = async () => {
             const role = await fetchUserRole();
             if (role !== null) {
+                setUserRole(role);
                 fetchDogs(currentPage, role);
             }
         };
@@ -158,4 +138,3 @@ const YourDog = (props) => {
 };
 
 export default YourDog;
-
