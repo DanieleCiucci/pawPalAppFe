@@ -1,12 +1,10 @@
-// src/components/YourDog.js
-
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AuthHeader from "./AuthHeader";
 import imageCard from "../assets/dog1.jpg";
 import Pagination from "./Paginator";
-import { fetchUserRole } from "../services/roleSerivces";  // Import the function
+import { fetchUserRole } from "../services/roleSerivces";
 
 const YourDog = (props) => {
     const [data, setData] = useState([]);
@@ -29,8 +27,16 @@ const YourDog = (props) => {
                         "Authorization": `Bearer ${token}`
                     }
                 });
-            } else {
+            } else if (role === 1) {
                 console.log("Fetching dogs for owner");
+                response = await fetch(`http://localhost:8080/api/dog/all-dog-owner?page=${page}&size=9`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+            } else {
                 return;
             }
 
@@ -94,7 +100,27 @@ const YourDog = (props) => {
                 <div className="col-2"></div>
                 <div className="col-8">
                     <div className="row">
-                        {data.length > 0 ? (
+                        {userRole === 1 && data.length > 0 ? (
+                            data.map((dog, index) => (
+                                <div key={index} className="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
+                                    <div className="card" style={{ width: '18rem' }}>
+                                        <img
+                                            className="card-img-top"
+                                            src={dog.image ? `data:image/jpeg;base64,${dog.image}` : imageCard}
+                                            alt="Dog"
+                                        />
+                                        <div className="card-body">
+                                            <p className="card-text"><strong>{dog.dogName}</strong></p>
+                                            <p className="card-text">{dog.dogBreeds}</p>
+                                            <p className="card-text">{dog.detail}</p>
+                                            <div className="d-flex justify-content-end">
+                                                <a href={`/yourdogs/${dog.idDog}`} className="btn btn-outline-primary">Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : userRole === 0 && data.length > 0 ? (
                             data.map((dog, index) => (
                                 <div key={index} className="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
                                     <div className="card" style={{ width: '18rem' }}>
@@ -121,7 +147,7 @@ const YourDog = (props) => {
                         )}
                     </div>
 
-                    {totalPages > 6 && (
+                    {totalPages > 1 && (
                         <div className="d-flex justify-content-end mt-4">
                             <Pagination
                                 currentPage={currentPage}
