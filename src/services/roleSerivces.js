@@ -1,3 +1,6 @@
+export function roleService() {
+}
+
 export const fetchUserRole = async () => {
     const token = localStorage.getItem('authToken');
     try {

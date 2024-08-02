@@ -8,18 +8,19 @@ import DetailsOwnerInfoForm from "./DetailsOwnerInfoForm";
 import DetailsAdditionalDetailForm from "./DetailsAdditionalDetailForm";
 import DetailsInfoCareForm from "./DetailsInfoCareForm";
 import NamePopUp from "../detailDog/PopUp/NamePopUp";
-import DetailsOwnerMainDetail from "./DetailsOwnerMainDetial"
+import DetailsOwnerMainDetail from "./DetailsOwnerMainDetial";
+import { fetchUserRole } from "../../services/roleSerivces";
 
 const DogDetails = (props) => {
     const { id } = useParams();
     const [dog, setDog] = useState(null);
     const [showNamePopUp, setShowNamePopUp] = useState(false);
-    const { logout } = props;
-    const fileInputRef = useRef(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [activeTab, setActiveTab] = useState('general');
     const [showPopup, setShowPopup] = useState(false);
+    const fileInputRef = useRef(null);
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
         const fetchDogDetails = async () => {
@@ -53,47 +54,48 @@ const DogDetails = (props) => {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        setSelectedFile(file);
-        setSelectedFileUrl(URL.createObjectURL(file));
+        if (file) {
+            setSelectedFile(file);
+            setSelectedFileUrl(URL.createObjectURL(file));
 
-        const reader = new FileReader();
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const base64String = reader.result.split(',')[1]; // Remove data:image/jpeg;base64,
+                setDog(prevDog => ({
+                    ...prevDog,
+                    image: base64String
+                }));
 
-        reader.onloadend = async () => {
-            const base64String = reader.result.split(',')[1];  // Remove data:image/jpeg;base64,
-            setDog(prevDog => ({
-                ...prevDog,
-                image: base64String
-            }));
+                const updateImage = {
+                    id: dog.id,
+                    image: base64String
+                };
 
-            const updateImage = {
-                id: dog.id,
-                image:base64String
-            }
+                // Send the base64 image to the backend
+                try {
+                    const token = localStorage.getItem('authToken');
+                    const response = await fetch(`http://localhost:8080/api/dog/update-main-image`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify(updateImage)
+                    });
 
-            // Send the base64 image to the backend
-            try {
-                const token = localStorage.getItem('authToken');
-                const response = await fetch(`http://localhost:8080/api/dog/update-main-image`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify(updateImage)
-                });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const responseBody = await response.json();
+                    console.log("Image updated successfully:", responseBody);
+                } catch (error) {
+                    console.error("Error updating image:", error);
                 }
+            };
 
-                const responseBody = await response.json();
-                console.log("Image updated successfully:", responseBody);
-            } catch (error) {
-                console.error("Error updating image:", error);
-            }
-        };
-
-        reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleChange = (e) => {
@@ -101,7 +103,7 @@ const DogDetails = (props) => {
         const [section, field] = name.split(".");
         const fieldValue = type === 'checkbox' ? checked : value;
 
-        setDog((prevDog) => ({
+        setDog(prevDog => ({
             ...prevDog,
             [section]: {
                 ...prevDog[section],
@@ -133,6 +135,20 @@ const DogDetails = (props) => {
         setShowPopup(false);
     };
 
+    useEffect(() => {
+        const initializePage = async () => {
+            try {
+                const userRole = await fetchUserRole();
+
+                setRole(userRole)
+            } catch (error) {
+                console.error("Error fetching user role:", error);
+            }
+        };
+
+        initializePage();
+    }, []);
+
     return (
         <div className="DogDetails">
             <AuthHeader logout={props.logout} />
@@ -156,8 +172,8 @@ const DogDetails = (props) => {
                                             }}
                                         />
                                         <div className="position-absolute bottom-0 end-0 p-3">
-                                            <button type="button" className="btn btn-primary"
-                                                    onClick={handleFileButtonClick}>Update Image
+                                            <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>
+                                                Update Image
                                             </button>
                                             <input
                                                 ref={fileInputRef}
@@ -174,7 +190,7 @@ const DogDetails = (props) => {
                                 {activeTab !== 'owner' ? (
                                     <div className="row">
                                         <div className="col-3">
-                                            <h2><strong>{dog.name} </strong></h2>
+                                            <h2><strong>{dog.name}</strong></h2>
                                             <p className="mb-4">{dog.breeds}</p>
                                         </div>
 
@@ -185,35 +201,47 @@ const DogDetails = (props) => {
                                             ></i>
                                         </div>
                                     </div>
-
-                                ):
+                                ) : (
                                     <DetailsOwnerMainDetail dog={dog} />
-                                }
+                                )}
 
                                 <hr style={{ borderTop: "1px solid #838383" }} />
 
                                 <ul className="nav nav-tabs CustomNav" style={{ borderBottom: 'none' }}>
                                     <li className="nav-item">
-                                        <button className={`nav-link ${activeTab === 'general' ? 'active' : ''}`}
-                                                onClick={() => setActiveTab('general')}>General Information
+                                        <button
+                                            className={`nav-link ${activeTab === 'general' ? 'active' : ''}`}
+                                            onClick={() => setActiveTab('general')}
+                                        >
+                                            General Information
                                         </button>
                                     </li>
                                     <li className="nav-item">
                                         <button
                                             className={`nav-link ${activeTab === 'additionalDetail' ? 'active' : ''}`}
-                                            onClick={() => setActiveTab('additionalDetail')}>Additional Details
+                                            onClick={() => setActiveTab('additionalDetail')}
+                                        >
+                                            Additional Details
                                         </button>
                                     </li>
                                     <li className="nav-item">
-                                        <button className={`nav-link ${activeTab === 'infoCare' ? 'active' : ''}`}
-                                                onClick={() => setActiveTab('infoCare')}>Info about Care
+                                        <button
+                                            className={`nav-link ${activeTab === 'infoCare' ? 'active' : ''}`}
+                                            onClick={() => setActiveTab('infoCare')}
+                                        >
+                                            Info about Care
                                         </button>
                                     </li>
+                                    {role === 0 && (
                                     <li className="nav-item">
-                                        <button className={`nav-link ${activeTab === 'owner' ? 'active' : ''}`}
-                                                onClick={() => setActiveTab('owner')}>Owner
+                                        <button
+                                            className={`nav-link ${activeTab === 'owner' ? 'active' : ''}`}
+                                            onClick={() => setActiveTab('owner')}
+                                        >
+                                            Owner
                                         </button>
                                     </li>
+                                        )}
                                 </ul>
 
                                 <div className="tab-content mt-4">
