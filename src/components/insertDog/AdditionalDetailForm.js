@@ -60,13 +60,13 @@ const AdditionalDetailForm = ({ formData, handleChange }) => {
                 <textarea
                     className="form-control"
                     placeholder="Leave a comment here"
-                    id="commentCare"
-                    name="dogAdditionalDetail.addtionalDetail"
-                    value={formData.dogAdditionalDetail.addtionalDetail}
+                    id="additionalDetail"
+                    name="dogAdditionalDetail.additionalDetail"
+                    value={formData.dogAdditionalDetail.additionalDetail}
                     onChange={handleChange}
                     style={{height: "8rem"}}
                 ></textarea>
-                <label htmlFor="commentCare">Comments</label>
+                <label htmlFor="additionalDetail">Comments</label>
             </div>
 
         </div>
