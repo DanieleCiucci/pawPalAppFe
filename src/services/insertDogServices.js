@@ -7,8 +7,6 @@ export const handleSubmit = async (e, formData, userRole) => {
     let submissionData = { ...formData };
 
     // GEOLOCATION SERVICE
-
-
     const { address: streetAddress, city, postalCode, state } = formData.owner;
 
     const addressParts = [streetAddress, city, postalCode, state].filter(part => part && part.trim());
