@@ -2,6 +2,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import AuthHeader from "./AuthHeader";
 import { fetchUserRole } from "../services/roleSerivces";
+import { findNewOwner } from "../services/findNewOwner";
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import marker from '../assets/pin.svg';
@@ -15,12 +16,11 @@ const popUpIcon = new Icon({
 const FindNewOwner = (props) => {
     const { logout } = props;
     const [userRole, setUserRole] = useState(null);
-    const [owners, setOwners] = useState([]);
-    const [mapCenter, setMapCenter] = useState(null);
+    const [owners, setOwners] = useState([]); // State to hold the list of owners or sitters
+    const [mapCenter, setMapCenter] = useState(null); // Initially null to conditionally render
 
     useEffect(() => {
         const initializePage = async () => {
-            const token = localStorage.getItem('authToken');
             try {
                 // Fetch user role
                 const role = await fetchUserRole();
@@ -28,41 +28,12 @@ const FindNewOwner = (props) => {
                     setUserRole(role);
                 }
 
-                let response
-
-                if(role === 0){
-                    // Fetch owners from your backend API with error handling and proper response parsing
-                     response = await fetch("http://localhost:8080/api/find-new-user/owner", {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                        }
-                    });
-                }else{
-                     response = await fetch("http://localhost:8080/api/find-new-user/sitter", {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                        }
-                    });
-                }
-
-                // Check if the response is OK (status code 200-299)
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                // Parse the response body
-                const responseBody = await response.text();
-                const data = responseBody ? JSON.parse(responseBody) : [];
-
-                // Update the state with the fetched owners
-                setOwners(data);
+                // Fetch owners or sitters based on the user role
+                const users = await findNewOwner(role);
+                setOwners(users);
 
             } catch (error) {
-                console.error("Error fetching owner data:", error);
+                console.error("Error during page initialization:", error);
             }
         };
 
@@ -139,11 +110,12 @@ const FindNewOwner = (props) => {
                                         icon={popUpIcon}
                                     >
                                         <Popup>
-                                            <div>
+                                            <>
                                                 <strong>{owner.name} {owner.surname}</strong><br />
                                                 {owner.address}<br />
-                                                {owner.city}, {owner.postalCode}
-                                            </div>
+                                                {owner.city}, {owner.postalCode} <br />
+                                                {owner.email}
+                                            </>
                                         </Popup>
                                     </Marker>
                                 ))}
