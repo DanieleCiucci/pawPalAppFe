@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 const OwnerInfoForm = ({ formData, handleChange }) => {
+
     const [photoPreview, setPhotoPreview] = useState(formData.owner.photo || "");
 
     const handleFileChange = (event) => {
@@ -98,7 +99,18 @@ const OwnerInfoForm = ({ formData, handleChange }) => {
                     />
                 </div>
             </div>
-            <div className="row">
+            <div className="row mt-3">
+                <div className="col-6 form-group">
+                    <label>State:</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="owner.state"
+                        value={formData.owner.state}
+                        onChange={handleChange}
+                    />
+                </div>
+
                 <div className="col-6 form-group">
                     <label>City:</label>
                     <input
@@ -109,6 +121,8 @@ const OwnerInfoForm = ({ formData, handleChange }) => {
                         onChange={handleChange}
                     />
                 </div>
+            </div>
+            <div className="row">
                 <div className="col-6 form-group">
                     <label>Address:</label>
                     <input
@@ -116,6 +130,16 @@ const OwnerInfoForm = ({ formData, handleChange }) => {
                         className="form-control"
                         name="owner.address"
                         value={formData.owner.address}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="col-6 form-group">
+                    <label>Postal code:</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="owner.postalCode"
+                        value={formData.owner.postalCode}
                         onChange={handleChange}
                     />
                 </div>

@@ -7,13 +7,14 @@ import OwnerInfoForm from "./OwnerInfoForm";
 import AdditionalDetailForm from "./AdditionalDetailForm";
 import InfoCareForm from "./InfoCareForm";
 import { fetchUserRole } from "../../services/roleSerivces";
+import {geocodeAddress} from "../../services/geocodeAdress";
 
 const InsertDogForm = ({ logout }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [activeTab, setActiveTab] = useState('general');
     const fileInputRef = useRef(null);
-    const [userRole, setUserRole] = useState(null); // State for user role
+    const [userRole, setUserRole] = useState(null);
 
     useEffect(() => {
         const initializeRole = async () => {
@@ -45,9 +46,14 @@ const InsertDogForm = ({ logout }) => {
             addressInfo: "",
             photo: "",
             personalNoteAboutOwner: "",
-            aboutOwner: ""
+            aboutOwner: "",
+            state:"",
+            postalCode:"",
+            geoX:undefined,
+            geoY:undefined
         },
         dogAdditionalDetail: {
+            //settarli a undefined the optional field
             getAlongWellWithOtherDog: false,
             getAlongWellWithOtherCat: false,
             getAlongWellWithChildren: false,
@@ -82,8 +88,13 @@ const InsertDogForm = ({ logout }) => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        //GEOLOCATION SERVICE
+        const address = `${formData.owner.address} ${formData.owner.city} ${formData.owner.postalCode}, ${formData.owner.state}`;
+        const location = await geocodeAddress(address);
+
         const token = localStorage.getItem('authToken');
 
         // Create a copy of the formData to manipulate
@@ -92,6 +103,15 @@ const InsertDogForm = ({ logout }) => {
         // If user role is 1, remove the owner data from the formData
         if (userRole === 1) {
             delete submissionData.owner;
+        }
+
+        // Add geocoded location to submissionData if available
+        if (location) {
+            submissionData.owner = {
+                ...submissionData.owner,
+                geoX: location.lat,
+                geoY: location.lon,
+            };
         }
 
         // Format the additional detail data
