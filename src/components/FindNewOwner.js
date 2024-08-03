@@ -28,14 +28,26 @@ const FindNewOwner = (props) => {
                     setUserRole(role);
                 }
 
-                // Fetch owners from your backend API with error handling and proper response parsing
-                const response = await fetch("http://localhost:8080/api/find-new-user/owner", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
+                let response
+
+                if(role === 0){
+                    // Fetch owners from your backend API with error handling and proper response parsing
+                     response = await fetch("http://localhost:8080/api/find-new-user/owner", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+                }else{
+                     response = await fetch("http://localhost:8080/api/find-new-user/sitter", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+                }
 
                 // Check if the response is OK (status code 200-299)
                 if (!response.ok) {
