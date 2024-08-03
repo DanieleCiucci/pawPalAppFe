@@ -7,7 +7,7 @@ import OwnerInfoForm from "./OwnerInfoForm";
 import AdditionalDetailForm from "./AdditionalDetailForm";
 import InfoCareForm from "./InfoCareForm";
 import { fetchUserRole } from "../../services/roleSerivces";
-import {geocodeAddress} from "../../services/geocodeAdress";
+import { handleSubmit } from "../../services/insertDogServices"
 
 const InsertDogForm = ({ logout }) => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -41,19 +41,18 @@ const InsertDogForm = ({ logout }) => {
             surname: "",
             email: "",
             phoneNumber: "",
-            city: "",
-            address: "",
             addressInfo: "",
             photo: "",
             personalNoteAboutOwner: "",
             aboutOwner: "",
-            state:"",
-            postalCode:"",
+            city: undefined,
+            address: undefined,
+            state:undefined,
+            postalCode:undefined,
             geoX:undefined,
             geoY:undefined
         },
         dogAdditionalDetail: {
-            //settarli a undefined the optional field
             getAlongWellWithOtherDog: false,
             getAlongWellWithOtherCat: false,
             getAlongWellWithChildren: false,
@@ -62,7 +61,6 @@ const InsertDogForm = ({ logout }) => {
             dateAdoption: "",
             dateOfBirdth: "",
         },
-
         dogInfoCare: {
             idLeftAlone: "",
             idTypeOfEnergy: "",
@@ -88,66 +86,8 @@ const InsertDogForm = ({ logout }) => {
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        //GEOLOCATION SERVICE
-        const address = `${formData.owner.address} ${formData.owner.city} ${formData.owner.postalCode}, ${formData.owner.state}`;
-        const location = await geocodeAddress(address);
-
-        const token = localStorage.getItem('authToken');
-
-        // Create a copy of the formData to manipulate
-        let submissionData = { ...formData };
-
-        // If user role is 1, remove the owner data from the formData
-        if (userRole === 1) {
-            delete submissionData.owner;
-        }
-
-        // Add geocoded location to submissionData if available
-        if (location) {
-            submissionData.owner = {
-                ...submissionData.owner,
-                geoX: location.lat,
-                geoY: location.lon,
-            };
-        }
-
-        // Format the additional detail data
-        submissionData = {
-            ...submissionData,
-            dogAdditionalDetail: {
-                ...submissionData.dogAdditionalDetail,
-                getAlongWellWithOtherDog: submissionData.dogAdditionalDetail.getAlongWellWithOtherDog ? 1 : 0,
-                getAlongWellWithOtherCat: submissionData.dogAdditionalDetail.getAlongWellWithOtherCat ? 1 : 0,
-                getAlongWellWithChildren: submissionData.dogAdditionalDetail.getAlongWellWithChildren ? 1 : 0,
-                needsOutside: submissionData.dogAdditionalDetail.needsOutside ? 1 : 0,
-            }
-        };
-
-        // Send the data to the server
-        fetch("http://localhost:8080/api/dog/insert", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(submissionData)
-        })
-            .then(async (response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const responseBody = await response.text();
-                return responseBody ? JSON.parse(responseBody) : {};
-            })
-            .then((data) => {
-                console.log("Success:", data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
+    const handleFormSubmit = (e) => {
+        handleSubmit(e, formData, userRole);
     };
 
     const handleFileButtonClick = () => {
@@ -245,9 +185,8 @@ const InsertDogForm = ({ logout }) => {
                         <div className="tab-content mt-4">
                             {renderTabContent()}
                         </div>
-
                         <div className="mt-5">
-                            <button type="submit" className="btn btn-primary mb-5" onClick={handleSubmit}>Insert Dog</button>
+                            <button type="submit" className="btn btn-primary mb-5" onClick={handleFormSubmit}>Insert Dog</button>
                         </div>
                     </div>
                     <div className="col-2"></div>
