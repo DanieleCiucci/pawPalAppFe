@@ -5,8 +5,7 @@ import phoneIcon from "../../../assets/phoneIcon.svg";
 import mailIcon from "../../../assets/mailIcon.svg";
 import AboutOwnerPopUp from "../../detailDog/PopUp/AboutOnwerPopUp";
 import LocationAndGeneralInfoPopUp from "../../detailDog/PopUp/LocationAndGeneralInfoPopUp";
-import ProfileMap from "./ProfileMap"; // Make sure this is the correct path
-
+import ProfileMap from "./ProfileMap";
 
 const GeneralInfoProfile = (props) => {
     const [showOwnerPopup, setShowOwnerPopup] = useState(false);
