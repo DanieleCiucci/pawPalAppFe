@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import profileDefaultImage from "../../../assets/profileImageDefault.png"
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import profileDefaultImage from "../../../assets/profileImageDefault.png";
 
 const MainDetailsProfile = (props) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [profile, setProfile] = useState(props.profile);
+    const navigate = useNavigate(); // Initialize navigate
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -52,11 +54,14 @@ const MainDetailsProfile = (props) => {
         reader.readAsDataURL(file);
     };
 
+    const handleAddDogClick = () => {
+        navigate('/yourdogs/insert', { state: { personalSitterDog: true } });
+    };
+
     return (
         <div>
             <div className="row">
                 <div className="col-2 position-relative">
-                    {/* Position the pencil icon closer to the image */}
                     <label htmlFor="file-upload" className="file-upload-label">
                         <i
                             className="bi bi-pencil position-absolute"
@@ -66,7 +71,7 @@ const MainDetailsProfile = (props) => {
                                 cursor: 'pointer',
                                 borderRadius: '50%',
                                 padding: '0.2rem',
-                                zIndex: 1 // Ensure it's above the image
+                                zIndex: 1
                             }}
                         ></i>
                     </label>
@@ -88,7 +93,7 @@ const MainDetailsProfile = (props) => {
                         }}
                     />
                 </div>
-                <div className="col-10 d-flex align-items-center">
+                <div className="col-7 d-flex align-items-center">
                     <div>
                         <h3 className="mb-0">
                             {profile.name}{" " + profile.surname}
@@ -97,6 +102,12 @@ const MainDetailsProfile = (props) => {
                             {profile.email}
                         </p>
                     </div>
+                </div>
+
+                <div className="col-3">
+                    <button type="button" className="btn btn-primary mt-5" onClick={handleAddDogClick}>
+                        Add your personal dog
+                    </button>
                 </div>
             </div>
         </div>

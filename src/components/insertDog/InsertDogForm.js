@@ -8,6 +8,7 @@ import AdditionalDetailForm from "./AdditionalDetailForm";
 import InfoCareForm from "./InfoCareForm";
 import { fetchUserRole } from "../../services/roleSerivces";
 import { handleSubmit } from "../../services/insertDogServices"
+import {useLocation} from "react-router-dom";
 
 const InsertDogForm = ({ logout }) => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -15,6 +16,11 @@ const InsertDogForm = ({ logout }) => {
     const [activeTab, setActiveTab] = useState('general');
     const fileInputRef = useRef(null);
     const [userRole, setUserRole] = useState(null);
+
+    const location = useLocation();
+    const { personalSitterDog } = location.state || {};
+
+    console.log("Personal Sitter Dog:", personalSitterDog)
 
     useEffect(() => {
         const initializeRole = async () => {
@@ -87,7 +93,7 @@ const InsertDogForm = ({ logout }) => {
     };
 
     const handleFormSubmit = (e) => {
-        handleSubmit(e, formData, userRole);
+        handleSubmit(e, formData, userRole, personalSitterDog);
     };
 
     const handleFileButtonClick = () => {
@@ -137,8 +143,19 @@ const InsertDogForm = ({ logout }) => {
                 <div className="row">
                     <div className="col-2"></div>
                     <div className="col-8">
-                        <h1 style={{ fontWeight: 'bold' }}>Insert dog</h1>
-                        <p>In this section you can insert your dog's information</p>
+
+                        {personalSitterDog ? (
+                            <>
+                                <h1 style={{fontWeight: 'bold'}}>Insert your personal dog</h1>
+                                <p className="mt-3">In this section you can insert your personal dog's information</p>
+                            </>
+                        ): (
+                            <>
+                                <h1 style={{ fontWeight: 'bold' }}>Insert dog</h1>
+                                <p>In this section you can insert your dog's information</p>
+                            </>
+
+                        )}
                         <div className="position-relative mt-4">
                             <div className="image-preview-container mb-4">
                                 <img src={selectedFileUrl || defaultImg} alt="Dog Preview" style={{ height: '19rem', width: '100%', border: '1px solid #ccc', borderRadius: '8px', objectFit: 'cover' }} />

@@ -1,6 +1,6 @@
 import { geocodeAddress } from './geocodeAdress';
 
-export const handleSubmit = async (e, formData, userRole) => {
+export const handleSubmit = async (e, formData, userRole, personalSitterDog) => {
     e.preventDefault();
 
     // Create a copy of the formData to manipulate
@@ -15,8 +15,6 @@ export const handleSubmit = async (e, formData, userRole) => {
 
     // Check if the constructed address is valid before calling the geocode service
     if (address) {
-        console.log("INITIALIZING THE GEOCODE");
-
         try {
             const location = await geocodeAddress(address);
 
@@ -57,26 +55,55 @@ export const handleSubmit = async (e, formData, userRole) => {
         }
     };
 
-    // Send the data to the server
-    fetch("http://localhost:8080/api/dog/insert", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(submissionData)
-    })
-        .then(async (response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const responseBody = await response.text();
-            return responseBody ? JSON.parse(responseBody) : {};
+
+    if(personalSitterDog){
+
+        // Send the data to the server
+        fetch("http://localhost:8080/api/dog/insert-sitter-dog", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(submissionData)
         })
-        .then((data) => {
-            console.log("Success:", data);
+            .then(async (response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const responseBody = await response.text();
+                return responseBody ? JSON.parse(responseBody) : {};
+            })
+            .then((data) => {
+                console.log("Success:", data);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+
+    }else{
+
+        // Send the data to the server
+        fetch("http://localhost:8080/api/dog/insert", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(submissionData)
         })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+            .then(async (response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const responseBody = await response.text();
+                return responseBody ? JSON.parse(responseBody) : {};
+            })
+            .then((data) => {
+                console.log("Success:", data);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }
 };
