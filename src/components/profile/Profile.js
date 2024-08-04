@@ -13,8 +13,35 @@ const Profile = (props) => {
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [activeTab, setActiveTab] = useState('general');
     const [showPopup, setShowPopup] = useState(false);
+    const [dogsOwned, setDogsOwned] = useState([]);
     const fileInputRef = useRef(null);
     const [role, setRole] = useState(null);
+
+
+    // Define a new function to fetch dogs owned by the sitter
+    const fetchDogsOwnedBySitter = async () => {
+        const token = localStorage.getItem('authToken');
+        try {
+            const response = await fetch(`http://localhost:8080/api/profile/get-all-dog-owned-by-sitter`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error("Error fetching dogs owned by sitter:", error);
+            return [];
+        }
+    };
+
+
 
     useEffect(() => {
         const fetchProfileDetails = async () => {
@@ -41,6 +68,17 @@ const Profile = (props) => {
 
         fetchProfileDetails();
     }, []);
+
+    useEffect(() => {
+        if (activeTab === 'petOwned') {
+            const fetchDogs = async () => {
+                const dogs = await fetchDogsOwnedBySitter();
+                setDogsOwned(dogs);
+            };
+
+            fetchDogs();
+        }
+    }, [activeTab]);
 
     const handleFileButtonClick = () => {
         fileInputRef.current.click();
@@ -107,15 +145,35 @@ const Profile = (props) => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'general':
-                return <GeneralInfoProfile profile={profile}/>;
+                return <GeneralInfoProfile profile={profile} />;
             case 'petOwned':
-                return <div>Pet Owned Content</div>;
+                return (
+                    <div>
+                        <h3>Pet Owned</h3>
+                        <ul>
+                            {dogsOwned.length ? (
+                                dogsOwned.map(dog => (
+                                    <li key={dog.id}>
+                                        <img
+                                            src={dog.image ? `data:image/jpeg;base64,${dog.image}` : defaultImg}
+                                            alt={dog.name}
+                                            style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                                        />
+                                        <span>{dog.name}</span>
+                                    </li>
+                                ))
+                            ) : (
+                                <p>No dogs owned by this sitter.</p>
+                            )}
+                        </ul>
+                    </div>
+                );
             case 'skill':
                 return <div>Skill Content</div>;
             case 'services':
                 return <div>Services Content</div>;
             case 'calendar':
-                return <Calendar profile={profile} />;
+                return <Calendar />;
             default:
                 return <div>Select a tab to view content</div>;
         }
@@ -154,7 +212,7 @@ const Profile = (props) => {
                                 <div className="position-relative mt-4">
                                     <div className="image-preview-container mb-4">
                                         <img
-                                            src={selectedFileUrl || (profile.mainPhoto ? `data:image/jpeg;base64,${profile.mainPhoto}` : defaultImg)}
+                                            src={selectedFileUrl || (profile.image ? `data:image/jpeg;base64,${profile.image}` : defaultImg)}
                                             alt="Dog"
                                             style={{
                                                 height: '19rem',
