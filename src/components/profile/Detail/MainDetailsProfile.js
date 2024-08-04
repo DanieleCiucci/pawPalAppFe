@@ -8,6 +8,9 @@ const MainDetailsProfile = (props) => {
     const [profile, setProfile] = useState(props.profile);
     const navigate = useNavigate(); // Initialize navigate
 
+
+    console.log("the active tab is set to :", props.activeButtonPetOwned)
+
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -104,11 +107,14 @@ const MainDetailsProfile = (props) => {
                     </div>
                 </div>
 
+                {props.activeButtonPetOwned && (
                 <div className="col-3">
                     <button type="button" className="btn btn-primary mt-5" onClick={handleAddDogClick}>
                         Add your personal dog
                     </button>
                 </div>
+                )}
+
             </div>
         </div>
     );

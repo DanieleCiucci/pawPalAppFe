@@ -20,8 +20,6 @@ const InsertDogForm = ({ logout }) => {
     const location = useLocation();
     const { personalSitterDog } = location.state || {};
 
-    console.log("Personal Sitter Dog:", personalSitterDog)
-
     useEffect(() => {
         const initializeRole = async () => {
             const role = await fetchUserRole();
@@ -190,7 +188,7 @@ const InsertDogForm = ({ logout }) => {
                                         onClick={() => setActiveTab('infoCare')}>Info about Care
                                 </button>
                             </li>
-                            {userRole === 0 && (
+                            {(userRole === 0 && !personalSitterDog) && (
                                 <li className="nav-item">
                                     <button className={`nav-link ${activeTab === 'owner' ? 'active' : ''}`}
                                             onClick={() => setActiveTab('owner')}>Owner

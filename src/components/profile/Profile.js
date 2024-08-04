@@ -181,7 +181,7 @@ const Profile = (props) => {
                                 </div>
 
                                 <div className="row">
-                                    <MainDetailsProfile profile={profile} />
+                                    <MainDetailsProfile profile={profile} activeButtonPetOwned={activeTab === 'petOwned'} />
                                 </div>
 
                                 <hr style={{ borderTop: "1px solid #838383" }} />
