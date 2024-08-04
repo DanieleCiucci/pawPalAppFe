@@ -1,14 +1,11 @@
 import * as React from "react";
 import { useState } from "react";
-
-import defaultImgMap from "../../../assets/ownerMapMock.png";
 import infoIcon from "../../../assets/infoIcon.svg";
 import phoneIcon from "../../../assets/phoneIcon.svg";
 import mailIcon from "../../../assets/mailIcon.svg";
-
-
 import AboutOwnerPopUp from "../../detailDog/PopUp/AboutOnwerPopUp";
 import LocationAndGeneralInfoPopUp from "../../detailDog/PopUp/LocationAndGeneralInfoPopUp";
+import ProfileMap from "./ProfileMap"; // Make sure this is the correct path
 
 
 const GeneralInfoProfile = (props) => {
@@ -43,16 +40,7 @@ const GeneralInfoProfile = (props) => {
                     <h5 className="p-3"><strong>Location & General info</strong></h5>
 
                     <div className="row p-4 position-relative">
-                        <img
-                            src={defaultImgMap}
-                            alt="Dog"
-                            style={{
-                                height: '9rem',
-                                width: '100%',
-                                borderRadius: '8px',
-                                objectFit: 'cover'
-                            }}
-                        />
+                        <ProfileMap profile={props.profile} />
                         <div className="addressBox">
                             {props.profile.address}
                         </div>
@@ -63,10 +51,7 @@ const GeneralInfoProfile = (props) => {
                             <img
                                 src={infoIcon}
                                 alt="info icon"
-                                style={{
-                                    height: '1.5rem',
-                                    alignItems: 'baseline'
-                                }}
+                                style={{ height: '1.5rem' }}
                             />
                             <p className="p-3 mb-0"> {props.profile.addressInfo}</p>
                         </div>
@@ -75,9 +60,7 @@ const GeneralInfoProfile = (props) => {
                             <img
                                 src={phoneIcon}
                                 alt="phone icon"
-                                style={{
-                                    height: '1.5rem',
-                                }}
+                                style={{ height: '1.5rem' }}
                             />
                             <p className="p-3 mb-0"> {props.profile.phoneNumber}</p>
                         </div>
@@ -85,9 +68,7 @@ const GeneralInfoProfile = (props) => {
                             <img
                                 src={mailIcon}
                                 alt="mail icon"
-                                style={{
-                                    height: '1.25rem',
-                                }}
+                                style={{ height: '1.25rem' }}
                             />
                             <p className="p-3 mb-0"> {props.profile.email}</p>
                         </div>
@@ -124,14 +105,14 @@ const GeneralInfoProfile = (props) => {
             </div>
 
             {showOwnerPopup && (
-                <AboutOwnerPopUp show={showOwnerPopup} handleClose={handleCloseOwnerPopup} profile={props.profile}/>
+                <AboutOwnerPopUp show={showOwnerPopup} handleClose={handleCloseOwnerPopup} profile={props.profile} />
             )}
             {showLocationPopup && (
-                <LocationAndGeneralInfoPopUp show={showLocationPopup} handleClose={handleCloseLocationPopup} profile={props.profile}/>
+                <LocationAndGeneralInfoPopUp show={showLocationPopup} handleClose={handleCloseLocationPopup} profile={props.profile} />
             )}
 
         </div>
     );
-}
+};
 
 export default GeneralInfoProfile;
