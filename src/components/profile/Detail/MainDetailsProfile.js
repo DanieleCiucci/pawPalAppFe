@@ -29,7 +29,7 @@ const MainDetailsProfile = (props) => {
 
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await fetch(`http://localhost:8080/api/dog/update-owner-image`, {
+                const response = await fetch(`http://localhost:8080/api/profile/update-profile-image`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",

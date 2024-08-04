@@ -4,7 +4,7 @@ import defaultImg from "../../assets/defaultImg.svg";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import NamePopUp from "../detailDog/PopUp/NamePopUp";
 import { fetchUserRole } from "../../services/roleSerivces";
-import DetailsOwnerMainDetail from "../detailDog/DetailsOwnerMainDetial";
+import GeneralInfoProfile from "./Detail/GeneralInfoProfile";
 import MainDetailsProfile from "./Detail/MainDetailsProfile";
 
 const Profile = (props) => {
@@ -106,7 +106,7 @@ const Profile = (props) => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'general':
-                return <div>General Information Content</div>;
+                return <GeneralInfoProfile profile={profile}/>;
             case 'petOwned':
                 return <div>Pet Owned Content</div>;
             case 'skill':
@@ -153,7 +153,7 @@ const Profile = (props) => {
                                 <div className="position-relative mt-4">
                                     <div className="image-preview-container mb-4">
                                         <img
-                                            src={selectedFileUrl || (profile.photo ? `data:image/jpeg;base64,${profile.photo}` : defaultImg)}
+                                            src={selectedFileUrl || (profile.mainPhoto ? `data:image/jpeg;base64,${profile.mainPhoto}` : defaultImg)}
                                             alt="Dog"
                                             style={{
                                                 height: '19rem',
