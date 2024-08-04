@@ -6,6 +6,7 @@ import NamePopUp from "../detailDog/PopUp/NamePopUp";
 import { fetchUserRole } from "../../services/roleSerivces";
 import GeneralInfoProfile from "./Detail/GeneralInfoProfile";
 import MainDetailsProfile from "./Detail/MainDetailsProfile";
+import Calendar from "./Detail/CalendarComponent";
 
 const Profile = (props) => {
     const [profile, setProfile] = useState(null);
@@ -114,7 +115,7 @@ const Profile = (props) => {
             case 'services':
                 return <div>Services Content</div>;
             case 'calendar':
-                return <div>Calendar Content</div>;
+                return <Calendar profile={profile} />;
             default:
                 return <div>Select a tab to view content</div>;
         }

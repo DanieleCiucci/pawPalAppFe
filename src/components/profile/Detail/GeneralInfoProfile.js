@@ -94,11 +94,11 @@ const GeneralInfoProfile = (props) => {
                     </div>
                     <div className="row m-2">
                         <p><strong>About me</strong></p>
-                        <p>{props.profile.aboutSitter}</p>
+                        <p className="mb-2">{props.profile.aboutSitter}</p>
                     </div>
                     <div className="row m-2">
                         <p><strong>Personal note about the owner</strong></p>
-                        <p>{props.profile.preferencesAboutDog}</p>
+                        <p className="mb-3">{props.profile.preferencesAboutDog}</p>
                     </div>
                 </div>
             </div>
