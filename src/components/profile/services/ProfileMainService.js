@@ -29,7 +29,7 @@ export const updateProfileImage = async (profileId, base64String) => {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({ id: profileId, image: base64String })
+            body: JSON.stringify({ id: profileId, mainPhoto: base64String })
         });
 
         if (!response.ok) {

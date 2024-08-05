@@ -112,7 +112,7 @@ const Profile = (props) => {
                                 <div className="position-relative mt-4">
                                     <div className="image-preview-container mb-4">
                                         <img
-                                            src={selectedFileUrl || (profile.image ? `data:image/jpeg;base64,${profile.image}` : defaultImg)}
+                                            src={selectedFileUrl || (profile.mainPhoto ? `data:image/jpeg;base64,${profile.mainPhoto}` : defaultImg)}
                                             alt="Dog"
                                             style={{
                                                 height: '19rem',
