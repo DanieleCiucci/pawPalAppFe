@@ -37,6 +37,7 @@ export default class AppContent extends React.Component {
         this.setState({ componentToShow: "welcome", user: null });
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
+        localStorage.removeItem('auth_token');
     }
 
     onLogin = (e, username, password, callback) => {
@@ -48,7 +49,7 @@ export default class AppContent extends React.Component {
         ).then((response) => {
             const user = { username, role: response.data.role };
             this.setState({ componentToShow: "messages", user }, callback);
-            setAuthToken(response.data.token);
+
             localStorage.setItem('authToken', response.data.token);
             localStorage.setItem('user', JSON.stringify(user));
         }).catch((error) => {
