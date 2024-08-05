@@ -79,14 +79,6 @@ const Profile = (props) => {
         }
     };
 
-    const handleIconClick = () => {
-        setShowPopup(true);
-    };
-
-    const handleClosePopup = () => {
-        setShowPopup(false);
-    };
-
     useEffect(() => {
         const initializePage = async () => {
             try {
@@ -190,8 +182,6 @@ const Profile = (props) => {
                                 <div className="tab-content mt-4">
                                     {renderTabContent()}
                                 </div>
-
-                                <NamePopUp show={showPopup} handleClose={handleClosePopup} profile={profile} />
                             </>
                         ) : (
                             <p>Loading...</p>

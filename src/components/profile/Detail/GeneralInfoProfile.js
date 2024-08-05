@@ -6,6 +6,7 @@ import mailIcon from "../../../assets/mailIcon.svg";
 import AboutOwnerPopUp from "../../detailDog/PopUp/AboutOnwerPopUp";
 import LocationAndGeneralInfoPopUp from "../../detailDog/PopUp/LocationAndGeneralInfoPopUp";
 import ProfileMap from "./ProfileMap";
+import GeneralInfoPopUp from "../PopUp/GeneralInfoPopUp";
 
 const GeneralInfoProfile = (props) => {
     const [showOwnerPopup, setShowOwnerPopup] = useState(false);
@@ -88,7 +89,7 @@ const GeneralInfoProfile = (props) => {
                         <div className="col-8">
                             <div className="d-flex align-items-center m-2">
                                 <img src={infoIcon} alt="info icon"/>
-                                <h5 className="p-3 mb-0"><strong>Owner Information</strong></h5>
+                                <h5 className="p-3 mb-0"><strong>Personal Information</strong></h5>
                             </div>
                         </div>
                     </div>
@@ -107,7 +108,7 @@ const GeneralInfoProfile = (props) => {
                 <AboutOwnerPopUp show={showOwnerPopup} handleClose={handleCloseOwnerPopup} profile={props.profile} />
             )}
             {showLocationPopup && (
-                <LocationAndGeneralInfoPopUp show={showLocationPopup} handleClose={handleCloseLocationPopup} profile={props.profile} />
+                <GeneralInfoPopUp show={showLocationPopup} handleClose={handleCloseLocationPopup} profile={props.profile} />
             )}
 
         </div>
