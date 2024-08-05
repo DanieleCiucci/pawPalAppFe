@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { geocodeAddress } from "../../../services/geocodeAdress";
+import { updateGeneralInfo } from "../services/UpdateGeneralInfoService";
 
 const GeneralInfoPopUp = ({ show, handleClose, profile }) => {
     const [formData, setFormData] = useState(profile);
@@ -16,15 +17,13 @@ const GeneralInfoPopUp = ({ show, handleClose, profile }) => {
         }));
     };
 
-    console.log(formData);
-
     const handleSave = async () => {
         const { address: streetAddress, city, postalCode, state } = formData;
 
         const addressParts = [streetAddress, city, postalCode, state].filter(part => part && part.trim());
         const address = addressParts.join(', ');
 
-        let updatedData = { ...formData };  // Create a local variable to hold updated data
+        let updatedData = { ...formData };
 
         if (address) {
             try {
@@ -66,20 +65,7 @@ const GeneralInfoPopUp = ({ show, handleClose, profile }) => {
         };
 
         try {
-            const response = await fetch("http://localhost:8080/api/profile/update-general-info", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify(updatedFields)
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const responseBody = await response.json();
+            const responseBody = await updateGeneralInfo(updatedFields, token);
             console.log("Update successful", responseBody);
 
             setAlert({ type: 'success', message: 'Update successful!' });
@@ -89,7 +75,6 @@ const GeneralInfoPopUp = ({ show, handleClose, profile }) => {
                 window.location.reload();
             }, 1500);
         } catch (error) {
-            console.error("Error updating general info:", error);
             setAlert({ type: 'danger', message: 'Error updating general info.' });
             setTimeout(() => {
                 setAlert(null);
