@@ -9,6 +9,7 @@ import GeneralInfoProfile from "./Detail/GeneralInfoProfile";
 import MainDetailsProfile from "./Detail/MainDetailsProfile";
 import Calendar from "./Detail/CalendarComponent";
 import PetOwned from "./Detail/PetOwned";
+import Skill from "./Detail/Skill";
 
 const Profile = (props) => {
     const [profile, setProfile] = useState(null);
@@ -67,9 +68,9 @@ const Profile = (props) => {
             case 'general':
                 return <GeneralInfoProfile profile={profile} />;
             case 'petOwned':
-                return <PetOwned dogsOwned={dogsOwned} />; // Correct prop name
+                return <PetOwned dogsOwned={dogsOwned} />;
             case 'skill':
-                return <div>Skill Content</div>;
+                return <Skill profile={profile} />;
             case 'services':
                 return <div>Services Content</div>;
             case 'calendar':

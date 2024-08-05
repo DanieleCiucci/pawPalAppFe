@@ -220,3 +220,19 @@ body {
     --bs-pagination-color:#8B4513 !important;
     --bs-pagination-hover-color: #8B4513 !important;
 }
+
+
+
+
+.form-check-input{
+    background-color: #8B4513 !important;
+    border-color: #7F5539 !important;
+}
+
+.customCheck{
+    margin-left: -13px!important;
+}
+
+.form-check{
+    border: 0.5px solid #F2F2F2 !important;
+}
