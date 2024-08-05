@@ -4,9 +4,11 @@ import defaultImg from "../../assets/defaultImg.svg";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import NamePopUp from "../detailDog/PopUp/NamePopUp";
 import { fetchUserRole } from "../../services/roleSerivces";
+import { fetchProfileDetails, updateProfileImage,fetchDogsOwnedBySitter } from "./services/ProfileMainService";
 import GeneralInfoProfile from "./Detail/GeneralInfoProfile";
 import MainDetailsProfile from "./Detail/MainDetailsProfile";
 import Calendar from "./Detail/CalendarComponent";
+import PetOwned from "./Detail/PetOwned";
 
 const Profile = (props) => {
     const [profile, setProfile] = useState(null);
@@ -17,68 +19,21 @@ const Profile = (props) => {
     const fileInputRef = useRef(null);
     const [role, setRole] = useState(null);
 
-
-    // Define a new function to fetch dogs owned by the sitter
-    const fetchDogsOwnedBySitter = async () => {
-        const token = localStorage.getItem('authToken');
-        try {
-            const response = await fetch(`http://localhost:8080/api/profile/get-all-dog-owned-by-sitter`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error("Error fetching dogs owned by sitter:", error);
-            return [];
-        }
-    };
-
-
-
     useEffect(() => {
-        const fetchProfileDetails = async () => {
-            const token = localStorage.getItem('authToken');
+        const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/profile/sitter`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
+                const profileData = await fetchProfileDetails();
+                setProfile(profileData);
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const responseBody = await response.json();
-                setProfile(responseBody);
+                const dogs = await fetchDogsOwnedBySitter();
+                setDogsOwned(dogs);
             } catch (error) {
-                console.error("Error fetching profile details:", error);
+                console.error("Error fetching data:", error);
             }
         };
 
-        fetchProfileDetails();
+        fetchData();
     }, []);
-
-    useEffect(() => {
-        if (activeTab === 'petOwned') {
-            const fetchDogs = async () => {
-                const dogs = await fetchDogsOwnedBySitter();
-                setDogsOwned(dogs);
-            };
-
-            fetchDogs();
-        }
-    }, [activeTab]);
 
     const handleFileButtonClick = () => {
         fileInputRef.current.click();
@@ -92,33 +47,12 @@ const Profile = (props) => {
             const reader = new FileReader();
             reader.onloadend = async () => {
                 const base64String = reader.result.split(',')[1];
-                setProfile(prevProfile => ({
-                    ...prevProfile,
-                    image: base64String
-                }));
-
-                const updateImage = {
-                    id: profile.id,
-                    image: base64String
-                };
-
                 try {
-                    const token = localStorage.getItem('authToken');
-                    const response = await fetch(`http://localhost:8080/api/profile/update-main-image`, {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                        },
-                        body: JSON.stringify(updateImage)
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const responseBody = await response.json();
-                    console.log("Image updated successfully:", responseBody);
+                    await updateProfileImage(profile.id, base64String);
+                    setProfile(prevProfile => ({
+                        ...prevProfile,
+                        image: base64String
+                    }));
                 } catch (error) {
                     console.error("Error updating image:", error);
                 }
@@ -128,46 +62,12 @@ const Profile = (props) => {
         }
     };
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        const [section, field] = name.split(".");
-        const fieldValue = type === 'checkbox' ? checked : value;
-
-        setProfile(prevProfile => ({
-            ...prevProfile,
-            [section]: {
-                ...prevProfile[section],
-                [field]: fieldValue
-            }
-        }));
-    };
-
     const renderTabContent = () => {
         switch (activeTab) {
             case 'general':
                 return <GeneralInfoProfile profile={profile} />;
             case 'petOwned':
-                return (
-                    <div>
-                        <h3>Pet Owned</h3>
-                        <ul>
-                            {dogsOwned.length ? (
-                                dogsOwned.map(dog => (
-                                    <li key={dog.id}>
-                                        <img
-                                            src={dog.image ? `data:image/jpeg;base64,${dog.image}` : defaultImg}
-                                            alt={dog.name}
-                                            style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                                        />
-                                        <span>{dog.name}</span>
-                                    </li>
-                                ))
-                            ) : (
-                                <p>No dogs owned by this sitter.</p>
-                            )}
-                        </ul>
-                    </div>
-                );
+                return <PetOwned dogsOwned={dogsOwned} />; // Correct prop name
             case 'skill':
                 return <div>Skill Content</div>;
             case 'services':
