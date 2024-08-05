@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import profileDefaultImage from "../../../assets/profileImageDefault.png";
+import { updateProfileImage } from "../services/UpdatePhotoProfileService";
 
 const MainDetailsProfile = (props) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [profile, setProfile] = useState(props.profile);
-    const navigate = useNavigate(); // Initialize navigate
 
-    const handleFileChange = (event) => {
+
+    const navigate = useNavigate();
+
+    const handleFileChange = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
 
@@ -24,28 +27,9 @@ const MainDetailsProfile = (props) => {
                 photo: base64String
             }));
 
-            const updateImage = {
-                id: profile.id,
-                photo: base64String
-            };
-
             try {
-                const token = localStorage.getItem('authToken');
-                const response = await fetch(`http://localhost:8080/api/profile/update-profile-image`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify(updateImage)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const responseBody = await response.json();
-                console.log("Image updated successfully:", responseBody);
+                await updateProfileImage(profile.id, base64String);
+                console.log("Image updated successfully");
             } catch (error) {
                 console.error("Error updating image:", error);
             }
@@ -105,11 +89,11 @@ const MainDetailsProfile = (props) => {
                 </div>
 
                 {props.activeButtonPetOwned && (
-                <div className="col-3">
-                    <button type="button" className="btn btn-primary mt-5" onClick={handleAddDogClick}>
-                        Add your personal dog
-                    </button>
-                </div>
+                    <div className="col-3">
+                        <button type="button" className="btn btn-primary mt-5" onClick={handleAddDogClick}>
+                            Add your personal dog
+                        </button>
+                    </div>
                 )}
 
             </div>
