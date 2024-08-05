@@ -3,21 +3,17 @@ import { useState, useEffect } from "react";
 import infoIcon from "../../../assets/infoIcon.svg";
 
 const Skill = (props) => {
-    // State to manage the checked status of each checkbox
     const [checkedState, setCheckedState] = useState(new Array(6).fill(false));
-    // State to track if any checkbox has been modified
     const [isModified, setIsModified] = useState(false);
 
-    // Handle change event for checkboxes
     const handleCheckboxChange = (index) => {
         const updatedCheckedState = checkedState.map((item, i) =>
             i === index ? !item : item
         );
         setCheckedState(updatedCheckedState);
-        setIsModified(true); // Set modified state to true when any checkbox changes
+        setIsModified(true);
     };
 
-    // Update checked state based on props.profile.skills
     useEffect(() => {
         if (props.profile && props.profile.skills) {
             const initialCheckedState = new Array(6).fill(false);
@@ -31,11 +27,47 @@ const Skill = (props) => {
         }
     }, [props.profile.skills]);
 
-    // Handle update button click
-    const handleUpdateClick = () => {
-        // Implement your update logic here
-        console.log("Updated skills:", checkedState);
-        setIsModified(false); // Reset modified state after update
+    // Collect IDs of checked skills
+    const getCheckedSkillIds = () => {
+        return checkedState
+            .map((isChecked, index) => (isChecked ? index : null))
+            .filter(id => id !== null);
+    };
+
+    const updateSkills = async (checkedSkillIds) => {
+        const token = localStorage.getItem('authToken');
+        try {
+            const response = await fetch(`http://localhost:8080/api/profile/update-skills`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(checkedSkillIds), // Send array directly
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error updating skills:', error);
+            throw error;
+        }
+    };
+
+
+    const handleUpdateClick = async () => {
+        try {
+            const checkedSkillIds = getCheckedSkillIds();
+            await updateSkills(checkedSkillIds);
+            setIsModified(false);
+            console.log("Skills updated successfully.");
+        } catch (error) {
+            console.error("Update failed.");
+        }
     };
 
     return (
