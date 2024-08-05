@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { geocodeAddress } from "../../../services/geocodeAdress";
 
 const GeneralInfoPopUp = ({ show, handleClose, profile }) => {
     const [formData, setFormData] = useState(profile);
@@ -15,7 +16,35 @@ const GeneralInfoPopUp = ({ show, handleClose, profile }) => {
         }));
     };
 
+    console.log(formData);
+
     const handleSave = async () => {
+        const { address: streetAddress, city, postalCode, state } = formData;
+
+        const addressParts = [streetAddress, city, postalCode, state].filter(part => part && part.trim());
+        const address = addressParts.join(', ');
+
+        let updatedData = { ...formData };  // Create a local variable to hold updated data
+
+        if (address) {
+            try {
+                const location = await geocodeAddress(address);
+
+                if (location) {
+                    updatedData.geoX = location.lat;
+                    updatedData.geoY = location.lon;
+                } else {
+                    console.log("Geolocation service returned no results.");
+                }
+            } catch (error) {
+                console.error("Error during geocoding:", error);
+                setAlert({ type: 'danger', message: 'Geocoding error. Please try again later.' });
+                return;
+            }
+        } else {
+            console.log("Address is invalid. Skipping geolocation service call.");
+        }
+
         const token = localStorage.getItem('authToken');
         if (!token) {
             console.error("No token found in local storage");
@@ -23,15 +52,17 @@ const GeneralInfoPopUp = ({ show, handleClose, profile }) => {
         }
 
         const updatedFields = {
-            id: profile.id,
-            name: formData.name,
-            surname: formData.surname,
-            email: formData.email,
-            phoneNumber: formData.phoneNumber,
-            state: formData.state,
-            city: formData.city,
-            address: formData.address,
-            postalCode: formData.postalCode
+            id: updatedData.id,
+            name: updatedData.name,
+            surname: updatedData.surname,
+            email: updatedData.email,
+            phoneNumber: updatedData.phoneNumber,
+            state: updatedData.state,
+            city: updatedData.city,
+            address: updatedData.address,
+            postalCode: updatedData.postalCode,
+            geoX: updatedData.geoX,
+            geoY: updatedData.geoY
         };
 
         try {
@@ -51,15 +82,14 @@ const GeneralInfoPopUp = ({ show, handleClose, profile }) => {
             const responseBody = await response.json();
             console.log("Update successful", responseBody);
 
-            // Show success alert and close the popup
             setAlert({ type: 'success', message: 'Update successful!' });
             setTimeout(() => {
                 setAlert(null);
                 handleClose();
+                window.location.reload();
             }, 1500);
         } catch (error) {
             console.error("Error updating general info:", error);
-            // Show error alert
             setAlert({ type: 'danger', message: 'Error updating general info.' });
             setTimeout(() => {
                 setAlert(null);
@@ -170,7 +200,7 @@ const GeneralInfoPopUp = ({ show, handleClose, profile }) => {
                             name="address"
                             value={formData.address || ''}
                             onChange={e => handleChange('address', e.target.value)}
-                            placeholder="address"
+                            placeholder="Address"
                         />
                     </div>
                     <div className="col-6 form-group">
@@ -181,11 +211,10 @@ const GeneralInfoPopUp = ({ show, handleClose, profile }) => {
                             name="postalCode"
                             value={formData.postalCode || ''}
                             onChange={e => handleChange('postalCode', e.target.value)}
-                            placeholder="City"
+                            placeholder="Postal Code"
                         />
                     </div>
                 </div>
-
 
                 <div className="row p-3">
                     <div className="col-11 text-end">
