@@ -1,12 +1,12 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import infoIcon from "../../../assets/infoIcon.svg";
 
 const Skill = (props) => {
-    // Define state to manage the checked status of each checkbox
-    const [checkedState, setCheckedState] = useState(
-        new Array(6).fill(false)
-    );
+    // State to manage the checked status of each checkbox
+    const [checkedState, setCheckedState] = useState(new Array(6).fill(false));
+    // State to track if any checkbox has been modified
+    const [isModified, setIsModified] = useState(false);
 
     // Handle change event for checkboxes
     const handleCheckboxChange = (index) => {
@@ -14,6 +14,28 @@ const Skill = (props) => {
             i === index ? !item : item
         );
         setCheckedState(updatedCheckedState);
+        setIsModified(true); // Set modified state to true when any checkbox changes
+    };
+
+    // Update checked state based on props.profile.skills
+    useEffect(() => {
+        if (props.profile && props.profile.skills) {
+            const initialCheckedState = new Array(6).fill(false);
+            props.profile.skills.forEach(skill => {
+                const skillIndex = skill.id; // Assuming id maps directly to checkbox index
+                if (skillIndex >= 0 && skillIndex < initialCheckedState.length) {
+                    initialCheckedState[skillIndex] = true;
+                }
+            });
+            setCheckedState(initialCheckedState);
+        }
+    }, [props.profile.skills]);
+
+    // Handle update button click
+    const handleUpdateClick = () => {
+        // Implement your update logic here
+        console.log("Updated skills:", checkedState);
+        setIsModified(false); // Reset modified state after update
     };
 
     return (
@@ -33,7 +55,7 @@ const Skill = (props) => {
                         </div>
                     </div>
                     <div className="row m-2 mb-4">
-                        <div className="col-6 d-flex align-items-center">
+                        <div className="col-6 d-flex align-items-center mb-3">
                             <div className="form-check w-100 d-flex align-items-center">
                                 <input
                                     type="checkbox"
@@ -48,7 +70,7 @@ const Skill = (props) => {
                                 </label>
                             </div>
                         </div>
-                        <div className="col-6 d-flex align-items-center">
+                        <div className="col-6 d-flex align-items-center mb-3">
                             <div className="form-check w-100 d-flex align-items-center">
                                 <input
                                     type="checkbox"
@@ -65,7 +87,7 @@ const Skill = (props) => {
                         </div>
                     </div>
                     <div className="row m-2 mb-4">
-                        <div className="col-6 d-flex align-items-center">
+                        <div className="col-6 d-flex align-items-center mb-3">
                             <div className="form-check w-100 d-flex align-items-center">
                                 <input
                                     type="checkbox"
@@ -80,7 +102,7 @@ const Skill = (props) => {
                                 </label>
                             </div>
                         </div>
-                        <div className="col-6 d-flex align-items-center">
+                        <div className="col-6 d-flex align-items-center mb-3">
                             <div className="form-check w-100 d-flex align-items-center">
                                 <input
                                     type="checkbox"
@@ -97,7 +119,7 @@ const Skill = (props) => {
                         </div>
                     </div>
                     <div className="row m-2 mb-5">
-                        <div className="col-6 d-flex align-items-center mb-5">
+                        <div className="col-6 d-flex align-items-center mb-3">
                             <div className="form-check w-100 d-flex align-items-center">
                                 <input
                                     type="checkbox"
@@ -112,7 +134,7 @@ const Skill = (props) => {
                                 </label>
                             </div>
                         </div>
-                        <div className="col-6 d-flex align-items-center mb-5">
+                        <div className="col-6 d-flex align-items-center mb-3">
                             <div className="form-check w-100 d-flex align-items-center">
                                 <input
                                     type="checkbox"
@@ -128,6 +150,17 @@ const Skill = (props) => {
                             </div>
                         </div>
                     </div>
+                    {/* Conditionally render the update button */}
+                    {isModified && (
+                        <div className="text-end m-3">
+                            <button
+                                className="btn btn-primary mb-3"
+                                onClick={handleUpdateClick}
+                            >
+                                Update
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
