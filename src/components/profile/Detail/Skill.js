@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import infoIcon from "../../../assets/infoIcon.svg";
+import { updateSkills } from "../services/UpdateSkills";
 
 const Skill = (props) => {
     const [checkedState, setCheckedState] = useState(new Array(6).fill(false));
@@ -33,31 +34,6 @@ const Skill = (props) => {
             .map((isChecked, index) => (isChecked ? index : null))
             .filter(id => id !== null);
     };
-
-    const updateSkills = async (checkedSkillIds) => {
-        const token = localStorage.getItem('authToken');
-        try {
-            const response = await fetch(`http://localhost:8080/api/profile/update-skills`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify(checkedSkillIds), // Send array directly
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error updating skills:', error);
-            throw error;
-        }
-    };
-
 
     const handleUpdateClick = async () => {
         try {
