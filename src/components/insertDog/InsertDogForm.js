@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import AuthHeader from "../AuthHeader";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import defaultImg from "../../assets/defaultImg.svg";
+import defaultImg from "../../assets/defaultMainImage.png";
 import DogInfoForm from "./DogInfoForm";
 import OwnerInfoForm from "./OwnerInfoForm";
 import AdditionalDetailForm from "./AdditionalDetailForm";

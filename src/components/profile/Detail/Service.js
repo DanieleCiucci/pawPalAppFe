@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import infoIcon from "../../../assets/infoIcon.svg";
-import { updateSkills } from "../services/UpdateSkills";
+import { updateServices } from "../services/UpdateSkills";
 
 const Service = (props) => {
     const [checkedState, setCheckedState] = useState(new Array(6).fill(false));
@@ -16,20 +16,20 @@ const Service = (props) => {
     };
 
     useEffect(() => {
-        if (props.profile && props.profile.skills) {
+        if (props.profile && props.profile.services) {
             const initialCheckedState = new Array(6).fill(false);
-            props.profile.skills.forEach(skill => {
-                const skillIndex = skill.id; // Assuming id maps directly to checkbox index
-                if (skillIndex >= 0 && skillIndex < initialCheckedState.length) {
-                    initialCheckedState[skillIndex] = true;
+            props.profile.services.forEach(service => {
+                const serviceIndex = service.id; // Assuming id maps directly to checkbox index
+                if (serviceIndex >= 0 && serviceIndex < initialCheckedState.length) {
+                    initialCheckedState[serviceIndex] = true;
                 }
             });
             setCheckedState(initialCheckedState);
         }
-    }, [props.profile.skills]);
+    }, [props.profile.services]);
 
-    // Collect IDs of checked skills
-    const getCheckedSkillIds = () => {
+    // Collect IDs of checked services
+    const getCheckedServiceIds = () => {
         return checkedState
             .map((isChecked, index) => (isChecked ? index : null))
             .filter(id => id !== null);
@@ -37,10 +37,9 @@ const Service = (props) => {
 
     const handleUpdateClick = async () => {
         try {
-            const checkedSkillIds = getCheckedSkillIds();
-            await updateSkills(checkedSkillIds);
+            const checkedServiceIds = getCheckedServiceIds();
+            await updateServices(checkedServiceIds);
             setIsModified(false);
-            console.log("Skills updated successfully.");
         } catch (error) {
             console.error("Update failed.");
         }
@@ -73,8 +72,8 @@ const Service = (props) => {
                                     className="form-check-input customCheck me-2"
                                 />
                                 <label htmlFor="checkbox1" className="form-check-label">
-                                    <strong>Oral drug administration</strong> <br />
-                                    Administering medication by mouth to ensure correct dosing and effectiveness.
+                                    <strong>Daily Pet Sitting</strong> <br />
+                                    Providing daily care and companionship for pets while the owner is away.
                                 </label>
                             </div>
                         </div>
@@ -88,13 +87,13 @@ const Service = (props) => {
                                     className="form-check-input customCheck me-2"
                                 />
                                 <label htmlFor="checkbox2" className="form-check-label">
-                                    <strong>Drug administration injection</strong> <br />
-                                    Giving injections for precise medication delivery and treatment.
+                                    <strong>In-Home Pet Sitting</strong> <br />
+                                    Caring for pets in the comfort of their own home while the owner is away.
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <div className="row m-2 mb-4">
+                    <div className="row m-2 mb-5">
                         <div className="col-6 d-flex align-items-center mb-3">
                             <div className="form-check w-100 d-flex align-items-center">
                                 <input
@@ -105,8 +104,8 @@ const Service = (props) => {
                                     className="form-check-input customCheck me-2"
                                 />
                                 <label htmlFor="checkbox3" className="form-check-label">
-                                    <strong>First aid</strong> <br />
-                                    Providing initial care for injuries and emergencies before veterinary help.
+                                    <strong>Pet Sitting at Sitter's Home</strong> <br />
+                                    Offering pet care at the sitter's residence, ensuring a safe environment.
                                 </label>
                             </div>
                         </div>
@@ -120,40 +119,8 @@ const Service = (props) => {
                                     className="form-check-input customCheck me-2"
                                 />
                                 <label htmlFor="checkbox4" className="form-check-label">
-                                    <strong>Experience with dogs under one year</strong> <br />
-                                    Handling and caring for puppies with specific needs.
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row m-2 mb-5">
-                        <div className="col-6 d-flex align-items-center mb-3">
-                            <div className="form-check w-100 d-flex align-items-center">
-                                <input
-                                    type="checkbox"
-                                    id="checkbox5"
-                                    checked={checkedState[4]}
-                                    onChange={() => handleCheckboxChange(4)}
-                                    className="form-check-input customCheck me-2"
-                                />
-                                <label htmlFor="checkbox5" className="form-check-label">
-                                    <strong>Experience with adult dogs</strong> <br />
-                                    Managing the health and care of fully-grown dogs.
-                                </label>
-                            </div>
-                        </div>
-                        <div className="col-6 d-flex align-items-center mb-3">
-                            <div className="form-check w-100 d-flex align-items-center">
-                                <input
-                                    type="checkbox"
-                                    id="checkbox6"
-                                    checked={checkedState[5]}
-                                    onChange={() => handleCheckboxChange(5)}
-                                    className="form-check-input customCheck me-2"
-                                />
-                                <label htmlFor="checkbox6" className="form-check-label">
-                                    <strong>Can do exercise to the dog</strong> <br />
-                                    Creating and implementing exercise routines to keep dogs fit and active.
+                                    <strong>Dog Walking</strong> <br />
+                                    Providing regular walks to keep dogs active and healthy.
                                 </label>
                             </div>
                         </div>

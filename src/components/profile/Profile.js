@@ -4,7 +4,7 @@ import defaultImg from "../../assets/defaultImg.svg";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import NamePopUp from "../detailDog/PopUp/NamePopUp";
 import { fetchUserRole } from "../../services/roleSerivces";
-import { fetchProfileDetails, updateProfileImage,fetchDogsOwnedBySitter } from "./services/ProfileMainService";
+import { fetchProfileDetails, updateProfileImage, fetchDogsOwnedBySitter, fetchProfileDetailsOwner, fetchDogsOwnedByOwner } from "./services/ProfileMainService";
 import GeneralInfoProfile from "./Detail/GeneralInfoProfile";
 import MainDetailsProfile from "./Detail/MainDetailsProfile";
 import Calendar from "./Detail/CalendarComponent";
@@ -22,20 +22,45 @@ const Profile = (props) => {
     const [role, setRole] = useState(null);
 
     useEffect(() => {
+        const fetchRole = async () => {
+            try {
+                const userRole = await fetchUserRole();
+                setRole(userRole);
+            } catch (error) {
+                console.error("Error fetching user role:", error);
+            }
+        };
+
+        fetchRole();
+    }, []);
+
+    useEffect(() => {
+        if (role == null) return;
+
         const fetchData = async () => {
             try {
-                const profileData = await fetchProfileDetails();
-                setProfile(profileData);
+                let profileData;
+                let dogs;
 
-                const dogs = await fetchDogsOwnedBySitter();
+                if (role === 0) {
+                    profileData = await fetchProfileDetails();
+                    setProfile(profileData);
+                    dogs = await fetchDogsOwnedBySitter();
+                } else {
+                    profileData = await fetchProfileDetailsOwner();
+                    setProfile(profileData);
+                    dogs = await fetchDogsOwnedByOwner();
+                }
+
                 setDogsOwned(dogs);
+
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
 
         fetchData();
-    }, []);
+    }, [role]);
 
     const handleFileButtonClick = () => {
         fileInputRef.current.click();
@@ -80,19 +105,6 @@ const Profile = (props) => {
                 return <div>Select a tab to view content</div>;
         }
     };
-
-    useEffect(() => {
-        const initializePage = async () => {
-            try {
-                const userRole = await fetchUserRole();
-                setRole(userRole);
-            } catch (error) {
-                console.error("Error fetching user role:", error);
-            }
-        };
-
-        initializePage();
-    }, []);
 
     return (
         <div className="DogDetails">
@@ -155,30 +167,34 @@ const Profile = (props) => {
                                             Pet Owned
                                         </button>
                                     </li>
-                                    <li className="nav-item">
-                                        <button
-                                            className={`nav-link ${activeTab === 'skill' ? 'active' : ''}`}
-                                            onClick={() => setActiveTab('skill')}
-                                        >
-                                            Skill
-                                        </button>
-                                    </li>
-                                    <li className="nav-item">
-                                        <button
-                                            className={`nav-link ${activeTab === 'services' ? 'active' : ''}`}
-                                            onClick={() => setActiveTab('services')}
-                                        >
-                                            Services
-                                        </button>
-                                    </li>
-                                    <li className="nav-item">
-                                        <button
-                                            className={`nav-link ${activeTab === 'calendar' ? 'active' : ''}`}
-                                            onClick={() => setActiveTab('calendar')}
-                                        >
-                                            Calendar
-                                        </button>
-                                    </li>
+                                    {!role && (
+                                        <>
+                                            <li className="nav-item">
+                                                <button
+                                                    className={`nav-link ${activeTab === 'skill' ? 'active' : ''}`}
+                                                    onClick={() => setActiveTab('skill')}
+                                                >
+                                                    Skill
+                                                </button>
+                                            </li>
+                                            <li className="nav-item">
+                                                <button
+                                                    className={`nav-link ${activeTab === 'services' ? 'active' : ''}`}
+                                                    onClick={() => setActiveTab('services')}
+                                                >
+                                                    Services
+                                                </button>
+                                            </li>
+                                            <li className="nav-item">
+                                                <button
+                                                    className={`nav-link ${activeTab === 'calendar' ? 'active' : ''}`}
+                                                    onClick={() => setActiveTab('calendar')}
+                                                >
+                                                    Calendar
+                                                </button>
+                                            </li>
+                                        </>
+                                    )}
                                 </ul>
 
                                 <div className="tab-content mt-4">

@@ -2,11 +2,18 @@ import React from "react";
 import defaultImg from "../../../assets/defaultImg.svg";
 
 const PetOwned = ({ dogsOwned }) => {
+    console.log(dogsOwned);
+
+    // Ensure dogsOwned is an array, even if it's undefined or null
+    const validDogsOwned = Array.isArray(dogsOwned) ? dogsOwned : [];
+
+    console.log(validDogsOwned)
+
     return (
         <div>
             <div className="row">
-                {dogsOwned.length ? (
-                    dogsOwned.map((dog, index) => (
+                {validDogsOwned.length > 0 ? (
+                    validDogsOwned.map((dog, index) => (
                         <div key={index} className="col-lg-6 col-md-6 mb-4 d-flex justify-content-center">
                             <div className="card" style={{ width: '21rem' }}>
                                 <img
@@ -25,7 +32,7 @@ const PetOwned = ({ dogsOwned }) => {
                         </div>
                     ))
                 ) : (
-                    <p>No dogs owned by this sitter.</p>
+                    <p>No dogs owned</p>
                 )}
             </div>
         </div>
