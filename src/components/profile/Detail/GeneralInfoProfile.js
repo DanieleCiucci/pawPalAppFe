@@ -1,14 +1,17 @@
-import * as React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import infoIcon from "../../../assets/infoIcon.svg";
 import phoneIcon from "../../../assets/phoneIcon.svg";
 import mailIcon from "../../../assets/mailIcon.svg";
-import AboutOwnerPopUp from "../../detailDog/PopUp/AboutOnwerPopUp";
-import LocationAndGeneralInfoPopUp from "../../detailDog/PopUp/LocationAndGeneralInfoPopUp";
+import AboutProfilePopUp from "../PopUp/AboutProfilePopUp";
 import ProfileMap from "./ProfileMap";
 import GeneralInfoPopUp from "../PopUp/GeneralInfoPopUp";
+import { fetchUserRole } from "../../../services/roleSerivces";
+
+
+import AboutProfileOwnerPopUp from "../PopUp/AboutProfileOwnerPopUp"
 
 const GeneralInfoProfile = (props) => {
+    const [userRole, setUserRole] = useState(null);
     const [showOwnerPopup, setShowOwnerPopup] = useState(false);
     const [showLocationPopup, setShowLocationPopup] = useState(false);
 
@@ -27,6 +30,23 @@ const GeneralInfoProfile = (props) => {
     const handleCloseLocationPopup = () => {
         setShowLocationPopup(false);
     };
+
+    useEffect(() => {
+        const initializePage = async () => {
+            try {
+                // Fetch user role
+                const role = await fetchUserRole();
+                if (role !== null) {
+                    setUserRole(role);
+                }
+            } catch (error) {
+                console.error("Error during page initialization:", error);
+            }
+        };
+
+        initializePage();
+    }, []);
+
 
     return (
         <div className="row mt-5">
@@ -95,22 +115,37 @@ const GeneralInfoProfile = (props) => {
                     </div>
                     <div className="row m-2">
                         <p><strong>About me</strong></p>
+                        {userRole ===0 ? (
                         <p className="mb-2">{props.profile.aboutSitter}</p>
+                        ): (
+                            <p className="mb-2">{props.profile.aboutOwner}</p>
+                        )}
+
                     </div>
                     <div className="row m-2">
                         <p><strong>Personal note about the owner</strong></p>
+                        {userRole ===0 ? (
                         <p className="mb-3">{props.profile.preferencesAboutDog}</p>
+                        ):(
+                            <p className="mb-2">{props.profile.personalNoteAboutOwner}</p>
+                        )}
+
                     </div>
                 </div>
             </div>
 
-            {showOwnerPopup && (
-                <AboutOwnerPopUp show={showOwnerPopup} handleClose={handleCloseOwnerPopup} profile={props.profile} />
+            {
+                //if the role is sitter else show the owner components pop up
+            }
+            {(showOwnerPopup && userRole === 0 ) && (
+                <AboutProfilePopUp show={showOwnerPopup} handleClose={handleCloseOwnerPopup} profile={props.profile} />
+            )}
+            {(showOwnerPopup && userRole === 1 ) && (
+                <AboutProfileOwnerPopUp show={showOwnerPopup} handleClose={handleCloseOwnerPopup} profile={props.profile} />
             )}
             {showLocationPopup && (
                 <GeneralInfoPopUp show={showLocationPopup} handleClose={handleCloseLocationPopup} profile={props.profile} />
             )}
-
         </div>
     );
 };
