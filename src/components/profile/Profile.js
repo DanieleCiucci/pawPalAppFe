@@ -10,6 +10,7 @@ import MainDetailsProfile from "./Detail/MainDetailsProfile";
 import Calendar from "./Detail/CalendarComponent";
 import PetOwned from "./Detail/PetOwned";
 import Skill from "./Detail/Skill";
+import Service from "./Detail/Service";
 
 const Profile = (props) => {
     const [profile, setProfile] = useState(null);
@@ -72,7 +73,7 @@ const Profile = (props) => {
             case 'skill':
                 return <Skill profile={profile} />;
             case 'services':
-                return <div>Services Content</div>;
+                return <Service profile={profile} />;
             case 'calendar':
                 return <Calendar />;
             default:

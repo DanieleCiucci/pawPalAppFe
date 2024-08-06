@@ -22,13 +22,24 @@ const GeneralInfoPopUp = ({ show, handleClose, dog }) => {
             return;
         }
 
+        let idGenderRequest = 0;
+
+        if(formData.idGender == 1) {
+            console.log("entrato nel if");
+            idGenderRequest = 1;
+        }
+
+        console.log("id gender "+ idGenderRequest);
+
+
         const updatedFields = {
             id: dog.id,
             ageInYear: formData.ageInYear,
             ageMonth: formData.ageMonth,
             weight: formData.weight,
-            idGender: formData.idGender
+            idGender: idGenderRequest
         };
+
 
         try {
             const response = await fetch("http://localhost:8080/api/dog/update-general-info", {
@@ -66,6 +77,8 @@ const GeneralInfoPopUp = ({ show, handleClose, dog }) => {
     };
 
     if (!show) return null;
+
+
 
     return (
         <div className="popup-overlay overlayStyle">
@@ -129,10 +142,10 @@ const GeneralInfoPopUp = ({ show, handleClose, dog }) => {
                         <select
                             className="form-select"
                             name="idGender"
-                            value={formData.idGender}
+                            value={formData.idGender || ""}
                             onChange={e => handleChange('idGender', e.target.value)}
                         >
-                            <option value="" disabled>Select Gender</option>
+                            <option selected disabled className="optionSelected">{dog.idGender}</option>
                             <option value="0">Male</option>
                             <option value="1">Female</option>
                         </select>
