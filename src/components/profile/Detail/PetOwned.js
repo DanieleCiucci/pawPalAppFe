@@ -1,9 +1,17 @@
 import React from "react";
 import defaultImg from "../../../assets/defaultImg.svg";
+import { useNavigate } from "react-router-dom";
 
 const PetOwned = ({ dogsOwned }) => {
+    const navigate = useNavigate();
 
+    // Ensure dogsOwned is a valid array
     const validDogsOwned = Array.isArray(dogsOwned) ? dogsOwned : [];
+
+    // Function to handle navigation with state
+    const handleDetailsClick = (dog) => {
+        navigate(`/yourdogs/${dog.id}`, { state: { personalSitterDog: true } });
+    };
 
     return (
         <div>
@@ -21,7 +29,12 @@ const PetOwned = ({ dogsOwned }) => {
                                     <p className="card-text"><strong>{dog.name}</strong></p>
                                     <p className="card-text">{dog.detail}</p>
                                     <div className="d-flex justify-content-end mt-3">
-                                        <a href={`/yourdogs/${dog.id}`} className="btn btn-outline-primary">Details</a>
+                                        <button
+                                            className="btn btn-outline-primary"
+                                            onClick={() => handleDetailsClick(dog)}
+                                        >
+                                            Details
+                                        </button>
                                     </div>
                                 </div>
                             </div>

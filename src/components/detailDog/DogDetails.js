@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import AuthHeader from "../AuthHeader";
 import defaultImg from "../../assets/defaultImg.svg";
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -21,6 +21,9 @@ const DogDetails = (props) => {
     const [showPopup, setShowPopup] = useState(false);
     const fileInputRef = useRef(null);
     const [role, setRole] = useState(null);
+
+    const location = useLocation();
+    const { personalSitterDog } = location.state || {};
 
     useEffect(() => {
         const fetchDogDetails = async () => {
@@ -60,7 +63,7 @@ const DogDetails = (props) => {
 
             const reader = new FileReader();
             reader.onloadend = async () => {
-                const base64String = reader.result.split(',')[1]; // Remove data:image/jpeg;base64,
+                const base64String = reader.result.split(',')[1];
                 setDog(prevDog => ({
                     ...prevDog,
                     image: base64String
@@ -139,8 +142,7 @@ const DogDetails = (props) => {
         const initializePage = async () => {
             try {
                 const userRole = await fetchUserRole();
-
-                setRole(userRole)
+                setRole(userRole);
             } catch (error) {
                 console.error("Error fetching user role:", error);
             }
@@ -232,16 +234,17 @@ const DogDetails = (props) => {
                                             Info about Care
                                         </button>
                                     </li>
-                                    {role === 0 && (
-                                    <li className="nav-item">
-                                        <button
-                                            className={`nav-link ${activeTab === 'owner' ? 'active' : ''}`}
-                                            onClick={() => setActiveTab('owner')}
-                                        >
-                                            Owner
-                                        </button>
-                                    </li>
-                                        )}
+                                    {/* Show the Owner tab only if role is not 0 and personalSitterDog is false */}
+                                    {!(role === 0 || personalSitterDog) && (
+                                        <li className="nav-item">
+                                            <button
+                                                className={`nav-link ${activeTab === 'owner' ? 'active' : ''}`}
+                                                onClick={() => setActiveTab('owner')}
+                                            >
+                                                Owner
+                                            </button>
+                                        </li>
+                                    )}
                                 </ul>
 
                                 <div className="tab-content mt-4">
