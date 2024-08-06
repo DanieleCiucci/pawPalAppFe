@@ -25,12 +25,9 @@ const GeneralInfoPopUp = ({ show, handleClose, dog }) => {
         let idGenderRequest = 0;
 
         if(formData.idGender == 1) {
-            console.log("entrato nel if");
+
             idGenderRequest = 1;
         }
-
-        console.log("id gender "+ idGenderRequest);
-
 
         const updatedFields = {
             id: dog.id,
