@@ -8,7 +8,6 @@ const MainDetailsProfile = (props) => {
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [profile, setProfile] = useState(props.profile);
 
-
     const navigate = useNavigate();
 
     const handleFileChange = async (event) => {
@@ -80,7 +79,7 @@ const MainDetailsProfile = (props) => {
                 <div className="col-7 d-flex align-items-center">
                     <div>
                         <h3 className="mb-0">
-                            {profile.name}{" " + profile.surname}
+                            {profile.name} {profile.surname}
                         </h3>
                         <p className="mt-2 ms-3 text-muted">
                             {profile.email}
@@ -88,14 +87,13 @@ const MainDetailsProfile = (props) => {
                     </div>
                 </div>
 
-                {props.activeButtonPetOwned && (
+                {props.activeButtonPetOwned && props.role === 0 && (
                     <div className="col-3">
                         <button type="button" className="btn btn-primary mt-5" onClick={handleAddDogClick}>
                             Add your personal dog
                         </button>
                     </div>
                 )}
-
             </div>
         </div>
     );

@@ -2,12 +2,8 @@ import React from "react";
 import defaultImg from "../../../assets/defaultImg.svg";
 
 const PetOwned = ({ dogsOwned }) => {
-    console.log(dogsOwned);
 
-    // Ensure dogsOwned is an array, even if it's undefined or null
     const validDogsOwned = Array.isArray(dogsOwned) ? dogsOwned : [];
-
-    console.log(validDogsOwned)
 
     return (
         <div>
