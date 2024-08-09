@@ -130,8 +130,6 @@ const DogDetails = (props) => {
         }
     };
 
-    console.log(role)
-
     const handleIconClick = () => {
         setShowPopup(true);
     };
@@ -152,8 +150,6 @@ const DogDetails = (props) => {
 
         initializePage();
     }, []);
-
-    console.log(personalSitterDog, ' log personalSitterDog')
 
     return (
         <div className="DogDetails">
