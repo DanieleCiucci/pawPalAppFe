@@ -16,8 +16,8 @@ const popUpIcon = new Icon({
 const FindNewOwner = (props) => {
     const { logout } = props;
     const [userRole, setUserRole] = useState(null);
-    const [owners, setOwners] = useState([]); // State to hold the list of owners or sitters
-    const [mapCenter, setMapCenter] = useState(null); // Initially null to conditionally render
+    const [owners, setOwners] = useState([]);
+    const [mapCenter, setMapCenter] = useState(null);
 
     useEffect(() => {
         const initializePage = async () => {

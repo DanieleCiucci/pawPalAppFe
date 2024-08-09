@@ -130,6 +130,8 @@ const DogDetails = (props) => {
         }
     };
 
+    console.log(role)
+
     const handleIconClick = () => {
         setShowPopup(true);
     };
@@ -150,6 +152,8 @@ const DogDetails = (props) => {
 
         initializePage();
     }, []);
+
+    console.log(personalSitterDog, ' log personalSitterDog')
 
     return (
         <div className="DogDetails">
@@ -234,8 +238,8 @@ const DogDetails = (props) => {
                                             Info about Care
                                         </button>
                                     </li>
-                                    {/* Show the Owner tab only if role is not 0 and personalSitterDog is false */}
-                                    {!(role === 0 || personalSitterDog) && (
+
+                                    {!personalSitterDog && role === 0 && (
                                         <li className="nav-item">
                                             <button
                                                 className={`nav-link ${activeTab === 'owner' ? 'active' : ''}`}
@@ -245,6 +249,7 @@ const DogDetails = (props) => {
                                             </button>
                                         </li>
                                     )}
+
                                 </ul>
 
                                 <div className="tab-content mt-4">
