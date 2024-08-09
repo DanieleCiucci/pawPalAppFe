@@ -5,7 +5,7 @@ import LoginFormWrapper from "./LoginForm";
 import { request, setAuthToken } from "../axios_helper";
 import Buttons from "./Buttons";
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Appointment from "./Appointment";
+import Appointment from "./appointment/Appointment";
 import YourDog from "./YourDog"
 import InsertDog from "./insertDog/InsertDogForm";
 import DogDetails from "./detailDog/DogDetails";

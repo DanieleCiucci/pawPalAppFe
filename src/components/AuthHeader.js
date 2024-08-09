@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Link, Route, Routes} from "react-router-dom";
-import Appointment from "./Appointment";
+import Appointment from "./appointment/Appointment";
 import logoBackground from "../assets/logoBackgroud.svg";
 import logo from "../assets/appLogo.svg";
 
