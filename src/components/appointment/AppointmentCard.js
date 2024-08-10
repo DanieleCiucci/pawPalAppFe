@@ -2,16 +2,16 @@
 import React from 'react';
 import defaultImg from '../../assets/defaultImg.svg';
 
-const AppointmentCard = ({ appointment = {} }) => {
+const AppointmentCard = ({ appointment = {}, role }) => {
     const {
-        startDate = Date.now(), // Default to current date if not provided
+        startDate = Date.now(),
         ownerName = "Unknown",
+        sitterName = "Unknow",
         state = "Unknown",
         dogNames = "Unknown",
-        photo = null // Add the photo field with a default value of null
+        photo = null
     } = appointment;
 
-    // Format the date as needed
     const formattedDate = new Date(startDate).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -25,14 +25,18 @@ const AppointmentCard = ({ appointment = {} }) => {
                     className="card-img-top"
                     src={photo ? `data:image/jpeg;base64,${photo}` : defaultImg}
                     alt="Appointment"
-                    style={{ height: '180px', objectFit: 'cover' }} // Ensure image fits the card
+                    style={{ height: '180px', objectFit: 'cover' }}
                 />
                 <div className="card-body">
-                    <p className="card-text"><strong>{ownerName}</strong> </p>
+                    {role === 0 ?(
+                        <p className="card-text"><strong>{ownerName}</strong></p>
+                    ): (
+                        <p className="card-text"><strong>{sitterName}</strong></p>
+                    )}
                     <p className="card-text"><strong>Date:</strong> {formattedDate}</p>
                     <p className="card-text">Appointment type:  {state}</p>
                     <p className="card-text">Dogs in the appointment: {dogNames}</p>
-                    <div className="d-flex justify-content-end">
+                    <div className="d-flex justify-content-end mt-4">
                         <a href="#" className="btn btn-outline-primary">Details</a>
                     </div>
                 </div>

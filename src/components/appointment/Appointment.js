@@ -1,16 +1,19 @@
-// Appointments.js
 import React, { useEffect, useState } from "react";
 import AuthHeader from "../AuthHeader";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { fetchUserRole } from "../../services/roleSerivces";
-import { fetchAppointmentsByState } from "./service/AppointmentService";
+import { fetchAppointmentsByState, fetchAppointmentsOwnerByState } from "./service/AppointmentService";
 import AppointmentCard from './AppointmentCard';
+import Pagination from '../Paginator';
+
 const Appointments = (props) => {
     const [activeTab, setActiveTab] = useState('pending');
     const [appointments, setAppointments] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const [role, setRole] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const pageSize = 6; // Number of items per page
 
     // Fetch user role on mount
     useEffect(() => {
@@ -20,27 +23,38 @@ const Appointments = (props) => {
                 setRole(userRole);
             } catch (error) {
                 console.error("Error fetching user role:", error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
         fetchRole();
     }, []);
 
-    // Fetch appointments whenever the active tab or current page changes
+    // Fetch appointments whenever the active tab, current page, or role changes
     useEffect(() => {
         const fetchAppointments = async () => {
             try {
                 const idState = getIdStateForTab(activeTab);
-                const data = await fetchAppointmentsByState(idState);
-                setAppointments(data);
-                setTotalPages(Math.ceil(data.totalItems / 6)); // Adjust as needed
+                let data;
+
+                if (role === 0) {
+                    data = await fetchAppointmentsByState(idState, currentPage, pageSize);
+                } else {
+                    data = await fetchAppointmentsOwnerByState(idState, currentPage, pageSize);
+                }
+
+                setAppointments(data.content); // Adjust based on your API response structure
+                setTotalPages(data.totalPages); // Assuming the API returns totalPages
             } catch (error) {
                 console.error("Error fetching appointments:", error);
             }
         };
 
-        fetchAppointments();
-    }, [activeTab, currentPage]);
+        if (!isLoading) {
+            fetchAppointments();
+        }
+    }, [activeTab, currentPage, role, isLoading]);
 
     // Determine ID state based on active tab
     const getIdStateForTab = (tab) => {
@@ -57,7 +71,7 @@ const Appointments = (props) => {
     // Handle tab changes
     const handleTabChange = (tab) => {
         setActiveTab(tab);
-        setCurrentPage(0); // Reset page on tab change
+        setCurrentPage(0); // Reset to first page on tab change
     };
 
     // Handle page changes
@@ -65,6 +79,10 @@ const Appointments = (props) => {
         setCurrentPage(pageNumber);
     };
 
+    // replace this with a spinner or custom loading component
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="AuthHome">
@@ -81,7 +99,6 @@ const Appointments = (props) => {
                             You can schedule a new appointment using the "Schedule Appointment" button.
                         </p>
                     </div>
-
                 </div>
                 <div className="col-2 d-flex align-items-center justify-content-center">
                     <button className="homeButton">Schedule Appointment</button>
@@ -96,9 +113,8 @@ const Appointments = (props) => {
             </div>
 
             <div className="row">
-            <div className="col-2"></div>
+                <div className="col-2"></div>
                 <div className="col-8">
-
                     <ul className="nav nav-tabs CustomNav" style={{borderBottom: 'none', marginLeft: '2rem'}}>
                         <li className="nav-item">
                             <button
@@ -116,40 +132,36 @@ const Appointments = (props) => {
                                 Confirmed
                             </button>
                         </li>
-                        {!role && (
-                            <>
-                                <li className="nav-item">
-                                    <button
-                                        className={`nav-link ${activeTab === 'rejected' ? 'active' : ''}`}
-                                        onClick={() => handleTabChange('rejected')}
-                                    >
-                                        Rejected
-                                    </button>
-                                </li>
-                                <li className="nav-item">
-                                    <button
-                                        className={`nav-link ${activeTab === 'cancelled' ? 'active' : ''}`}
-                                        onClick={() => handleTabChange('cancelled')}
-                                    >
-                                        Cancelled
-                                    </button>
-                                </li>
-                                <li className="nav-item">
-                                    <button
-                                        className={`nav-link ${activeTab === 'passed' ? 'active' : ''}`}
-                                        onClick={() => handleTabChange('passed')}
-                                    >
-                                        Passed
-                                    </button>
-                                </li>
-                            </>
-                        )}
+                        <li className="nav-item">
+                            <button
+                                className={`nav-link ${activeTab === 'rejected' ? 'active' : ''}`}
+                                onClick={() => handleTabChange('rejected')}
+                            >
+                                Rejected
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button
+                                className={`nav-link ${activeTab === 'cancelled' ? 'active' : ''}`}
+                                onClick={() => handleTabChange('cancelled')}
+                            >
+                                Cancelled
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button
+                                className={`nav-link ${activeTab === 'passed' ? 'active' : ''}`}
+                                onClick={() => handleTabChange('passed')}
+                            >
+                                Passed
+                            </button>
+                        </li>
                     </ul>
                     <div className="tab-content mt-4">
                         <div className="row mt-5">
                             {appointments.length > 0 ? (
                                 appointments.map((appointment, index) => (
-                                    <AppointmentCard key={index} appointment={appointment}/>
+                                    <AppointmentCard key={index} appointment={appointment} role={role} />
                                 ))
                             ) : (
                                 <div className="col-12 text-center">
@@ -159,7 +171,11 @@ const Appointments = (props) => {
                         </div>
                         {totalPages > 1 && (
                             <div className="d-flex justify-content-end mt-4 mb-4">
-
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={handlePageChange}
+                                />
                             </div>
                         )}
                     </div>
