@@ -236,3 +236,8 @@ body {
 .form-check{
     border: 0.5px solid #F2F2F2 !important;
 }
+
+.filterSection{
+    background-color: #FFFFFF;
+    margin-left: 3rem;
+}

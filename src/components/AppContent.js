@@ -5,12 +5,13 @@ import LoginFormWrapper from "./LoginForm";
 import { request, setAuthToken } from "../axios_helper";
 import Buttons from "./Buttons";
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Appointment from "./appointment/Appointment";
 import YourDog from "./YourDog"
 import InsertDog from "./insertDog/InsertDogForm";
 import DogDetails from "./detailDog/DogDetails";
 import  FindNewOwner from "./FindNewOwner"
 import Profile from "./profile/Profile";
+import Appointment from "./appointment/Appointment";
+import ScheduleAppointment from "./appointment/ScheudleAppointment";
 
 export default class AppContent extends React.Component {
     constructor(props) {
@@ -83,8 +84,17 @@ export default class AppContent extends React.Component {
                 <Routes>
                     <Route path="/" element={<WelcomeContent />} />
                     <Route path="/auth" element={user ? <AuthContent logout={this.logout} user={user} /> : <Navigate to="/" />} />
-                    <Route path="/appointment" element={user ? <Appointment /> : <Navigate to="/" /> }/>
 
+                    {
+                        //APPOINTMENT NAVIGATION
+                    }
+
+                    <Route path="/appointment" element={user ? <Appointment /> : <Navigate to="/" /> }/>
+                    <Route path="/appointment/schedule-appointment" element={user ? <ScheduleAppointment /> : <Navigate to="/" /> }/>
+
+                    {
+                        //your dog navigation
+                    }
                     <Route path="/yourdogs" element={user ? <YourDog logout={this.logout} user={user} /> : <Navigate to="/" />}/>
                     <Route path="/yourdogs/insert" element={user ? <InsertDog /> : <Navigate to="/" />} />
 

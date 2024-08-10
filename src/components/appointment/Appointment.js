@@ -5,6 +5,7 @@ import { fetchUserRole } from "../../services/roleSerivces";
 import { fetchAppointmentsByState, fetchAppointmentsOwnerByState } from "./service/AppointmentService";
 import AppointmentCard from './AppointmentCard';
 import Pagination from '../Paginator';
+import {useNavigate} from "react-router-dom";
 
 const Appointments = (props) => {
     const [activeTab, setActiveTab] = useState('pending');
@@ -13,7 +14,8 @@ const Appointments = (props) => {
     const [totalPages, setTotalPages] = useState(1);
     const [role, setRole] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const pageSize = 6; // Number of items per page
+    const pageSize = 6;
+    const navigate = useNavigate();
 
     // Fetch user role on mount
     useEffect(() => {
@@ -44,8 +46,8 @@ const Appointments = (props) => {
                     data = await fetchAppointmentsOwnerByState(idState, currentPage, pageSize);
                 }
 
-                setAppointments(data.content); // Adjust based on your API response structure
-                setTotalPages(data.totalPages); // Assuming the API returns totalPages
+                setAppointments(data.content);
+                setTotalPages(data.totalPages);
             } catch (error) {
                 console.error("Error fetching appointments:", error);
             }
@@ -68,13 +70,11 @@ const Appointments = (props) => {
         }
     };
 
-    // Handle tab changes
     const handleTabChange = (tab) => {
         setActiveTab(tab);
         setCurrentPage(0); // Reset to first page on tab change
     };
 
-    // Handle page changes
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -83,6 +83,16 @@ const Appointments = (props) => {
     if (isLoading) {
         return <div>Loading...</div>;
     }
+
+    const handleInsertAppointment = () =>{
+        if(role === 1){
+            navigate("/appointment/schedule-appointment")
+        }else{
+            console.log(" sono un sitter");
+        }
+
+    }
+
 
     return (
         <div className="AuthHome">
@@ -101,7 +111,7 @@ const Appointments = (props) => {
                     </div>
                 </div>
                 <div className="col-2 d-flex align-items-center justify-content-center">
-                    <button className="homeButton">Schedule Appointment</button>
+                    <button className="homeButton" onClick={handleInsertAppointment}>Schedule Appointment</button>
                 </div>
 
                 <div className="row" style={{marginTop: '-2rem'}}>
@@ -165,7 +175,7 @@ const Appointments = (props) => {
                                 ))
                             ) : (
                                 <div className="col-12 text-center">
-                                    <p>No appointments available for this tab.</p>
+                                    <p>No appointments available.</p>
                                 </div>
                             )}
                         </div>
