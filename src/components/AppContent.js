@@ -89,8 +89,8 @@ export default class AppContent extends React.Component {
                         //APPOINTMENT NAVIGATION
                     }
 
-                    <Route path="/appointment" element={user ? <Appointment /> : <Navigate to="/" /> }/>
-                    <Route path="/appointment/schedule-appointment" element={user ? <ScheduleAppointment /> : <Navigate to="/" /> }/>
+                    <Route path="/appointment/schedule-appointment" element={<ScheduleAppointment />} />
+                    <Route path="/appointment" element={<Appointment />} />
                     <Route path="/profile/:sitterId" element={<Profile />} />
 
                     {
@@ -102,6 +102,9 @@ export default class AppContent extends React.Component {
                     <Route path="/findnewowner" element={user ? <FindNewOwner /> : <Navigate to="/" />}/>
                     <Route path="/profile" element={user ? <Profile /> : <Navigate to="/" />} />
                     <Route path="/yourdogs/:id" element={<DogDetails />} />
+
+
+
                 </Routes>
                 {componentToShow === "login" && <LoginFormWrapper onLogin={this.onLogin} onRegister={this.onRegister} />}
             </div>
