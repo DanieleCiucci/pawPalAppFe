@@ -5,7 +5,8 @@ import { fetchUserRole } from "../../services/roleSerivces";
 import { fetchAppointmentsByState, fetchAppointmentsOwnerByState } from "./service/AppointmentService";
 import AppointmentCard from './AppointmentCard';
 import Pagination from '../Paginator';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import AppointmentModalSitter from "./popUp/NewAppointmentPopUpSitter";
 
 const Appointments = (props) => {
     const [activeTab, setActiveTab] = useState('pending');
@@ -16,6 +17,7 @@ const Appointments = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const pageSize = 6;
     const navigate = useNavigate();
+    const [modalShow, setModalShow] = useState(false);
 
     // Fetch user role on mount
     useEffect(() => {
@@ -79,20 +81,19 @@ const Appointments = (props) => {
         setCurrentPage(pageNumber);
     };
 
-    // replace this with a spinner or custom loading component
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
-    const handleInsertAppointment = () =>{
-        if(role === 1){
-            navigate("/appointment/schedule-appointment")
-        }else{
-            console.log(" sono un sitter");
+    const handleInsertAppointment = () => {
+        if (role === 1) {
+            navigate("/appointment/schedule-appointment");
+        } else {
+            setModalShow(true); // Show the modal for sitters
         }
+    };
 
-    }
-
+    const handleCloseModal = () => setModalShow(false);
 
     return (
         <div className="AuthHome">
@@ -100,12 +101,12 @@ const Appointments = (props) => {
             <div className="row mb-0">
                 <div className="col-2"></div>
                 <div className="col-5 m-lg-5">
-                    <h1 style={{fontWeight: 'bold'}}>
+                    <h1 style={{ fontWeight: 'bold' }}>
                         Appointments
                     </h1>
                     <div className="mt-2">
-                        <p style={{fontSize: '1rem', color: '#686565'}}>
-                            In this section, you can view the list of appointments. <br/>
+                        <p style={{ fontSize: '1rem', color: '#686565' }}>
+                            In this section, you can view the list of appointments. <br />
                             You can schedule a new appointment using the "Schedule Appointment" button.
                         </p>
                     </div>
@@ -114,10 +115,10 @@ const Appointments = (props) => {
                     <button className="homeButton" onClick={handleInsertAppointment}>Schedule Appointment</button>
                 </div>
 
-                <div className="row" style={{marginTop: '-2rem'}}>
+                <div className="row" style={{ marginTop: '-2rem' }}>
                     <div className="col-2"></div>
                     <div className="col-8">
-                        <hr style={{borderTop: "1px solid #838383", marginLeft:'3rem'}}/>
+                        <hr style={{ borderTop: "1px solid #838383", marginLeft: '3rem' }} />
                     </div>
                 </div>
             </div>
@@ -125,7 +126,7 @@ const Appointments = (props) => {
             <div className="row">
                 <div className="col-2"></div>
                 <div className="col-8">
-                    <ul className="nav nav-tabs CustomNav" style={{borderBottom: 'none', marginLeft: '2rem'}}>
+                    <ul className="nav nav-tabs CustomNav" style={{ borderBottom: 'none', marginLeft: '2rem' }}>
                         <li className="nav-item">
                             <button
                                 className={`nav-link ${activeTab === 'pending' ? 'active' : ''}`}
@@ -192,6 +193,7 @@ const Appointments = (props) => {
                 </div>
                 <div className="col-2"></div>
             </div>
+            <AppointmentModalSitter show={modalShow} handleClose={handleCloseModal} sitterId={props.sitterId}/>
         </div>
     );
 };

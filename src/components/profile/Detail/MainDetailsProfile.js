@@ -8,7 +8,7 @@ const MainDetailsProfile = (props) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [profile, setProfile] = useState(props.profile);
-    const [modalShow, setModalShow] = useState(false); // State to manage modal visibility
+    const [modalShow, setModalShow] = useState(false);
 
     const navigate = useNavigate();
 
