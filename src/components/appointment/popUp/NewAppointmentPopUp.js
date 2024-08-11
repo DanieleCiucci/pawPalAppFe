@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import imageCard from "../../../assets/dog1.jpg";
+import { scheduleAppointment } from '../service/AppointmentService';
 
-const NewAppointmentPopUp = ({ show, handleClose }) => {
+const NewAppointmentPopUp = ({ show, handleClose, sitterId }) => {
     const [appointmentData, setAppointmentData] = useState({
         startDate: '',
         endDate: '',
-        sitterId: '',
+        sitterId: sitterId,
         dogIds: [],
-        message: ''
+        message: '',
+        serviceId:''
     });
     const [alert, setAlert] = useState(null);
     const [dogs, setDogs] = useState([]);
@@ -17,9 +19,9 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
         { value: '', label: "Any" },
         { value: '0', label: 'Daily pet sitting' },
         { value: '1', label: 'Pet sitting at the owner\'s home' },
-        { value: '3', label: 'Pet sitting at the sitter\'s home' },
-        { value: '4', label: 'Walk' },
-        { value: '5', label: 'Pet sitting for more than a day' },
+        { value: '2', label: 'Pet sitting at the sitter\'s home' },
+        { value: '3', label: 'Walk' },
+        { value: '4', label: 'Pet sitting for more than a day' },
     ];
 
     useEffect(() => {
@@ -56,15 +58,20 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
         }));
     };
 
-    const handleSubmit = async () => {
-        console.log("Appointment Data:", appointmentData);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
         try {
-            // Simulate a successful submission
-            setAlert({ type: 'success', message: 'Appointment scheduled successfully!' });
-            //setTimeout(() => {
-            //    setAlert(null);
-            //    handleClose(); // Close modal after submission
+            const responseBody = await scheduleAppointment(appointmentData); // Use the external API call
+            console.log("Success:", responseBody);
+
+            // Show success alert and close the modal after a brief delay
+            setAlert({ type: 'success', message: 'Appointment scheduled successfully.' });
+            // setTimeout(() => {
+            //   setAlert(null);
+            // handleClose();
             //}, 1500);
+
         } catch (error) {
             console.error("Error scheduling appointment:", error);
             setAlert({ type: 'danger', message: 'Error scheduling appointment.' });
@@ -74,9 +81,16 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
         }
     };
 
+
     const handleServiceTypeChange = (event) => {
-        setServiceType(event.target.value);
+        const serviceId = event.target.value;
+        setServiceType(serviceId);
+        setAppointmentData(prevData => ({
+            ...prevData,
+            serviceId: serviceId
+        }));
     };
+
 
     const handleDateTimeChangeCheckin = (event) => {
         setAppointmentData(prevData => ({

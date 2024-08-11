@@ -84,5 +84,29 @@ export const fetchNearbySitters = async (filters, token, page, size=6) => {
     }
 };
 
+export const scheduleAppointment = async (appointmentData) => {
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+        throw new Error('User not authenticated.');
+    }
+
+    const response = await fetch("http://localhost:8080/api/appointment/schedule-appointment", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(appointmentData)
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+};
+
+
 
 
