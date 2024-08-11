@@ -53,8 +53,6 @@ const Profile = (props) => {
 
                 if(sitterId === undefined){
 
-                    console.log(sitterId , "the id of the sitter undefinde");
-
                 if (role === 0) {
                     profileData = await fetchProfileDetails();
                     setProfile(profileData);
