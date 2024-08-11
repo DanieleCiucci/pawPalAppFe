@@ -14,7 +14,7 @@ const ProfileMap = (props) => {
     // Check if geoX and geoY exist, otherwise use a default location
     const mapCenter = props.profile.geoX && props.profile.geoY
         ? [props.profile.geoX, props.profile.geoY]
-        : [51.5074, 0.1272];
+        : [51.5074, -0.1272]; // Corrected longitude
 
     return (
         <div className="map-container" style={{ height: '10rem', width: '100%' }}>
@@ -23,9 +23,10 @@ const ProfileMap = (props) => {
                 zoom={13}
                 scrollWheelZoom={true}
                 style={{ height: '100%', width: '100%' }}
+                className="custom-map-container" // Add a custom class for additional styling
             >
                 <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    attribution={null} // Disable the default attribution text
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 {props.profile.geoX && props.profile.geoY && (

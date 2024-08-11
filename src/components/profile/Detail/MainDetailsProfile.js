@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import profileDefaultImage from "../../../assets/profileImageDefault.png";
 import { updateProfileImage } from "../services/UpdatePhotoProfileService";
+import AppointmentModal from '../../appointment/popUp/NewAppointmentPopUp';
 
 const MainDetailsProfile = (props) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [profile, setProfile] = useState(props.profile);
+    const [modalShow, setModalShow] = useState(false); // State to manage modal visibility
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Update the profile state whenever sitterId changes
         setProfile(props.profile);
     }, [props.sitterId, props.profile]);
 
@@ -45,6 +46,9 @@ const MainDetailsProfile = (props) => {
     const handleAddDogClick = () => {
         navigate('/yourdogs/insert', { state: { personalSitterDog: true } });
     };
+
+    const handleShowModal = () => setModalShow(true);
+    const handleCloseModal = () => setModalShow(false);
 
     return (
         <div>
@@ -101,7 +105,20 @@ const MainDetailsProfile = (props) => {
                         </button>
                     </div>
                 )}
+                {props.sitterId && (
+                    <div className="col-3">
+                        <button type="button" className="btn btn-primary mt-5" onClick={handleShowModal}>
+                            Schedule Appointment
+                        </button>
+                    </div>
+                )}
             </div>
+
+            {/* Render the AppointmentModal */}
+            <AppointmentModal
+                show={modalShow}
+                handleClose={handleCloseModal}
+            />
         </div>
     );
 };

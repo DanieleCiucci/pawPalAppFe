@@ -241,3 +241,20 @@ body {
     background-color: #FFFFFF;
     margin-left: 3rem;
 }
+
+/* Hide Leaflet control pane */
+.custom-map-container .leaflet-control-attribution {
+    display: none;
+}
+
+.custom-map-container .leaflet-control-zoom {
+    display: none;
+}
+
+.custom-map-container .leaflet-control-scale {
+    display: none;
+}
+
+.custom-map-container .leaflet-control-layers {
+    display: none;
+}
