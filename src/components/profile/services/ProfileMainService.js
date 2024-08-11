@@ -20,6 +20,29 @@ export const fetchProfileDetails = async () => {
     }
 };
 
+export const fetchProfileDetailsSitter = async (sitterId) => {
+    const token = localStorage.getItem('authToken');
+    try {
+        const response = await fetch(`http://localhost:8080/api/profile/sitter/`+sitterId, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching profile details:", error);
+        throw error;
+    }
+};
+
+
 export const fetchProfileDetailsOwner = async () => {
     const token = localStorage.getItem('authToken');
     try {
@@ -89,6 +112,30 @@ export const fetchDogsOwnedBySitter = async () => {
     }
 };
 
+export const fetchDogsOwnedByIdSitter = async (sitterId) => {
+    const token = localStorage.getItem('authToken');
+    try {
+        const response = await fetch(`http://localhost:8080/api/profile/get-all-dog-owned-by-sitter/`+sitterId, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching dogs owned by sitter:", error);
+        return [];
+    }
+};
+
+
+
 export const fetchDogsOwnedByOwner = async () => {
     const token = localStorage.getItem('authToken');
     try {
@@ -110,4 +157,5 @@ export const fetchDogsOwnedByOwner = async () => {
         return [];
     }
 };
+
 

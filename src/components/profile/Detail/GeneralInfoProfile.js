@@ -51,11 +51,13 @@ const GeneralInfoProfile = (props) => {
     return (
         <div className="row mt-5">
             <div className="col-5 boxGeneralInfo position-relative">
-                <i
-                    className="bi bi-pencil fs-5 position-absolute"
-                    style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }}
-                    onClick={handleLocationIconClick}
-                ></i>
+                {!props.sitterId && (
+                    <i
+                        className="bi bi-pencil fs-5 position-absolute"
+                        style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }}
+                        onClick={handleLocationIconClick}
+                    ></i>
+                )}
                 <div className="generalInfoContainer">
                     <h5 className="p-3"><strong>Location & General info</strong></h5>
 
@@ -99,11 +101,13 @@ const GeneralInfoProfile = (props) => {
             <div className="col-1"></div>
 
             <div className="col-6 boxPhoto position-relative">
-                <i
-                    className="bi bi-pencil fs-5 position-absolute"
-                    style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }}
-                    onClick={handleOwnerIconClick}
-                ></i>
+                {!props.sitterId && (
+                    <i
+                        className="bi bi-pencil fs-5 position-absolute"
+                        style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }}
+                        onClick={handleOwnerIconClick}
+                    ></i>
+                )}
                 <div className="photoGallery">
                     <div className="row">
                         <div className="col-8">
@@ -115,7 +119,7 @@ const GeneralInfoProfile = (props) => {
                     </div>
                     <div className="row m-2">
                         <p><strong>About me</strong></p>
-                        {userRole ===0 ? (
+                        {(userRole === 0 && !props.sitterId) || props.sitterId ? (
                         <p className="mb-2">{props.profile.aboutSitter}</p>
                         ): (
                             <p className="mb-2">{props.profile.aboutOwner}</p>
@@ -124,7 +128,7 @@ const GeneralInfoProfile = (props) => {
                     </div>
                     <div className="row m-2">
                         <p><strong>Personal note about the owner</strong></p>
-                        {userRole ===0 ? (
+                        {(userRole === 0 && !props.sitterId) || props.sitterId ? (
                         <p className="mb-3">{props.profile.preferencesAboutDog}</p>
                         ):(
                             <p className="mb-2">{props.profile.personalNoteAboutOwner}</p>

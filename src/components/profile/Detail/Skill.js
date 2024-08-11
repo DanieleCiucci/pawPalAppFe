@@ -8,6 +8,8 @@ const Skill = (props) => {
     const [isModified, setIsModified] = useState(false);
 
     const handleCheckboxChange = (index) => {
+        if (props.sitterId) return;
+
         const updatedCheckedState = checkedState.map((item, i) =>
             i === index ? !item : item
         );
@@ -71,6 +73,7 @@ const Skill = (props) => {
                                     checked={checkedState[0]}
                                     onChange={() => handleCheckboxChange(0)}
                                     className="form-check-input customCheck me-2"
+
                                 />
                                 <label htmlFor="checkbox1" className="form-check-label">
                                     <strong>Oral drug administration</strong> <br />
@@ -118,6 +121,7 @@ const Skill = (props) => {
                                     checked={checkedState[3]}
                                     onChange={() => handleCheckboxChange(3)}
                                     className="form-check-input customCheck me-2"
+
                                 />
                                 <label htmlFor="checkbox4" className="form-check-label">
                                     <strong>Experience with dogs under one year</strong> <br />
@@ -135,6 +139,7 @@ const Skill = (props) => {
                                     checked={checkedState[4]}
                                     onChange={() => handleCheckboxChange(4)}
                                     className="form-check-input customCheck me-2"
+
                                 />
                                 <label htmlFor="checkbox5" className="form-check-label">
                                     <strong>Experience with adult dogs</strong> <br />
@@ -150,6 +155,7 @@ const Skill = (props) => {
                                     checked={checkedState[5]}
                                     onChange={() => handleCheckboxChange(5)}
                                     className="form-check-input customCheck me-2"
+
                                 />
                                 <label htmlFor="checkbox6" className="form-check-label">
                                     <strong>Can do exercise to the dog</strong> <br />
@@ -158,8 +164,7 @@ const Skill = (props) => {
                             </div>
                         </div>
                     </div>
-                    {/* Conditionally render the update button */}
-                    {isModified && (
+                    {!props.sitterId && isModified && (
                         <div className="text-end m-3">
                             <button
                                 className="btn btn-primary mb-3"

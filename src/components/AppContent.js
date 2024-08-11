@@ -91,6 +91,7 @@ export default class AppContent extends React.Component {
 
                     <Route path="/appointment" element={user ? <Appointment /> : <Navigate to="/" /> }/>
                     <Route path="/appointment/schedule-appointment" element={user ? <ScheduleAppointment /> : <Navigate to="/" /> }/>
+                    <Route path="/profile/:sitterId" element={<Profile />} />
 
                     {
                         //your dog navigation

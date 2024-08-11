@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import profileDefaultImage from "../../../assets/profileImageDefault.png";
 import { updateProfileImage } from "../services/UpdatePhotoProfileService";
@@ -9,6 +9,11 @@ const MainDetailsProfile = (props) => {
     const [profile, setProfile] = useState(props.profile);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Update the profile state whenever sitterId changes
+        setProfile(props.profile);
+    }, [props.sitterId, props.profile]);
 
     const handleFileChange = async (event) => {
         const file = event.target.files[0];
@@ -45,19 +50,21 @@ const MainDetailsProfile = (props) => {
         <div>
             <div className="row">
                 <div className="col-2 position-relative">
-                    <label htmlFor="file-upload" className="file-upload-label">
-                        <i
-                            className="bi bi-pencil position-absolute"
-                            style={{
-                                top: '6.5rem',
-                                right: '0.5rem',
-                                cursor: 'pointer',
-                                borderRadius: '50%',
-                                padding: '0.2rem',
-                                zIndex: 1
-                            }}
-                        ></i>
-                    </label>
+                    {!props.sitterId && (
+                        <label htmlFor="file-upload" className="file-upload-label">
+                            <i
+                                className="bi bi-pencil position-absolute"
+                                style={{
+                                    top: '6.5rem',
+                                    right: '0.5rem',
+                                    cursor: 'pointer',
+                                    borderRadius: '50%',
+                                    padding: '0.2rem',
+                                    zIndex: 1
+                                }}
+                            ></i>
+                        </label>
+                    )}
                     <input
                         id="file-upload"
                         type="file"

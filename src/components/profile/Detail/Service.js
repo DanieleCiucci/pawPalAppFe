@@ -8,6 +8,9 @@ const Service = (props) => {
     const [isModified, setIsModified] = useState(false);
 
     const handleCheckboxChange = (index) => {
+
+        if (props.sitterId) return;
+
         const updatedCheckedState = checkedState.map((item, i) =>
             i === index ? !item : item
         );

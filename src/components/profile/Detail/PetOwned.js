@@ -2,7 +2,7 @@ import React from "react";
 import defaultImg from "../../../assets/defaultImg.svg";
 import { useNavigate } from "react-router-dom";
 
-const PetOwned = ({ dogsOwned }) => {
+const PetOwned = ({ dogsOwned, sitterId }) => {
     const navigate = useNavigate();
 
     // Ensure dogsOwned is a valid array
@@ -29,12 +29,14 @@ const PetOwned = ({ dogsOwned }) => {
                                     <p className="card-text"><strong>{dog.name}</strong></p>
                                     <p className="card-text">{dog.detail}</p>
                                     <div className="d-flex justify-content-end mt-3">
+                                        {!sitterId && (
                                         <button
                                             className="btn btn-outline-primary"
                                             onClick={() => handleDetailsClick(dog)}
                                         >
                                             Details
                                         </button>
+                                        )}
                                     </div>
                                 </div>
                             </div>

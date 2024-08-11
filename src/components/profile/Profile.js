@@ -2,24 +2,33 @@ import React, { useEffect, useRef, useState } from "react";
 import AuthHeader from "../AuthHeader";
 import defaultImg from "../../assets/defaultImg.svg";
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import NamePopUp from "../detailDog/PopUp/NamePopUp";
 import { fetchUserRole } from "../../services/roleSerivces";
-import { fetchProfileDetails, updateProfileImage, fetchDogsOwnedBySitter, fetchProfileDetailsOwner, fetchDogsOwnedByOwner } from "./services/ProfileMainService";
+import {
+    fetchProfileDetails,
+    updateProfileImage,
+    fetchDogsOwnedBySitter,
+    fetchProfileDetailsOwner,
+    fetchDogsOwnedByOwner,
+    fetchProfileDetailsSitter, fetchDogsOwnedByIdSitter
+} from "./services/ProfileMainService";
 import GeneralInfoProfile from "./Detail/GeneralInfoProfile";
 import MainDetailsProfile from "./Detail/MainDetailsProfile";
 import Calendar from "./Detail/CalendarComponent";
 import PetOwned from "./Detail/PetOwned";
 import Skill from "./Detail/Skill";
 import Service from "./Detail/Service";
+import { useParams } from 'react-router-dom';
+
 
 const Profile = (props) => {
     const [profile, setProfile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [activeTab, setActiveTab] = useState('general');
-    const [showPopup, setShowPopup] = useState(false);
     const [dogsOwned, setDogsOwned] = useState([]);
     const fileInputRef = useRef(null);
     const [role, setRole] = useState(null);
+    const { sitterId } = useParams();
+
 
     useEffect(() => {
         const fetchRole = async () => {
@@ -42,6 +51,10 @@ const Profile = (props) => {
                 let profileData;
                 let dogs;
 
+                if(sitterId === undefined){
+
+                    console.log(sitterId , "the id of the sitter undefinde");
+
                 if (role === 0) {
                     profileData = await fetchProfileDetails();
                     setProfile(profileData);
@@ -53,6 +66,13 @@ const Profile = (props) => {
                 }
 
                 setDogsOwned(dogs);
+                }else{
+
+                    profileData = await fetchProfileDetailsSitter(sitterId);
+                    setProfile(profileData);
+                    dogs = await fetchDogsOwnedByIdSitter(sitterId);
+                    setDogsOwned(dogs);
+                }
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -60,7 +80,7 @@ const Profile = (props) => {
         };
 
         fetchData();
-    }, [role]);
+    }, [role, sitterId]);
 
     const handleFileButtonClick = () => {
         fileInputRef.current.click();
@@ -92,13 +112,13 @@ const Profile = (props) => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'general':
-                return <GeneralInfoProfile profile={profile} />;
+                return <GeneralInfoProfile profile={profile} sitterId = {sitterId} />;
             case 'petOwned':
-                return <PetOwned dogsOwned={dogsOwned} />;
+                return <PetOwned dogsOwned={dogsOwned} sitterId = {sitterId}/>;
             case 'skill':
-                return <Skill profile={profile} />;
+                return <Skill profile={profile} sitterId = {sitterId}/>;
             case 'services':
-                return <Service profile={profile} />;
+                return <Service profile={profile} sitterId = {sitterId} />;
             case 'calendar':
                 return <Calendar />;
             default:
@@ -128,24 +148,27 @@ const Profile = (props) => {
                                                 objectFit: 'cover'
                                             }}
                                         />
-                                        <div className="position-absolute bottom-0 end-0 p-3">
-                                            <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>
-                                                Update Image
-                                            </button>
-                                            <input
-                                                ref={fileInputRef}
-                                                type="file"
-                                                className="form-control-file"
-                                                onChange={handleFileChange}
-                                                accept="image/*"
-                                                style={{ display: "none" }}
-                                            />
-                                        </div>
+                                        {!sitterId &&(
+                                            <div className="position-absolute bottom-0 end-0 p-3">
+
+                                                <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>
+                                                    Update Image
+                                                </button>
+                                                <input
+                                                    ref={fileInputRef}
+                                                    type="file"
+                                                    className="form-control-file"
+                                                    onChange={handleFileChange}
+                                                    accept="image/*"
+                                                    style={{ display: "none" }}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
                                 <div className="row">
-                                    <MainDetailsProfile profile={profile}  role={role} activeButtonPetOwned={activeTab === 'petOwned'} />
+                                    <MainDetailsProfile profile={profile}  role={role} activeButtonPetOwned={activeTab === 'petOwned'} sitterId={sitterId} />
                                 </div>
 
                                 <hr style={{ borderTop: "1px solid #838383" }} />
@@ -167,7 +190,7 @@ const Profile = (props) => {
                                             Pet Owned
                                         </button>
                                     </li>
-                                    {!role && (
+                                    {(role !== 1 || sitterId) && (
                                         <>
                                             <li className="nav-item">
                                                 <button

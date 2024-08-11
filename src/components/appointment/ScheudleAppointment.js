@@ -4,6 +4,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { fetchNearbySitters } from './service/AppointmentService';
 import imageCard from "../../assets/dog1.jpg";
 import Pagination from "../Paginator";
+import {Link} from "react-router-dom";
 
 const ScheduleAppointment = (props) => {
     const [serviceType, setServiceType] = useState('');
@@ -176,8 +177,8 @@ const ScheduleAppointment = (props) => {
                                                     </p>
                                                 </div>
                                                 <div className="d-flex justify-content-end">
-                                                    <a href={`/profile/${sitter.id}`}
-                                                       className="btn btn-outline-primary m-3">Schedule</a>
+                                                    <Link to={{ pathname: `/profile/${sitter.id}`, state: { sitterId: sitter.id } }}
+                                                          className="btn btn-outline-primary m-3">Schedule</Link>
                                                 </div>
                                             </div>
                                         </div>
