@@ -7,13 +7,15 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
     const [appointmentData, setAppointmentData] = useState({
         startDate: '',
         endDate: '',
-        sitterId: sitterId,
+        recipientId: '',
         dogIds: [],
         message: '',
-        serviceId:''
+        serviceId: '',
+        ownerId: ''
     });
     const [alert, setAlert] = useState(null);
     const [dogs, setDogs] = useState([]);
+    const [owners, setOwners] = useState([]);
     const [serviceType, setServiceType] = useState('');
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(0);
@@ -29,10 +31,37 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
 
     useEffect(() => {
         if (show) {
+            const fetchOwners = async () => {
+                try {
+                    const token = localStorage.getItem('authToken');
+                    const response = await fetch('http://localhost:8080/api/appointment/get-all-owner-linked-to-sitter', {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    setOwners(data || []);
+                } catch (error) {
+                    console.error("Error fetching owners:", error);
+                    setAlert({ type: 'danger', message: 'Error fetching owner data.' });
+                }
+            };
+
+            fetchOwners();
+        }
+    }, [show]);
+
+    useEffect(() => {
+        if (appointmentData.ownerId) {
             const fetchDogs = async () => {
                 try {
                     const token = localStorage.getItem('authToken');
-                    const response = await fetch(`http://localhost:8080/api/dog/all-dog-owner?page=${currentPage}&size=6`, {
+                    const response = await fetch(`http://localhost:8080/api/appointment/all-dog-owner/?ownerId=${appointmentData.ownerId}&page=${currentPage}&size=6`, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
@@ -45,15 +74,15 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                     const data = await response.json();
                     setDogs(data.content || []);
                     setTotalPages(data.totalPages);
-
                 } catch (error) {
                     console.error("Error fetching dogs:", error);
                     setAlert({ type: 'danger', message: 'Error fetching dog data.' });
                 }
             };
+
             fetchDogs();
         }
-    }, [show, currentPage]);
+    }, [appointmentData.ownerId, currentPage]);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -67,20 +96,27 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
         }));
     };
 
+    const handleOwnerChange = (event) => {
+        const selectedOwnerId = event.target.value;
+        setAppointmentData(prevData => ({
+            ...prevData,
+            ownerId: selectedOwnerId
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const responseBody = await scheduleAppointment(appointmentData); // Use the external API call
+            const responseBody = await scheduleAppointment(appointmentData);
             console.log("Success:", responseBody);
 
             // Show success alert and close the modal after a brief delay
             setAlert({ type: 'success', message: 'Appointment scheduled successfully.' });
-            // setTimeout(() => {
-            //   setAlert(null);
-            // handleClose();
-            //}, 1500);
-
+            setTimeout(() => {
+                setAlert(null);
+                handleClose();
+            }, 1500);
         } catch (error) {
             console.error("Error scheduling appointment:", error);
             setAlert({ type: 'danger', message: 'Error scheduling appointment.' });
@@ -138,7 +174,6 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                     <div className="col-12">
                         <h3>Appointment schedule for sitter</h3>
                     </div>
-
                 </div>
 
                 <div className="row">
@@ -154,7 +189,26 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                 </div>
 
                 <div className="row m-3">
-                    <p><strong>Appointment type</strong></p>
+
+                    <p><strong>General information</strong></p>
+
+                    <div className="col-md-6 mb-3 mt-3">
+                        <label htmlFor="ownerSelect" className="form-label">Select Owner</label>
+                        <select
+                            id="ownerSelect"
+                            className="form-select"
+                            value={appointmentData.ownerId}
+                            onChange={handleOwnerChange}
+                        >
+                            <option value="" disabled hidden>Select an owner</option>
+                            {owners.map(owner => (
+                                <option key={owner.idOwner} value={owner.idOwner}>
+                                    {owner.name} {owner.surname} {owner.id}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
                     <div className="col-md-6 mb-3 mt-3">
                         <label htmlFor="serviceType" className="form-label">Type of Service</label>
                         <select
@@ -217,7 +271,8 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                                                         marginRight: '10px'
                                                     }}
                                                 />
-                                                <div className="d-flex flex-column flex-grow-1 justify-content-center mb-3">
+                                                <div
+                                                    className="d-flex flex-column flex-grow-1 justify-content-center mb-3">
                                                     <strong>{dog.dogName}</strong>
                                                     <p className="mb-0 text-muted"
                                                        style={{fontSize: '14px'}}>{dog.dogBreeds}</p>

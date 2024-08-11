@@ -7,7 +7,7 @@ const NewAppointmentPopUp = ({ show, handleClose, sitterId }) => {
     const [appointmentData, setAppointmentData] = useState({
         startDate: '',
         endDate: '',
-        sitterId: sitterId,
+        recipientId: sitterId,
         dogIds: [],
         message: '',
         serviceId:''
