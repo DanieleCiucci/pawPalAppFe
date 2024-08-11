@@ -7,7 +7,7 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
         endDate: '',
         sitterId: '',
         dogIds: [],
-        message: '' // Added message field
+        message: ''
     });
     const [alert, setAlert] = useState(null);
     const [dogs, setDogs] = useState([]);
@@ -61,10 +61,10 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
         try {
             // Simulate a successful submission
             setAlert({ type: 'success', message: 'Appointment scheduled successfully!' });
-            setTimeout(() => {
-                setAlert(null);
-                handleClose(); // Close modal after submission
-            }, 1500);
+            //setTimeout(() => {
+            //    setAlert(null);
+            //    handleClose(); // Close modal after submission
+            //}, 1500);
         } catch (error) {
             console.error("Error scheduling appointment:", error);
             setAlert({ type: 'danger', message: 'Error scheduling appointment.' });
@@ -132,7 +132,6 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
                     </div>
                 </div>
 
-
                 <div className="row m-3">
                     <p><strong>Appointment type</strong></p>
                     <div className="col-md-6 mb-3 mt-3">
@@ -183,12 +182,12 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
                         {dogs.length > 0 ? (
                             <div className="row mt-3">
                                 {dogs.map((dog) => (
-                                    <div key={dog.id} className="col-md-6 mb-3">
+                                    <div key={dog.idDog} className="col-md-6 mb-3">
                                         <div className="d-flex align-items-center border p-2"
                                              style={{borderRadius: '14px', width: '100%'}}>
                                             <img
                                                 src={dog.image ? `data:image/jpeg;base64,${dog.image}` : imageCard}
-                                                alt={dog.name}
+                                                alt={dog.dogName}
                                                 style={{
                                                     width: '50px',
                                                     height: '50px',
@@ -205,12 +204,12 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
                                                 <input
                                                     className="form-check-input"
                                                     type="checkbox"
-                                                    id={`dogCheck-${dog.id}`}
-                                                    checked={appointmentData.dogIds.includes(dog.id)}
-                                                    onChange={() => handleDogSelectionChange(dog.id)}
+                                                    id={`dogCheck-${dog.idDog}`}
+                                                    checked={appointmentData.dogIds.includes(dog.idDog)}
+                                                    onChange={() => handleDogSelectionChange(dog.idDog)}
                                                 />
                                                 <label className="form-check-label"
-                                                       htmlFor={`dogCheck-${dog.id}`}></label>
+                                                       htmlFor={`dogCheck-${dog.idDog}`}></label>
                                             </div>
                                         </div>
                                     </div>
