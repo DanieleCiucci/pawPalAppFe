@@ -85,25 +85,16 @@ export default class AppContent extends React.Component {
                     <Route path="/" element={<WelcomeContent />} />
                     <Route path="/auth" element={user ? <AuthContent logout={this.logout} user={user} /> : <Navigate to="/" />} />
 
-                    {
-                        //APPOINTMENT NAVIGATION
-                    }
+                    <Route path="/appointment/schedule-appointment" element={user ? <ScheduleAppointment logout={this.logout} user={user}  />  : <Navigate to="/" />} />
+                    <Route path="/appointment" element={user ? <Appointment logout={this.logout} user={user} />  : <Navigate to="/" />}/>
+                    <Route path="/profile/:sitterId" element={user ?<Profile logout={this.logout} user={user} /> :<Navigate to="/" />} />
 
-                    <Route path="/appointment/schedule-appointment" element={<ScheduleAppointment />} />
-                    <Route path="/appointment" element={<Appointment />} />
-                    <Route path="/profile/:sitterId" element={<Profile />} />
-
-                    {
-                        //your dog navigation
-                    }
                     <Route path="/yourdogs" element={user ? <YourDog logout={this.logout} user={user} /> : <Navigate to="/" />}/>
-                    <Route path="/yourdogs/insert" element={user ? <InsertDog /> : <Navigate to="/" />} />
+                    <Route path="/yourdogs/insert" element={user ? <InsertDog logout={this.logout} user={user} /> : <Navigate to="/" />} />
 
-                    <Route path="/findnewowner" element={user ? <FindNewOwner /> : <Navigate to="/" />}/>
-                    <Route path="/profile" element={user ? <Profile /> : <Navigate to="/" />} />
-                    <Route path="/yourdogs/:id" element={<DogDetails />} />
-
-
+                    <Route path="/findnewowner" element={user ? <FindNewOwner logout={this.logout} user={user} /> : <Navigate to="/" />}/>
+                    <Route path="/profile" element={user ? <Profile logout={this.logout} user={user} /> : <Navigate to="/" />} />
+                    <Route path="/yourdogs/:id" element={<DogDetails logout={this.logout} user={user} />} />
 
                 </Routes>
                 {componentToShow === "login" && <LoginFormWrapper onLogin={this.onLogin} onRegister={this.onRegister} />}
