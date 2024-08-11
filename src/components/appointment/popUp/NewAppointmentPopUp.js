@@ -1,13 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import imageCard from "../../../assets/dog1.jpg";
 
 const NewAppointmentPopUp = ({ show, handleClose }) => {
     const [appointmentData, setAppointmentData] = useState({
         startDate: '',
         endDate: '',
         sitterId: '',
-        dogIds: ''
+        dogIds: [],
+        message: '' // Added message field
     });
     const [alert, setAlert] = useState(null);
+    const [dogs, setDogs] = useState([]);
+    const [serviceType, setServiceType] = useState('');
+
+    const serviceOptions = [
+        { value: '', label: "Any" },
+        { value: '0', label: 'Daily pet sitting' },
+        { value: '1', label: 'Pet sitting at the owner\'s home' },
+        { value: '3', label: 'Pet sitting at the sitter\'s home' },
+        { value: '4', label: 'Walk' },
+        { value: '5', label: 'Pet sitting for more than a day' },
+    ];
+
+    useEffect(() => {
+        if (show) {
+            const fetchDogs = async () => {
+                try {
+                    const token = localStorage.getItem('authToken');
+                    const response = await fetch("http://localhost:8080/api/dog/all-dog-owner", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    setDogs(data.content || []); // Assuming 'content' is the key in the API response
+                } catch (error) {
+                    console.error("Error fetching dogs:", error);
+                    setAlert({ type: 'danger', message: 'Error fetching dog data.' });
+                }
+            };
+            fetchDogs();
+        }
+    }, [show]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -18,15 +57,54 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
     };
 
     const handleSubmit = async () => {
-        // Handle appointment submission logic here
         console.log("Appointment Data:", appointmentData);
+        try {
+            // Simulate a successful submission
+            setAlert({ type: 'success', message: 'Appointment scheduled successfully!' });
+            setTimeout(() => {
+                setAlert(null);
+                handleClose(); // Close modal after submission
+            }, 1500);
+        } catch (error) {
+            console.error("Error scheduling appointment:", error);
+            setAlert({ type: 'danger', message: 'Error scheduling appointment.' });
+            setTimeout(() => {
+                setAlert(null);
+            }, 2000);
+        }
+    };
 
-        // Simulate a successful submission
-        setAlert({ type: 'success', message: 'Appointment scheduled successfully!' });
-        setTimeout(() => {
-            setAlert(null);
-            handleClose(); // Close modal after submission
-        }, 1500);
+    const handleServiceTypeChange = (event) => {
+        setServiceType(event.target.value);
+    };
+
+    const handleDateTimeChangeCheckin = (event) => {
+        setAppointmentData(prevData => ({
+            ...prevData,
+            startDate: event.target.value
+        }));
+    };
+
+    const handleDateTimeChangeCheckout = (event) => {
+        setAppointmentData(prevData => ({
+            ...prevData,
+            endDate: event.target.value
+        }));
+    };
+
+    const handleDogSelectionChange = (dogId) => {
+        setAppointmentData(prevData => {
+            const dogIds = new Set(prevData.dogIds);
+            if (dogIds.has(dogId)) {
+                dogIds.delete(dogId);
+            } else {
+                dogIds.add(dogId);
+            }
+            return {
+                ...prevData,
+                dogIds: Array.from(dogIds)
+            };
+        });
     };
 
     if (!show) return null;
@@ -34,10 +112,15 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
     return (
         <div className="popup-overlay overlayStyle">
             <div className="popup-content popupStyle">
+
                 <div className="row">
                     <div className="col-12">
-                        <h5 className="p-3"><strong>Schedule Appointment</strong></h5>
+                        <h3>Appointment schedule</h3>
                     </div>
+
+                </div>
+
+                <div className="row">
                     <div className="col-12">
                         <div className="alert-container">
                             {alert && (
@@ -49,52 +132,108 @@ const NewAppointmentPopUp = ({ show, handleClose }) => {
                     </div>
                 </div>
 
-                <div className="form-floating mb-3">
-                    <input
-                        type="datetime-local"
-                        className="form-control"
-                        id="startDate"
-                        name="startDate"
-                        value={appointmentData.startDate}
-                        onChange={handleInputChange}
-                    />
-                    <label htmlFor="startDate">Start Date</label>
+
+                <div className="row m-3">
+                    <p><strong>Appointment type</strong></p>
+                    <div className="col-md-6 mb-3 mt-3">
+                        <label htmlFor="serviceType" className="form-label">Type of Service</label>
+                        <select
+                            id="serviceType"
+                            className="form-select"
+                            value={serviceType}
+                            onChange={handleServiceTypeChange}
+                        >
+                            <option value="" disabled hidden>Select the type of service</option>
+                            {serviceOptions.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
-                <div className="form-floating mb-3">
-                    <input
-                        type="datetime-local"
-                        className="form-control"
-                        id="endDate"
-                        name="endDate"
-                        value={appointmentData.endDate}
-                        onChange={handleInputChange}
-                    />
-                    <label htmlFor="endDate">End Date</label>
+                <div className="row m-3">
+                    <p><strong>Programs</strong></p>
+                    <div className="col-md-6 mb-3 mt-3">
+                        <label htmlFor="startDate" className="form-label">Check in date</label>
+                        <input
+                            type="datetime-local"
+                            id="startDate"
+                            className="form-control"
+                            value={appointmentData.startDate}
+                            onChange={handleDateTimeChangeCheckin}
+                        />
+                    </div>
+                    <div className="col-md-6 mb-3 mt-3">
+                        <label htmlFor="endDate" className="form-label">Check out date</label>
+                        <input
+                            type="datetime-local"
+                            id="endDate"
+                            className="form-control"
+                            value={appointmentData.endDate}
+                            onChange={handleDateTimeChangeCheckout}
+                        />
+                    </div>
                 </div>
 
-                <div className="form-floating mb-3">
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="sitterId"
-                        name="sitterId"
-                        value={appointmentData.sitterId}
-                        onChange={handleInputChange}
-                    />
-                    <label htmlFor="sitterId">Sitter ID</label>
+                <div className="row m-3">
+                    <p><strong>Dogs involved in the appointment</strong></p>
+                    <div className="col-md-12 mb-3">
+                        {dogs.length > 0 ? (
+                            <div className="row mt-3">
+                                {dogs.map((dog) => (
+                                    <div key={dog.id} className="col-md-6 mb-3">
+                                        <div className="d-flex align-items-center border p-2"
+                                             style={{borderRadius: '14px', width: '100%'}}>
+                                            <img
+                                                src={dog.image ? `data:image/jpeg;base64,${dog.image}` : imageCard}
+                                                alt={dog.name}
+                                                style={{
+                                                    width: '50px',
+                                                    height: '50px',
+                                                    borderRadius: '50%',
+                                                    marginRight: '10px'
+                                                }}
+                                            />
+                                            <div className="d-flex flex-column flex-grow-1 justify-content-center mb-3">
+                                                <strong>{dog.dogName}</strong>
+                                                <p className="mb-0 text-muted"
+                                                   style={{fontSize: '14px'}}>{dog.dogBreeds}</p>
+                                            </div>
+                                            <div className="form-check">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    id={`dogCheck-${dog.id}`}
+                                                    checked={appointmentData.dogIds.includes(dog.id)}
+                                                    onChange={() => handleDogSelectionChange(dog.id)}
+                                                />
+                                                <label className="form-check-label"
+                                                       htmlFor={`dogCheck-${dog.id}`}></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p>No dogs available</p>
+                        )}
+                    </div>
                 </div>
 
-                <div className="form-floating mb-3">
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="dogIds"
-                        name="dogIds"
-                        value={appointmentData.dogIds}
-                        onChange={handleInputChange}
-                    />
-                    <label htmlFor="dogIds">Dog IDs (comma-separated)</label>
+                <div className="row m-3">
+                    <div className="col-md-12 mb-3">
+                        <label htmlFor="message" className="form-label"><strong>Message for the owner</strong></label>
+                        <textarea
+                            id="message"
+                            name="message"
+                            className="form-control"
+                            rows="3"
+                            value={appointmentData.message}
+                            onChange={handleInputChange}
+                        />
+                    </div>
                 </div>
 
                 <div className="row p-3">

@@ -113,12 +113,7 @@ const MainDetailsProfile = (props) => {
                     </div>
                 )}
             </div>
-
-            {/* Render the AppointmentModal */}
-            <AppointmentModal
-                show={modalShow}
-                handleClose={handleCloseModal}
-            />
+            <AppointmentModal show={modalShow} handleClose={handleCloseModal} sitterId ={props.sitterId}/>
         </div>
     );
 };
