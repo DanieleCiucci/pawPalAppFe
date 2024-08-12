@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAppointmentDetails } from './service/AppointmentService';
 import DogListDetailAppointment from "./DogListDetailAppointment";
+import {fetchUserRole} from "../../services/roleSerivces";
 
-const AppointmentDetailsPopup = ({ isOpen, onClose, appointment, role }) => {
+const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
     const [loadingDetails, setLoadingDetails] = useState(false);
     const [error, setError] = useState(null);
     const [appointmentData, setAppointmentData] = useState(null);
 
     const [currentPage, setCurrentPage] = useState(0);
     const appointmentId = appointment.id;
+    const [role, setRole] = useState(null);
 
 
     useEffect(() => {
@@ -30,6 +32,19 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment, role }) => {
 
         fetchAppointmentDetailsData();
     }, [isOpen, appointmentId]);
+
+    useEffect(() => {
+        const fetchRole = async () => {
+            try {
+                const userRole = await fetchUserRole();
+                setRole(userRole);
+            } catch (error) {
+                console.error("Error fetching user role:", error);
+            }
+        };
+        fetchRole()
+
+    }, []);
 
     if (!isOpen) return null;
 
@@ -117,11 +132,15 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment, role }) => {
 
                     <div className="row mb-3">
                         <div className="col-6">
+                            {role ===0 ? (
                             <p><strong>Owner: </strong> {appointmentData.ownerName}</p>
+                            ): (
+                                <p><strong>Sitter: </strong> {appointmentData.sitterName}</p>
+                            )}
                         </div>
                     </div>
 
-                    <div className="row mb-4">
+                        <div className="row mb-4">
                         <div className="col-6">
                             <p><strong>Type of appointment: </strong> {appointmentData.serviceDescription}</p>
                         </div>
@@ -147,18 +166,34 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment, role }) => {
                         currentPage={currentPage}
                         onPageChange={handlePageChange}
                     />
+                    {role ===0 ? (
+                        <>
+                            <h5>Owner contact</h5>
+                            <div className="row mt-3">
+                                <div className="col-6">
+                                    <p><strong>Email:</strong> {appointmentData.ownerEmail}</p>
+                                </div>
+                                <div className="col-6">
+                                    <p><strong>Phone number:</strong> {appointmentData.ownerPhoneNumber}</p>
+                                </div>
+                            </div>
+                        </>
+                    ):(
+                        <>
+                            <h5>Sitter contact</h5>
+                            <div className="row mt-3">
+                                <div className="col-6">
+                                    <p><strong>Email:</strong> {appointmentData.sitterEmail}</p>
+                                </div>
+                                <div className="col-6">
+                                    <p><strong>Phone number:</strong> {appointmentData.sitterPhoneNumber}</p>
+                                </div>
+                            </div>
+                        </>
 
-                    <h5>Owner contact</h5>
-                    <div className="row mt-3">
-                        <div className="col-6">
-                            <p><strong>Email:</strong> {appointmentData.ownerEmail}</p>
-                        </div>
-                        <div className="col-6">
-                            <p><strong>Phone number:</strong> {appointmentData.ownerPhoneNumber}</p>
-                        </div>
-                    </div>
+                            )}
 
-                    <h5 className="mt-4"> Message for the owner</h5>
+                    <h5 className="mt-4"> Message for the sitter</h5>
                     <p className="mt-2"> {appointmentData.message || "No message provided"}</p>
 
                     {/*
