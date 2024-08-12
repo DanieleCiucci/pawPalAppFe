@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAppointmentDetails } from './service/AppointmentService';
 import DogListDetailAppointment from "./DogListDetailAppointment";
-import {fetchUserRole} from "../../services/roleSerivces";
+import { fetchUserRole } from "../../services/roleSerivces";
 
 const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
     const [loadingDetails, setLoadingDetails] = useState(false);
     const [error, setError] = useState(null);
     const [appointmentData, setAppointmentData] = useState(null);
-
     const [currentPage, setCurrentPage] = useState(0);
-    const appointmentId = appointment.id;
     const [role, setRole] = useState(null);
-
+    const appointmentId = appointment.id;
 
     useEffect(() => {
         if (!isOpen || !appointmentId) return;
@@ -42,8 +40,7 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
                 console.error("Error fetching user role:", error);
             }
         };
-        fetchRole()
-
+        fetchRole();
     }, []);
 
     if (!isOpen) return null;
@@ -100,13 +97,21 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
         setCurrentPage(pageNumber);
     };
 
+    const handleConfirm = () => {
+        // Implement the logic to confirm the appointment
+        console.log('Appointment confirmed');
+    };
+
+    const handleRefuse = () => {
+        // Implement the logic to refuse the appointment
+        console.log('Appointment refused');
+    };
+
     return (
         <div className="popup-overlay overlayStyle" onClick={onClose}>
-
-                <div className="popup-content popupStyle" onClick={e => e.stopPropagation()}>
-                    <div className="m-3">
+            <div className="popup-content popupStyle" onClick={e => e.stopPropagation()}>
+                <div className="m-3">
                     <div className="d-flex justify-content-between align-items-center mb-3">
-
                         <h3>Appointment Details</h3>
                         <div className="d-flex align-items-center">
                             <p className="mb-0 me-4">State:</p>
@@ -132,15 +137,15 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
 
                     <div className="row mb-3">
                         <div className="col-6">
-                            {role ===0 ? (
-                            <p><strong>Owner: </strong> {appointmentData.ownerName}</p>
-                            ): (
+                            {role === 0 ? (
+                                <p><strong>Owner: </strong> {appointmentData.ownerName}</p>
+                            ) : (
                                 <p><strong>Sitter: </strong> {appointmentData.sitterName}</p>
                             )}
                         </div>
                     </div>
 
-                        <div className="row mb-4">
+                    <div className="row mb-4">
                         <div className="col-6">
                             <p><strong>Type of appointment: </strong> {appointmentData.serviceDescription}</p>
                         </div>
@@ -159,16 +164,17 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
                         </div>
                     </div>
 
-                    <h5 className="mt-4">Dog involved in the appointment</h5>
+                    <h5 className="mt-5">Dog involved in the appointment</h5>
 
                     <DogListDetailAppointment
                         appointmentId={appointmentId}
                         currentPage={currentPage}
                         onPageChange={handlePageChange}
                     />
-                    {role ===0 ? (
+
+                    {role === 0 ? (
                         <>
-                            <h5>Owner contact</h5>
+                            <h5 className="mt-4">Owner contact</h5>
                             <div className="row mt-3">
                                 <div className="col-6">
                                     <p><strong>Email:</strong> {appointmentData.ownerEmail}</p>
@@ -178,9 +184,9 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
                                 </div>
                             </div>
                         </>
-                    ):(
+                    ) : (
                         <>
-                            <h5>Sitter contact</h5>
+                            <h5 className="mt-4">Sitter contact</h5>
                             <div className="row mt-3">
                                 <div className="col-6">
                                     <p><strong>Email:</strong> {appointmentData.sitterEmail}</p>
@@ -190,15 +196,36 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
                                 </div>
                             </div>
                         </>
+                    )}
 
-                            )}
-
-                    <h5 className="mt-4"> Message for the sitter</h5>
+                    <h5 className="mt-4">Message for the sitter</h5>
                     <p className="mt-2"> {appointmentData.message || "No message provided"}</p>
 
-                    {/*
-                <button onClick={onClose}>Close</button>
-                 */}
+                    <div className="d-flex justify-content-between align-items-center mt-5">
+                        <button
+                            className="btn btn-secondary"
+                            onClick={onClose}
+                        >
+                            Close
+                        </button>
+
+                        {(appointmentData.idAppointmentState === 0) && (
+                            <div>
+                                <button
+                                    className="btn btn-danger me-5"
+                                    onClick={handleRefuse}
+                                >
+                                    Refuse
+                                </button>
+                                <button
+                                    className="btn btn-success me-2"
+                                    onClick={handleConfirm}
+                                >
+                                    Confirm
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
