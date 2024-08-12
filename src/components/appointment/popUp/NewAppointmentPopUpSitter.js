@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import imageCard from "../../../assets/dog1.jpg";
-import { scheduleAppointment } from '../service/AppointmentService';
+import { fetchOwners, fetchDogs, scheduleAppointmentSitter } from '../service/AppointmentService';
 import Pagination from "../../Paginator";
 
 const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
@@ -30,52 +30,34 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
 
     useEffect(() => {
         if (show) {
-            const fetchOwners = async () => {
+            const fetchOwnersData = async () => {
                 try {
                     const token = localStorage.getItem('authToken');
-                    const response = await fetch('http://localhost:8080/api/appointment/get-all-owner-linked-to-sitter', {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                        }
-                    });
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    const data = await response.json();
+                    const data = await fetchOwners(token);
                     setOwners(data || []);
                 } catch (error) {
-                    console.error("Error fetching owners:", error);
                     setAlert({ type: 'danger', message: 'Error fetching owner data.' });
                 }
             };
 
-            fetchOwners();
+            fetchOwnersData();
         }
     }, [show]);
 
     useEffect(() => {
         if (appointmentData.recipientId) {
-            const fetchDogs = async () => {
+            const fetchDogsData = async () => {
                 try {
                     const token = localStorage.getItem('authToken');
-                    const response = await fetch(`http://localhost:8080/api/appointment/all-dog-owner/?ownerId=${appointmentData.recipientId}&page=${currentPage}&size=6`, {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                        }
-                    });
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    const data = await response.json();
+                    const data = await fetchDogs(appointmentData.recipientId, currentPage, token);
                     setDogs(data.content || []);
                     setTotalPages(data.totalPages);
                 } catch (error) {
-                    console.error("Error fetching dogs:", error);
                     setAlert({ type: 'danger', message: 'Error fetching dog data.' });
                 }
             };
 
-            fetchDogs();
+            fetchDogsData();
         }
     }, [appointmentData.recipientId, currentPage]);
 
@@ -104,18 +86,13 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
         e.preventDefault();
 
         try {
-            // Schedule the appointment with the correct data structure
-            const responseBody = await scheduleAppointment(appointmentData);
-            console.log("Success:", responseBody);
-
-            // Show success alert and close the modal after a brief delay
+            const responseBody = await scheduleAppointmentSitter(appointmentData);
             setAlert({ type: 'success', message: 'Appointment scheduled successfully.' });
             setTimeout(() => {
                 setAlert(null);
                 handleClose();
             }, 1500);
         } catch (error) {
-            console.error("Error scheduling appointment:", error);
             setAlert({ type: 'danger', message: 'Error scheduling appointment.' });
             setTimeout(() => {
                 setAlert(null);
@@ -150,9 +127,10 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
             } else {
                 dogIds.add(dogId);
             }
+            const updatedDogIds = Array.from(dogIds);
             return {
                 ...prevData,
-                dogIds: Array.from(dogIds)
+                dogIds: updatedDogIds
             };
         });
     };
@@ -250,7 +228,7 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                                     {dogs.map((dog) => (
                                         <div key={dog.idDog} className="col-md-6 mb-3">
                                             <div className="d-flex align-items-center border p-2"
-                                                 style={{ borderRadius: '14px', width: '100%' }}>
+                                                 style={{borderRadius: '14px', width: '100%'}}>
                                                 <img
                                                     src={dog.image ? `data:image/jpeg;base64,${dog.image}` : imageCard}
                                                     alt={dog.dogName}
@@ -261,11 +239,11 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                                                         marginRight: '10px'
                                                     }}
                                                 />
-                                                <div className="d-flex flex-column flex-grow-1 justify-content-center mb-3">
+                                                <div
+                                                    className="d-flex flex-column flex-grow-1 justify-content-center mb-3">
                                                     <strong>{dog.dogName}</strong>
-                                                    <p className="mb-0 text-muted" style={{ fontSize: '14px' }}>
-                                                        {dog.dogBreeds}
-                                                    </p>
+                                                    <p className="mb-0 text-muted"
+                                                       style={{fontSize: '14px'}}>{dog.dogBreeds}</p>
                                                 </div>
                                                 <div className="form-check">
                                                     <input
@@ -275,7 +253,8 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                                                         checked={appointmentData.dogIds.includes(dog.idDog)}
                                                         onChange={() => handleDogSelectionChange(dog.idDog)}
                                                     />
-                                                    <label className="form-check-label" htmlFor={`dogCheck-${dog.idDog}`}></label>
+                                                    <label className="form-check-label"
+                                                           htmlFor={`dogCheck-${dog.idDog}`}></label>
                                                 </div>
                                             </div>
                                         </div>

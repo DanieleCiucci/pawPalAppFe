@@ -107,6 +107,84 @@ export const scheduleAppointment = async (appointmentData) => {
     return await response.json();
 };
 
+const API_URL = 'http://localhost:8080/api/appointment';
+
+export const fetchOwners = async (token) => {
+    try {
+        const response = await fetch(`${API_URL}/get-all-owner-linked-to-sitter`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching owners:', error);
+        throw error;
+    }
+};
+
+export const fetchDogs = async (ownerId, page, token) => {
+    try {
+        const response = await fetch(`${API_URL}/all-dog-owner/?ownerId=${ownerId}&page=${page}&size=6`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching dogs:', error);
+        throw error;
+    }
+};
+
+export const scheduleAppointmentSitter = async (appointmentData) => {
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${API_URL}/schedule-appointment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(appointmentData),
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        return await response.json();
+    } catch (error) {
+        console.error('Error scheduling appointment:', error);
+        throw error;
+    }
+};
+
+
+export const fetchDogsOwner = async (currentPage) => {
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`http://localhost:8080/api/dog/all-dog-owner?page=${currentPage}&size=6`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching dogs:", error);
+        throw new Error('Error fetching dog data.');
+    }
+};
+
+
+
 
 
 

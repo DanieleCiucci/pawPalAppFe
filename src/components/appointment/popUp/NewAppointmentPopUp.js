@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import imageCard from "../../../assets/dog1.jpg";
-import { scheduleAppointment } from '../service/AppointmentService';
+import { scheduleAppointment, fetchDogsOwner } from '../service/AppointmentService';
 import Pagination from "../../Paginator";
 
 const NewAppointmentPopUp = ({ show, handleClose, sitterId }) => {
@@ -29,29 +29,16 @@ const NewAppointmentPopUp = ({ show, handleClose, sitterId }) => {
 
     useEffect(() => {
         if (show) {
-            const fetchDogs = async () => {
+            const fetchDogsData = async () => {
                 try {
-                    const token = localStorage.getItem('authToken');
-                    const response = await fetch(`http://localhost:8080/api/dog/all-dog-owner?page=${currentPage}&size=6`, {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                        }
-                    });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const data = await response.json();
+                    const data = await fetchDogsOwner(currentPage);
                     setDogs(data.content || []);
                     setTotalPages(data.totalPages);
-
                 } catch (error) {
-                    console.error("Error fetching dogs:", error);
-                    setAlert({ type: 'danger', message: 'Error fetching dog data.' });
+                    setAlert({ type: 'danger', message: error.message });
                 }
             };
-            fetchDogs();
+            fetchDogsData();
         }
     }, [show, currentPage]);
 
@@ -71,19 +58,17 @@ const NewAppointmentPopUp = ({ show, handleClose, sitterId }) => {
         e.preventDefault();
 
         try {
-            const responseBody = await scheduleAppointment(appointmentData); // Use the external API call
+            const responseBody = await scheduleAppointment(appointmentData);
             console.log("Success:", responseBody);
 
-            // Show success alert and close the modal after a brief delay
             setAlert({ type: 'success', message: 'Appointment scheduled successfully.' });
-            // setTimeout(() => {
-            //   setAlert(null);
-            // handleClose();
-            //}, 1500);
+            setTimeout(() => {
+                setAlert(null);
+                handleClose();
+            }, 1500);
 
         } catch (error) {
-            console.error("Error scheduling appointment:", error);
-            setAlert({ type: 'danger', message: 'Error scheduling appointment.' });
+            setAlert({ type: 'danger', message: error.message });
             setTimeout(() => {
                 setAlert(null);
             }, 2000);
