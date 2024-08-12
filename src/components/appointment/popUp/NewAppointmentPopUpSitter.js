@@ -11,8 +11,8 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
         dogIds: [],
         message: '',
         serviceId: '',
-        ownerId: ''
     });
+
     const [alert, setAlert] = useState(null);
     const [dogs, setDogs] = useState([]);
     const [owners, setOwners] = useState([]);
@@ -21,7 +21,6 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
     const [currentPage, setCurrentPage] = useState(0);
 
     const serviceOptions = [
-        { value: '', label: "Any" },
         { value: '0', label: 'Daily pet sitting' },
         { value: '1', label: 'Pet sitting at the owner\'s home' },
         { value: '2', label: 'Pet sitting at the sitter\'s home' },
@@ -41,9 +40,7 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                             "Authorization": `Bearer ${token}`
                         }
                     });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
+                    if (!response.ok) throw new Error('Network response was not ok');
                     const data = await response.json();
                     setOwners(data || []);
                 } catch (error) {
@@ -57,20 +54,18 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
     }, [show]);
 
     useEffect(() => {
-        if (appointmentData.ownerId) {
+        if (appointmentData.recipientId) {
             const fetchDogs = async () => {
                 try {
                     const token = localStorage.getItem('authToken');
-                    const response = await fetch(`http://localhost:8080/api/appointment/all-dog-owner/?ownerId=${appointmentData.ownerId}&page=${currentPage}&size=6`, {
+                    const response = await fetch(`http://localhost:8080/api/appointment/all-dog-owner/?ownerId=${appointmentData.recipientId}&page=${currentPage}&size=6`, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${token}`
                         }
                     });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
+                    if (!response.ok) throw new Error('Network response was not ok');
                     const data = await response.json();
                     setDogs(data.content || []);
                     setTotalPages(data.totalPages);
@@ -82,11 +77,9 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
 
             fetchDogs();
         }
-    }, [appointmentData.ownerId, currentPage]);
+    }, [appointmentData.recipientId, currentPage]);
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
+    const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -100,14 +93,18 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
         const selectedOwnerId = event.target.value;
         setAppointmentData(prevData => ({
             ...prevData,
-            ownerId: selectedOwnerId
+            recipientId: selectedOwnerId,
+            dogIds: []
         }));
+        setDogs([]);
+        setCurrentPage(0);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            // Schedule the appointment with the correct data structure
             const responseBody = await scheduleAppointment(appointmentData);
             console.log("Success:", responseBody);
 
@@ -131,23 +128,19 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
         setServiceType(serviceId);
         setAppointmentData(prevData => ({
             ...prevData,
-            serviceId: serviceId
+            serviceId
         }));
     };
 
-    const handleDateTimeChangeCheckin = (event) => {
-        setAppointmentData(prevData => ({
-            ...prevData,
-            startDate: event.target.value
-        }));
-    };
+    const handleDateTimeChangeCheckin = (event) => setAppointmentData(prevData => ({
+        ...prevData,
+        startDate: event.target.value
+    }));
 
-    const handleDateTimeChangeCheckout = (event) => {
-        setAppointmentData(prevData => ({
-            ...prevData,
-            endDate: event.target.value
-        }));
-    };
+    const handleDateTimeChangeCheckout = (event) => setAppointmentData(prevData => ({
+        ...prevData,
+        endDate: event.target.value
+    }));
 
     const handleDogSelectionChange = (dogId) => {
         setAppointmentData(prevData => {
@@ -169,10 +162,9 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
     return (
         <div className="popup-overlay overlayStyle">
             <div className="popup-content popupStyle">
-
                 <div className="row">
                     <div className="col-12">
-                        <h3>Appointment schedule for sitter</h3>
+                        <h3>Schedule Appointment for Sitter</h3>
                     </div>
                 </div>
 
@@ -189,21 +181,19 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                 </div>
 
                 <div className="row m-3">
-
-                    <p><strong>General information</strong></p>
-
+                    <p><strong>General Information</strong></p>
                     <div className="col-md-6 mb-3 mt-3">
                         <label htmlFor="ownerSelect" className="form-label">Select Owner</label>
                         <select
                             id="ownerSelect"
                             className="form-select"
-                            value={appointmentData.ownerId}
+                            value={appointmentData.recipientId}
                             onChange={handleOwnerChange}
                         >
                             <option value="" disabled hidden>Select an owner</option>
                             {owners.map(owner => (
                                 <option key={owner.idOwner} value={owner.idOwner}>
-                                    {owner.name} {owner.surname} {owner.id}
+                                    {owner.name} {owner.surname} {owner.idOwner}
                                 </option>
                             ))}
                         </select>
@@ -228,9 +218,9 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                 </div>
 
                 <div className="row m-3">
-                    <p><strong>Programs</strong></p>
+                    <p><strong>Schedule</strong></p>
                     <div className="col-md-6 mb-3 mt-3">
-                        <label htmlFor="startDate" className="form-label">Check in date</label>
+                        <label htmlFor="startDate" className="form-label">Check-in Date</label>
                         <input
                             type="datetime-local"
                             id="startDate"
@@ -240,7 +230,7 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                         />
                     </div>
                     <div className="col-md-6 mb-3 mt-3">
-                        <label htmlFor="endDate" className="form-label">Check out date</label>
+                        <label htmlFor="endDate" className="form-label">Check-out Date</label>
                         <input
                             type="datetime-local"
                             id="endDate"
@@ -252,7 +242,7 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                 </div>
 
                 <div className="row m-3">
-                    <p><strong>Dogs involved in the appointment</strong></p>
+                    <p><strong>Dogs Involved in the Appointment</strong></p>
                     <div className="col-md-12 mb-3">
                         {dogs.length > 0 ? (
                             <>
@@ -260,7 +250,7 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                                     {dogs.map((dog) => (
                                         <div key={dog.idDog} className="col-md-6 mb-3">
                                             <div className="d-flex align-items-center border p-2"
-                                                 style={{borderRadius: '14px', width: '100%'}}>
+                                                 style={{ borderRadius: '14px', width: '100%' }}>
                                                 <img
                                                     src={dog.image ? `data:image/jpeg;base64,${dog.image}` : imageCard}
                                                     alt={dog.dogName}
@@ -271,11 +261,11 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                                                         marginRight: '10px'
                                                     }}
                                                 />
-                                                <div
-                                                    className="d-flex flex-column flex-grow-1 justify-content-center mb-3">
+                                                <div className="d-flex flex-column flex-grow-1 justify-content-center mb-3">
                                                     <strong>{dog.dogName}</strong>
-                                                    <p className="mb-0 text-muted"
-                                                       style={{fontSize: '14px'}}>{dog.dogBreeds}</p>
+                                                    <p className="mb-0 text-muted" style={{ fontSize: '14px' }}>
+                                                        {dog.dogBreeds}
+                                                    </p>
                                                 </div>
                                                 <div className="form-check">
                                                     <input
@@ -285,8 +275,7 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
                                                         checked={appointmentData.dogIds.includes(dog.idDog)}
                                                         onChange={() => handleDogSelectionChange(dog.idDog)}
                                                     />
-                                                    <label className="form-check-label"
-                                                           htmlFor={`dogCheck-${dog.idDog}`}></label>
+                                                    <label className="form-check-label" htmlFor={`dogCheck-${dog.idDog}`}></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -310,7 +299,7 @@ const NewAppointmentPopUpSitter = ({ show, handleClose, sitterId }) => {
 
                 <div className="row m-3">
                     <div className="col-md-12 mb-3">
-                        <label htmlFor="message" className="form-label"><strong>Message for the owner</strong></label>
+                        <label htmlFor="message" className="form-label"><strong>Message for the Sitter</strong></label>
                         <textarea
                             id="message"
                             name="message"
