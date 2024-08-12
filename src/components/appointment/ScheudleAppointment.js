@@ -61,11 +61,11 @@ const ScheduleAppointment = (props) => {
     };
 
     const handleSearchClick = () => {
-        fetchSitters(0); // Reset to first page on new search
+        fetchSitters(0);
     };
 
     useEffect(() => {
-        fetchSitters(currentPage); // Fetch data for the current page
+        fetchSitters(currentPage);
     }, [currentPage]);
 
     const handlePageChange = (pageNumber) => {

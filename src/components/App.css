@@ -259,3 +259,14 @@ body {
 .custom-map-container .leaflet-control-layers {
     display: none;
 }
+
+.customBadge{
+    height: 2rem !important;
+    width: 6rem !important;
+    border-radius: 20px !important;
+    font-size: larger !important;
+}
+
+.customPrimaryBadgeBg{
+    background-color: #154c79 !important; ;
+}

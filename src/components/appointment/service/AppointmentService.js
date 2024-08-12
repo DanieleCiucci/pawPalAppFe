@@ -183,6 +183,46 @@ export const fetchDogsOwner = async (currentPage) => {
     }
 };
 
+export const fetchAppointmentDetails = async (idAppointment) => {
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`http://localhost:8080/api/appointment/detail/${idAppointment}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching appointment details:", error);
+        throw new Error('Error fetching appointment details.');
+    }
+};
+
+export const fetchAllDogsInAppointment = async (idAppointment,currentPage )=>{
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`http://localhost:8080/api/appointment/all-dog-in-appointment/${idAppointment}?page=${currentPage}&size=6`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching dogs:", error);
+        throw new Error('Error fetching dog data.');
+    }
+
+}
 
 
 
