@@ -263,3 +263,28 @@ export const refuseAppointment = async (idAppointment )=>{
         throw new Error('Error fetching dog data.');
     }
 }
+
+export const cancelAppointment = async (idAppointment) => {
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`http://localhost:8080/api/appointment/cancel/${idAppointment}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+
+            const errorMessage = await response.text();
+            throw new Error(errorMessage || 'An error occurred while cancelling the appointment.');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error cancelling appointment:", error);
+        throw error;
+    }
+};
+

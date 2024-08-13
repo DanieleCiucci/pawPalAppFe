@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {acceptAppointment, fetchAppointmentDetails, refuseAppointment} from './service/AppointmentService';
+import {
+    acceptAppointment,
+    cancelAppointment,
+    fetchAppointmentDetails,
+    refuseAppointment
+} from './service/AppointmentService';
 import DogListDetailAppointment from "./DogListDetailAppointment";
 import { fetchUserRole } from "../../services/roleSerivces";
 
@@ -12,6 +17,7 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
     const appointmentId = appointment.id;
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showRejectMessage, setShowRejectMessage] = useState(false);
+    const [showCancelMessage, setShowCancelMessage] = useState(false);
 
     useEffect(() => {
         if (!isOpen || !appointmentId) return;
@@ -134,6 +140,25 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
         }
     };
 
+    const handleCancel = async () => {
+        try {
+            const response = await cancelAppointment(appointmentId);
+            if (response) {
+
+                setShowCancelMessage(true);
+
+                setTimeout(() => {
+                    setShowCancelMessage(false);
+                    onClose();
+                }, 1500);
+            }
+        } catch (error) {
+
+            alert('Failed to confirm appointment: ' + error.message);
+        }
+    };
+
+
     return (
         <div className="popup-overlay overlayStyle" onClick={onClose}>
             <div className="popup-content popupStyle" onClick={e => e.stopPropagation()}>
@@ -166,6 +191,11 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
                         {showRejectMessage &&(
                             <div className="alert alert-warning position-absolute top-0 end-0 mt-3 me-3" role="alert">
                                 Appointment refused successfully!
+                            </div>
+                        )}
+                        {showCancelMessage &&(
+                            <div className="alert alert-warning position-absolute top-0 end-0 mt-3 me-3" role="alert">
+                                Appointment cancelled successfully!
                             </div>
                         )}
                     </div>
@@ -250,16 +280,36 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
                         {(appointmentData.idAppointmentState === 0) && (
                             <div>
                                 <button
-                                    className="btn btn-danger me-5"
-                                    onClick={handleRefuse}
+                                    className="btn btn-outline-secondary me-5"
+                                    onClick={handleCancel}
                                 >
-                                    Refuse
+                                    Cancel
                                 </button>
+                                {role === 0 && (
+                                    <>
+                                        <button
+                                            className="btn btn-danger me-5"
+                                            onClick={handleRefuse}
+                                        >
+                                            Refuse
+                                        </button>
+                                        <button
+                                            className="btn btn-success me-2"
+                                            onClick={handleConfirm}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+                        )}
+                        {appointmentData.idAppointmentState === 1 &&(
+                            <div>
                                 <button
-                                    className="btn btn-success me-2"
-                                    onClick={handleConfirm}
+                                    className="btn btn-outline-secondary me-2"
+                                    onClick={handleCancel}
                                 >
-                                    Confirm
+                                    Cancel
                                 </button>
                             </div>
                         )}
