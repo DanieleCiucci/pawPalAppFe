@@ -224,7 +224,42 @@ export const fetchAllDogsInAppointment = async (idAppointment,currentPage )=>{
 
 }
 
+export const acceptAppointment = async (idAppointment )=>{
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`http://localhost:8080/api/appointment/accept/${idAppointment}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching dogs:", error);
+        throw new Error('Error fetching dog data.');
+    }
+}
 
-
-
-
+export const refuseAppointment = async (idAppointment )=>{
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`http://localhost:8080/api/appointment/reject/${idAppointment}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching dogs:", error);
+        throw new Error('Error fetching dog data.');
+    }
+}

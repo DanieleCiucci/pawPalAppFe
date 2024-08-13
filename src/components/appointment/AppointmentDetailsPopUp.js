@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchAppointmentDetails } from './service/AppointmentService';
+import {acceptAppointment, fetchAppointmentDetails, refuseAppointment} from './service/AppointmentService';
 import DogListDetailAppointment from "./DogListDetailAppointment";
 import { fetchUserRole } from "../../services/roleSerivces";
 
@@ -10,6 +10,8 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [role, setRole] = useState(null);
     const appointmentId = appointment.id;
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [showRejectMessage, setShowRejectMessage] = useState(false);
 
     useEffect(() => {
         if (!isOpen || !appointmentId) return;
@@ -77,7 +79,6 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
         );
     }
 
-    // Format the start and end dates with time
     const formatDateTime = (dateArray) => {
         const [year, month, day, hour, minute] = dateArray;
         return new Date(year, month - 1, day, hour, minute).toLocaleString('en-US', {
@@ -97,14 +98,40 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
         setCurrentPage(pageNumber);
     };
 
-    const handleConfirm = () => {
-        // Implement the logic to confirm the appointment
-        console.log('Appointment confirmed');
+    const handleConfirm = async () => {
+        try {
+            const response = await acceptAppointment(appointmentId);
+            if (response) {
+
+                setShowSuccessMessage(true);
+
+                setTimeout(() => {
+                    setShowSuccessMessage(false);
+                    onClose();
+                }, 1500);
+            }
+        } catch (error) {
+
+            alert('Failed to confirm appointment: ' + error.message);
+        }
     };
 
-    const handleRefuse = () => {
-        // Implement the logic to refuse the appointment
-        console.log('Appointment refused');
+    const handleRefuse = async () => {
+        try {
+            const response = await refuseAppointment(appointmentId);
+            if (response) {
+
+                setShowRejectMessage(true);
+
+                setTimeout(() => {
+                    setShowRejectMessage(false);
+                    onClose();
+                }, 1500);
+            }
+        } catch (error) {
+
+            alert('Failed to confirm appointment: ' + error.message);
+        }
     };
 
     return (
@@ -131,7 +158,18 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
                                 <button className="badge bg-primary customBadge customPrimaryBadgeBg">Passed</button>
                             )}
                         </div>
+                        {showSuccessMessage && (
+                            <div className="alert alert-success position-absolute top-0 end-0 mt-3 me-3" role="alert">
+                                Appointment confirmed successfully!
+                            </div>
+                        )}
+                        {showRejectMessage &&(
+                            <div className="alert alert-warning position-absolute top-0 end-0 mt-3 me-3" role="alert">
+                                Appointment refused successfully!
+                            </div>
+                        )}
                     </div>
+
 
                     <h5 className="mb-3">General information</h5>
 
