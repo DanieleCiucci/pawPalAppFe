@@ -114,6 +114,7 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
                 setTimeout(() => {
                     setShowSuccessMessage(false);
                     onClose();
+                    window.location.reload();
                 }, 1500);
             }
         } catch (error) {
@@ -132,6 +133,7 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
                 setTimeout(() => {
                     setShowRejectMessage(false);
                     onClose();
+                    window.location.reload();
                 }, 1500);
             }
         } catch (error) {
@@ -150,6 +152,7 @@ const AppointmentDetailsPopup = ({ isOpen, onClose, appointment }) => {
                 setTimeout(() => {
                     setShowCancelMessage(false);
                     onClose();
+                    window.location.reload();
                 }, 1500);
             }
         } catch (error) {
