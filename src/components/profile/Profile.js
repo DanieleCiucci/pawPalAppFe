@@ -9,7 +9,8 @@ import {
     fetchDogsOwnedBySitter,
     fetchProfileDetailsOwner,
     fetchDogsOwnedByOwner,
-    fetchProfileDetailsSitter, fetchDogsOwnedByIdSitter
+    fetchProfileDetailsSitter,
+    fetchDogsOwnedByIdSitter
 } from "./services/ProfileMainService";
 import GeneralInfoProfile from "./Detail/GeneralInfoProfile";
 import MainDetailsProfile from "./Detail/MainDetailsProfile";
@@ -19,7 +20,6 @@ import Skill from "./Detail/Skill";
 import Service from "./Detail/Service";
 import { useParams } from 'react-router-dom';
 
-
 const Profile = (props) => {
     const [profile, setProfile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
@@ -28,7 +28,6 @@ const Profile = (props) => {
     const fileInputRef = useRef(null);
     const [role, setRole] = useState(null);
     const { sitterId } = useParams();
-
 
     useEffect(() => {
         const fetchRole = async () => {
@@ -51,27 +50,23 @@ const Profile = (props) => {
                 let profileData;
                 let dogs;
 
-                if(sitterId === undefined){
-
-                if (role === 0) {
-                    profileData = await fetchProfileDetails();
-                    setProfile(profileData);
-                    dogs = await fetchDogsOwnedBySitter();
+                if (sitterId === undefined) {
+                    if (role === 0) {
+                        profileData = await fetchProfileDetails();
+                        setProfile(profileData);
+                        dogs = await fetchDogsOwnedBySitter();
+                    } else {
+                        profileData = await fetchProfileDetailsOwner();
+                        setProfile(profileData);
+                        dogs = await fetchDogsOwnedByOwner();
+                    }
+                    setDogsOwned(dogs);
                 } else {
-                    profileData = await fetchProfileDetailsOwner();
-                    setProfile(profileData);
-                    dogs = await fetchDogsOwnedByOwner();
-                }
-
-                setDogsOwned(dogs);
-                }else{
-
                     profileData = await fetchProfileDetailsSitter(sitterId);
                     setProfile(profileData);
                     dogs = await fetchDogsOwnedByIdSitter(sitterId);
                     setDogsOwned(dogs);
                 }
-
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -110,13 +105,13 @@ const Profile = (props) => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'general':
-                return <GeneralInfoProfile profile={profile} sitterId = {sitterId} />;
+                return <GeneralInfoProfile profile={profile} sitterId={sitterId} />;
             case 'petOwned':
-                return <PetOwned dogsOwned={dogsOwned} sitterId = {sitterId}/>;
+                return <PetOwned dogsOwned={dogsOwned} sitterId={sitterId}/>;
             case 'skill':
-                return <Skill profile={profile} sitterId = {sitterId}/>;
+                return <Skill profile={profile} sitterId={sitterId}/>;
             case 'services':
-                return <Service profile={profile} sitterId = {sitterId} />;
+                return <Service profile={profile} sitterId={sitterId} />;
             case 'calendar':
                 return <Calendar />;
             default:
@@ -129,44 +124,42 @@ const Profile = (props) => {
             <AuthHeader logout={props.logout} />
             <div className="container">
                 <div className="row">
-                    <div className="col-2"></div>
-                    <div className="col-8">
+                    <div className="col-2 d-none d-sm-block"></div>
+                    <div className="col-12 col-sm-8">
                         {profile ? (
                             <>
                                 <div className="position-relative mt-4">
-                                    <div className="image-preview-container mb-4">
-                                        <img
-                                            src={selectedFileUrl || (profile.mainPhoto ? `data:image/jpeg;base64,${profile.mainPhoto}` : defaultImg)}
-                                            alt="Dog"
-                                            style={{
-                                                height: '19rem',
-                                                width: '100%',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '8px',
-                                                objectFit: 'cover'
-                                            }}
-                                        />
-                                        {!sitterId &&(
-                                            <div className="position-absolute bottom-0 end-0 p-3">
-
-                                                <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>
-                                                    Update Image
-                                                </button>
-                                                <input
-                                                    ref={fileInputRef}
-                                                    type="file"
-                                                    className="form-control-file"
-                                                    onChange={handleFileChange}
-                                                    accept="image/*"
-                                                    style={{ display: "none" }}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
+                                    <img
+                                        src={selectedFileUrl || (profile.mainPhoto ? `data:image/jpeg;base64,${profile.mainPhoto}` : defaultImg)}
+                                        alt="Profile"
+                                        className="img-fluid"
+                                        style={{
+                                            height: '19rem',
+                                            width: '100%',
+                                            border: '1px solid #ccc',
+                                            borderRadius: '8px',
+                                            objectFit: 'cover'
+                                        }}
+                                    />
+                                    {!sitterId && (
+                                        <div className="position-absolute bottom-0 end-0 p-3">
+                                            <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>
+                                                <i className="bi bi-pencil"></i> Update Image
+                                            </button>
+                                            <input
+                                                ref={fileInputRef}
+                                                type="file"
+                                                className="form-control-file"
+                                                onChange={handleFileChange}
+                                                accept="image/*"
+                                                style={{ display: "none" }}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="row">
-                                    <MainDetailsProfile profile={profile}  role={role} activeButtonPetOwned={activeTab === 'petOwned'} sitterId={sitterId} />
+                                    <MainDetailsProfile profile={profile} role={role} activeButtonPetOwned={activeTab === 'petOwned'} sitterId={sitterId} />
                                 </div>
 
                                 <hr style={{ borderTop: "1px solid #838383" }} />
@@ -226,7 +219,7 @@ const Profile = (props) => {
                             <p>Loading...</p>
                         )}
                     </div>
-                    <div className="col-2"></div>
+                    <div className="col-2 d-none d-sm-block"></div>
                 </div>
             </div>
         </div>

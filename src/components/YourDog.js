@@ -80,23 +80,23 @@ const YourDog = (props) => {
         <div className="AuthHome">
             <AuthHeader logout={logout} />
             <div className="row">
-                <div className="col-2"></div>
-                <div className="col-5 m-lg-5">
+                <div className="col-2 d-none d-sm-block"></div>
+                <div className="col-12 m-3 col-md-5 m-md-0">
                     <h1 style={{ fontWeight: 'bold' }}>
                         Your dog to assist
                     </h1>
-                    <div className="mt-2">
+                    <div className="mt-2 col-12">
                         <p style={{ fontSize: '1rem', color: '#686565' }}>
                             In this section, you can view the dogs that you have entered to assist. <br />
                             You can add a new dog using the "Insert new dog" button.
                         </p>
                     </div>
                 </div>
-                <div className="col-2 d-flex align-items-center justify-content-center">
-                    <button className="homeButton" onClick={handleInsertDog}>Insert dog</button>
+                <div className="col-8 m-3 col-md-2 mt-md-5">
+                    <button className="btn btn-primary" onClick={handleInsertDog}>Insert dog</button>
                 </div>
             </div>
-            <div className="row">
+            <div className="row mt-5">
                 <div className="col-2"></div>
                 <div className="col-8">
                     <div className="row">

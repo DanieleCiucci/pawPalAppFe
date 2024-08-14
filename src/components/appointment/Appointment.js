@@ -99,34 +99,35 @@ const Appointments = (props) => {
         <div className="AuthHome">
             <AuthHeader logout={props.logout} />
             <div className="row mb-0">
-                <div className="col-2"></div>
-                <div className="col-5 m-lg-5">
+                <div className="col-2 d-none d-sm-block"></div>
+                <div className="col-12 m-3 col-md-5 m-md-0">
                     <h1 style={{ fontWeight: 'bold' }}>
                         Appointments
                     </h1>
-                    <div className="mt-2">
+                    <div className="mt-2 col-12">
                         <p style={{ fontSize: '1rem', color: '#686565' }}>
                             In this section, you can view the list of appointments. <br />
                             You can schedule a new appointment using the "Schedule Appointment" button.
                         </p>
                     </div>
                 </div>
-                <div className="col-2 d-flex align-items-center justify-content-center">
-                    <button className="homeButton" onClick={handleInsertAppointment}>Schedule Appointment</button>
+                <div className="col-8 m-3 col-md-2 mt-md-5">
+                    <button className="btn btn-primary" onClick={handleInsertAppointment}>Schedule Appointment</button>
                 </div>
 
-                <div className="row" style={{ marginTop: '-2rem' }}>
-                    <div className="col-2"></div>
-                    <div className="col-8">
-                        <hr style={{ borderTop: "1px solid #838383", marginLeft: '3rem' }} />
+                <div className="row mt-2 mt-md-0" style={{ marginTop: '-2rem !important' }}>
+                    <div className="col-2 d-none d-md-block"></div>
+                    <div className="col-12 m-3 col-md-8 m-md-0">
+                        <hr style={{ borderTop: "1px solid #838383" }} />
                     </div>
                 </div>
             </div>
 
             <div className="row">
-                <div className="col-2"></div>
-                <div className="col-8">
-                    <ul className="nav nav-tabs CustomNav" style={{ borderBottom: 'none', marginLeft: '2rem' }}>
+                <div className="col-2 d-none d-md-block"></div>
+                <div className="col-10 m-3 col-md-8 m-md-0">
+                    {/* Tabs for larger screens */}
+                    <ul className="nav nav-tabs CustomNav d-none d-md-flex" style={{ borderBottom: 'none', marginLeft: '2rem' }}>
                         <li className="nav-item">
                             <button
                                 className={`nav-link ${activeTab === 'pending' ? 'active' : ''}`}
@@ -168,6 +169,26 @@ const Appointments = (props) => {
                             </button>
                         </li>
                     </ul>
+
+                    {/* Dropdown for small screens */}
+                    <div className="d-md-none">
+                        <div className="col-8 mb-3">
+                            <label htmlFor="appointmentFilter" className="form-label">Filter by Status</label>
+                            <select
+                                id="appointmentFilter"
+                                className="form-select"
+                                value={activeTab}
+                                onChange={(e) => handleTabChange(e.target.value)}
+                            >
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="cancelled">Cancelled</option>
+                                <option value="passed">Passed</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div className="tab-content mt-4">
                         <div className="row mt-5">
                             {appointments.length > 0 ? (

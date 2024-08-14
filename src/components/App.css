@@ -278,7 +278,13 @@ body {
     }
 }
 
-/* Add this CSS in your global styles or a separate CSS file */
+@media screen and (max-width: 1394px) {
+    .CustomNav  {
+        gap: 0rem;
+    }
+}
+
+
 .overlay {
     position: fixed;
     top: 0;

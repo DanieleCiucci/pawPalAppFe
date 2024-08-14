@@ -51,69 +51,66 @@ const MainDetailsProfile = (props) => {
     const handleCloseModal = () => setModalShow(false);
 
     return (
-        <div>
-            <div className="row">
-                <div className="col-2 position-relative">
-                    {!props.sitterId && (
-                        <label htmlFor="file-upload" className="file-upload-label">
-                            <i
-                                className="bi bi-pencil position-absolute"
-                                style={{
-                                    top: '6.5rem',
-                                    right: '0.5rem',
-                                    cursor: 'pointer',
-                                    borderRadius: '50%',
-                                    padding: '0.2rem',
-                                    zIndex: 1
-                                }}
-                            ></i>
-                        </label>
-                    )}
+        <div className="container mt-3">
+            <div className="row align-items-center">
+                <div className="col-md-4 col-lg-3 d-flex justify-content-center align-items-center position-relative">
                     <input
                         id="file-upload"
                         type="file"
-                        style={{ display: 'none' }}
+                        style={{display: 'none'}}
                         onChange={handleFileChange}
                     />
-                    <img
-                        src={profile.photo ? `data:image/jpeg;base64,${profile.photo}` : profileDefaultImage}
-                        alt="Profile"
-                        style={{
-                            height: '8.5rem',
-                            width: '8.5rem',
-                            border: '1px solid white',
-                            borderRadius: '50%',
-                            objectFit: 'cover'
-                        }}
-                    />
-                </div>
-                <div className="col-7 d-flex align-items-center">
-                    <div>
-                        <h3 className="mb-0">
-                            {profile.name} {profile.surname}
-                        </h3>
-                        <p className="mt-2 ms-3 text-muted">
-                            {profile.email}
-                        </p>
-                    </div>
+                    <label htmlFor="file-upload" className="position-relative d-inline-block">
+                        <img
+                            src={profile.photo ? `data:image/jpeg;base64,${profile.photo}` : profileDefaultImage}
+                            alt="Profile"
+                            className="img-fluid rounded-circle"
+                            style={{
+                                maxHeight: '8.5rem',
+                                maxWidth: '8.5rem',
+                                border: '1px solid white',
+                                objectFit: 'cover'
+                            }}
+                        />
+                        {!props.sitterId && (
+                            <i
+                                className="bi bi-pencil position-absolute"
+                                style={{
+                                    cursor: 'pointer',
+                                    borderRadius: '50%',
+                                    padding: '0.2rem',
+                                    bottom: '0',
+                                    right: '0',
+                                    backgroundColor: 'white',
+                                    boxShadow: '0 0 0.2rem rgba(0,0,0,0.2)'
+                                }}
+                            ></i>
+                        )}
+                    </label>
                 </div>
 
-                {props.activeButtonPetOwned && props.role === 0 && (
-                    <div className="col-3">
-                        <button type="button" className="btn btn-primary mt-5" onClick={handleAddDogClick}>
+                <div className="col-md-8 col-lg-6 text-center text-md-start">
+                    <h3 className="mb-0">
+                        {profile.name} {profile.surname}
+                    </h3>
+                    <p className="mt-2 text-muted">
+                        {profile.email}
+                    </p>
+                </div>
+                <div className="col-md-12 col-lg-3 text-center text-lg-end">
+                    {props.activeButtonPetOwned && props.role === 0 && (
+                        <button type="button" className="btn btn-primary mt-4 mt-lg-5" onClick={handleAddDogClick}>
                             Add your personal dog
                         </button>
-                    </div>
-                )}
-                {props.sitterId && (
-                    <div className="col-3">
-                        <button type="button" className="btn btn-primary mt-5" onClick={handleShowModal}>
+                    )}
+                    {props.sitterId && (
+                        <button type="button" className="btn btn-primary mt-4 mt-lg-5" onClick={handleShowModal}>
                             Schedule Appointment
                         </button>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
-            <AppointmentModal show={modalShow} handleClose={handleCloseModal} sitterId ={props.sitterId}/>
+            <AppointmentModal show={modalShow} handleClose={handleCloseModal} sitterId={props.sitterId}/>
         </div>
     );
 };

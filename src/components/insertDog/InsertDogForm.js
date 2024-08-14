@@ -139,8 +139,8 @@ const InsertDogForm = ({ logout }) => {
             <AuthHeader logout={logout} />
             <div className="container">
                 <div className="row">
-                    <div className="col-2"></div>
-                    <div className="col-8">
+                    <div className="col-2 d-none d-sm-block"></div>
+                    <div className="col-12 col-sm-8">
 
                         {personalSitterDog ? (
                             <>
@@ -204,7 +204,7 @@ const InsertDogForm = ({ logout }) => {
                             <button type="submit" className="btn btn-primary mb-5" onClick={handleFormSubmit}>Insert Dog</button>
                         </div>
                     </div>
-                    <div className="col-2"></div>
+                    <div className="col-2 d-none d-sm-block"></div>
                 </div>
             </div>
         </div>
