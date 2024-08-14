@@ -53,7 +53,7 @@ const MainDetailsProfile = (props) => {
     return (
         <div className="container mt-3">
             <div className="row align-items-center">
-                <div className="col-md-4 col-lg-3 d-flex justify-content-center align-items-center position-relative">
+                <div className="col-md-2 col-lg-2 d-flex justify-content-center align-items-center position-relative">
                     <input
                         id="file-upload"
                         type="file"

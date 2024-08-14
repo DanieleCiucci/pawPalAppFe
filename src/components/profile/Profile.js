@@ -124,8 +124,8 @@ const Profile = (props) => {
             <AuthHeader logout={props.logout} />
             <div className="container">
                 <div className="row">
-                    <div className="col-2 d-none d-sm-block"></div>
-                    <div className="col-12 col-sm-8">
+                    <div className="col-2 d-none d-mg-block"></div>
+                    <div className="col-12 col-mg-8">
                         {profile ? (
                             <>
                                 <div className="position-relative mt-4">
@@ -219,7 +219,7 @@ const Profile = (props) => {
                             <p>Loading...</p>
                         )}
                     </div>
-                    <div className="col-2 d-none d-sm-block"></div>
+                    <div className="col-2 d-none d-mg-block"></div>
                 </div>
             </div>
         </div>

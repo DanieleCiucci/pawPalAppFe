@@ -50,9 +50,9 @@ const Skill = (props) => {
 
     return (
         <div className="row mt-5">
-            <div className="col-1"></div>
+            <div className="col-1 d-none d-md-block"></div>
 
-            <div className="col-10 boxPhoto position-relative">
+            <div className="col-12 col-md-10 boxPhoto position-relative">
                 <div className="photoGallery">
                     <div className="row">
                         <div className="col-8">
