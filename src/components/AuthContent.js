@@ -40,8 +40,8 @@ const AuthContent = ({ logout, user }) => {
     return (
         <div className="AuthHome">
             <AuthHeader logout={logout} />
-            <div className="row justify-content-md-center mt-5">
-                <div className="row mt-5">
+            <div className="row justify-content-md-center mt-md-5">
+                <div className="row mt-md-5">
                     <div className="col-12 d-flex flex-column align-items-center" style={{ textAlign: 'center' }}>
                         <h1 style={{ fontWeight: 'bold' }}>
                             "Welcome to PawPal!<br />
