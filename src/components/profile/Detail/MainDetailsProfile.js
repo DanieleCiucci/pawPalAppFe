@@ -81,8 +81,6 @@ const MainDetailsProfile = (props) => {
                                     padding: '0.2rem',
                                     bottom: '0',
                                     right: '0',
-                                    backgroundColor: 'white',
-                                    boxShadow: '0 0 0.2rem rgba(0,0,0,0.2)'
                                 }}
                             ></i>
                         )}

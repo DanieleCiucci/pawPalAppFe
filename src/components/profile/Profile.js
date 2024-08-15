@@ -123,8 +123,7 @@ const Profile = (props) => {
         <div className="DogDetails">
             <AuthHeader logout={props.logout} />
             <div className="container">
-                <div className="row">
-                    <div className="col-2 d-none d-mg-block"></div>
+                <div className="row align-items-center">
                     <div className="col-12 col-mg-8">
                         {profile ? (
                             <>
@@ -144,7 +143,7 @@ const Profile = (props) => {
                                     {!sitterId && (
                                         <div className="position-absolute bottom-0 end-0 p-3">
                                             <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>
-                                                <i className="bi bi-pencil"></i> Update Image
+                                                Update Image
                                             </button>
                                             <input
                                                 ref={fileInputRef}
