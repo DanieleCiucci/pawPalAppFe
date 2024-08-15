@@ -161,14 +161,14 @@ body {
     height: 36rem;
 }
 
-.popupStyle{
-
-    background-color: white;
+.popup-content {
+    max-width: 90vw; /* Ensures the popup is not too wide on small screens */
+    max-height: 90vh; /* Ensures the popup is not too tall on small screens */
+    overflow-y: auto; /* Allows content inside to scroll if necessary */
+    overflow-x: hidden;
     padding: 20px;
-    border-radius: 5px;
-    width: 80%;
-    max-width: 60rem;
-    position: relative;
+    background-color: white;
+    border-radius: 10px;
 }
 
 .seeAllCopy{
@@ -186,7 +186,7 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .optionSelected{
@@ -287,10 +287,10 @@ body {
 .overlay {
     position: fixed;
     top: 0;
-    left: 0;
+    right: 0;
     width: 41%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.6);
     z-index: 1050;
     display: flex;
     align-items: center;

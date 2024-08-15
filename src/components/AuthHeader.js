@@ -30,7 +30,7 @@ function AuthHeader({ logout }) {
         <div className="container">
             {/* Logos for larger screens */}
             <img
-                className="d-none d-sm-block"
+                className=""
                 src={logoBackground}
                 alt="Logo Background"
                 style={{
@@ -43,7 +43,7 @@ function AuthHeader({ logout }) {
                 }}
             />
             <img
-                className="d-none d-sm-block"
+                className=""
                 src={logo}
                 alt="App Logo"
                 style={{
@@ -57,8 +57,8 @@ function AuthHeader({ logout }) {
             />
             <div className="row">
                 <div className="col-2 d-none d-sm-block"></div>
-                <div className="col-8">
-                    <header className="py-3 mb-4">
+                <div className="col-8 d-none d-sm-block">
+                    <header className="py-3 mb-4 d-none d-sm-block">
                         <nav className="navbar navbar-expand-lg navbar-light p-0 d-none d-sm-block">
                             {/* Navbar toggle for small screens */}
                             <button
@@ -97,7 +97,7 @@ function AuthHeader({ logout }) {
             {/* Fullscreen overlay menu for small screens */}
             <div ref={navbarRef} className="d-lg-none">
                 <nav className="navbar navbar-expand-lg navbar-light">
-                    <div className="container-fluid">
+                    <div className="container-fluid justify-content-end">
                     <button
                         className="navbar-toggler"
                         type="button"
