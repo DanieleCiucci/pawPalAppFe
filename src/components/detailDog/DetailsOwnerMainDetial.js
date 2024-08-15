@@ -8,7 +8,7 @@ const DetailsOwnerMainDetail = (props) => {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        if (!file) return; // Exit if no file is selected
+        if (!file) return;
 
         setSelectedFile(file);
         setSelectedFileUrl(URL.createObjectURL(file));
@@ -53,50 +53,48 @@ const DetailsOwnerMainDetail = (props) => {
     };
 
     return (
-        <div>
-            <div className="row">
-                <div className="col-2 position-relative">
-                    {/* Position the pencil icon closer to the image */}
-                    <label htmlFor="file-upload" className="file-upload-label">
-                        <i
-                            className="bi bi-pencil position-absolute"
-                            style={{
-                                top: '6.5rem',
-                                right: '0.5rem',
-                                cursor: 'pointer',
-                                borderRadius: '50%',
-                                padding: '0.2rem',
-                                zIndex: 1 // Ensure it's above the image
-                            }}
-                        ></i>
-                    </label>
+        <div className="container mt-3">
+            <div className="row align-items-center">
+                <div className="col-md-2 col-lg-2 d-flex justify-content-center align-items-center position-relative">
                     <input
                         id="file-upload"
                         type="file"
                         style={{ display: 'none' }}
                         onChange={handleFileChange}
                     />
-                    <img
-                        src={dog.photo ? `data:image/jpeg;base64,${dog.photo}` : profileDefaultImage}
-                        alt="Profile"
-                        style={{
-                            height: '8.5rem',
-                            width: '8.5rem',
-                            border: '1px solid white',
-                            borderRadius: '50%',
-                            objectFit: 'cover'
-                        }}
-                    />
+                    <label htmlFor="file-upload" className="position-relative d-inline-block">
+                        <img
+                            src={dog.photo ? `data:image/jpeg;base64,${dog.photo}` : profileDefaultImage}
+                            alt="Profile"
+                            className="img-fluid rounded-circle"
+                            style={{
+                                maxHeight: '8.5rem',
+                                maxWidth: '8.5rem',
+                                border: '1px solid white',
+                                objectFit: 'cover'
+                            }}
+                        />
+                        <i
+                            className="bi bi-pencil position-absolute"
+                            style={{
+                                cursor: 'pointer',
+                                borderRadius: '50%',
+                                padding: '0.2rem',
+                                bottom: '0',
+                                right: '0',
+                                backgroundColor: 'white',
+                                boxShadow: '0 0 0.2rem rgba(0,0,0,0.2)'
+                            }}
+                        ></i>
+                    </label>
                 </div>
-                <div className="col-10 d-flex align-items-center">
-                    <div>
-                        <h3 className="mb-0">
-                            {dog.ownerName}{" " + dog.surname}
-                        </h3>
-                        <p className="mt-2 ms-3 text-muted">
-                            {"Owner of " + dog.name}
-                        </p>
-                    </div>
+                <div className="col-md-8 col-lg-6 text-center text-md-start">
+                    <h3 className="mb-0">
+                        {dog.ownerName} {dog.surname}
+                    </h3>
+                    <p className="mt-2 text-muted">
+                        Owner of {dog.name}
+                    </p>
                 </div>
             </div>
         </div>

@@ -66,9 +66,9 @@ const FindNewOwner = (props) => {
     return (
         <div className="AuthHome">
             <AuthHeader logout={logout} />
-            <div className="row">
-                <div className="col-2"></div>
-                <div className="col-5 m-lg-5">
+            <div className="row m-sm-3 m-md-0">
+                <div className="col-2 d-none d-md-block"></div>
+                <div className="col-12 col-lg-5">
                     {userRole === 0 && (
                         <h1 style={{ fontWeight: 'bold' }}>
                             Find a new Owner
@@ -94,8 +94,8 @@ const FindNewOwner = (props) => {
                 </div>
             </div>
             <div className="row p-3 mb-5">
-                <div className="col-2"></div>
-                <div className="col-8">
+                <div className="col-2 d-none d-lg-block"></div>
+                <div className="col-12 col-lg-8">
                     <div style={{ height: '500px' }}>
                         {mapCenter && (
                             <MapContainer center={mapCenter} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>

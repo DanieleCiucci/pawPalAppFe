@@ -156,8 +156,8 @@ const DogDetails = (props) => {
             <AuthHeader logout={props.logout} />
             <div className="container">
                 <div className="row">
-                    <div className="col-2"></div>
-                    <div className="col-8">
+                    <div className="col-2 d-none d-md-block"></div>
+                    <div className="col-12 m-2 col-md-8">
                         {dog ? (
                             <>
                                 <div className="position-relative mt-4">
@@ -191,27 +191,26 @@ const DogDetails = (props) => {
 
                                 {activeTab !== 'owner' ? (
                                     <div className="row">
-                                        <div className="col-3">
+                                        <div className="col-sm-5 col-md-4 col-lg-3 col-6 position-relative">
                                             <h2><strong>{dog.name}</strong></h2>
                                             <p className="mb-4">{dog.breeds}</p>
-                                        </div>
-
-                                        <div className="col-7 mt-3">
                                             <i
-                                                className="bi bi-pencil fs-5"
+                                                className="bi bi-pencil position-absolute top-50 start-100 translate-middle"
+                                                style={{cursor: 'pointer'}}
                                                 onClick={handleIconClick}
                                             ></i>
                                         </div>
                                     </div>
+
                                 ) : (
-                                    <DetailsOwnerMainDetail dog={dog} />
+                                    <DetailsOwnerMainDetail dog={dog}/>
                                 )}
 
-                                <hr style={{ borderTop: "1px solid #838383" }} />
+                                <hr style={{borderTop: "1px solid #838383"}}/>
 
-                                <ul className="nav nav-tabs CustomNav" style={{ borderBottom: 'none' }}>
+                                <ul className="nav nav-tabs CustomNav" style={{borderBottom: 'none'}}>
                                     <li className="nav-item">
-                                        <button
+                                    <button
                                             className={`nav-link ${activeTab === 'general' ? 'active' : ''}`}
                                             onClick={() => setActiveTab('general')}
                                         >

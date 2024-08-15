@@ -15,7 +15,7 @@ const DetailDogInfoForm = (props) => {
 
     return (
         <div className="row mt-5">
-            <div className="col-6 boxGeneralInfo position-relative">
+            <div className="col-12 col-lg-6 boxGeneralInfo position-relative">
                 <i className="bi bi-pencil fs-5 position-absolute" style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }} onClick={handleIconClick}></i>
                 <div className="generalInfoContainer">
                     <h5 className="p-3"><strong> General information </strong></h5>
@@ -42,6 +42,7 @@ const DetailDogInfoForm = (props) => {
 
             <div className="col-1"></div>
 
+            {/*
             <div className="col-5 boxPhoto">
                 <div className="photoGallery">
                     <div className="row">
@@ -75,6 +76,7 @@ const DetailDogInfoForm = (props) => {
                     </div>
                 </div>
             </div>
+            */}
 
             <GeneralInfoPopUp show={showPopup} handleClose={handleClosePopup} dog={props.dog} />
         </div>

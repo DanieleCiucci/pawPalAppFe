@@ -29,7 +29,7 @@ const DetailsOwnerInfoForm = (props) => {
 
     return (
         <div className="row mt-5">
-            <div className="col-5 boxGeneralInfo position-relative">
+            <div className="col-sm-8 mx-auto  center-block col-md-5 boxGeneralInfo position-relative">
                 <i
                     className="bi bi-pencil fs-5 position-absolute"
                     style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }}
@@ -91,9 +91,9 @@ const DetailsOwnerInfoForm = (props) => {
                 </div>
             </div>
 
-            <div className="col-1"></div>
+            <div className="col-1 d-none d-mg-block"></div>
 
-            <div className="col-6 boxPhoto position-relative">
+            <div className="col-md-6 col-sm-8 mx-auto  center-block boxPhoto position-relative">
                 <i
                     className="bi bi-pencil fs-5 position-absolute"
                     style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }}
