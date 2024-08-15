@@ -76,8 +76,8 @@ const ScheduleAppointment = (props) => {
         <div className="AuthHome">
             <AuthHeader logout={props.logout} />
             <div className="row mb-0">
-                <div className="col-2"></div>
-                <div className="col-5 m-lg-5">
+                <div className="col-2 d-none d-md-block"></div>
+                <div className="col-10 m-3 ml-lg-5 col-md-8">
                     <h1 style={{ fontWeight: 'bold' }}>
                         Schedule Appointment
                     </h1>
@@ -90,16 +90,16 @@ const ScheduleAppointment = (props) => {
             </div>
 
             <div className="row" style={{ marginTop: '-2rem' }}>
-                <div className="col-2"></div>
-                <div className="col-8">
-                    <hr style={{ borderTop: "1px solid #838383", marginLeft: '3rem' }} />
+                <div className="col-2 d-none d-md-block"></div>
+                <div className="col-10 m-3  col-md-8">
+                    <hr style={{ borderTop: "1px solid #838383",  }} />
                 </div>
             </div>
 
             <div className="row">
-                <div className="col-2"></div>
-                <div className="col-8">
-                    <div className="filterSection ml-3">
+                <div className="col-2 d-none d-md-block"></div>
+                <div className="col-11 m-3  col-md-8">
+                    <div className="filterSection">
                         <div className="row m-3">
                             <div className="col-md-6 mb-3 mt-3">
                                 <label htmlFor="serviceType" className="form-label">Type of Service</label>
@@ -154,8 +154,8 @@ const ScheduleAppointment = (props) => {
                         </div>
                     </div>
 
-                    <div className="aviableSitterWrapper m-5">
-                        <div className="row -3">
+                    <div className="aviableSitterWrapper">
+                        <div className="row mt-5">
                             {sitters.length > 0 ? (
                                 <>
                                     <h3>Available nearby Sitters:</h3>
@@ -200,7 +200,7 @@ const ScheduleAppointment = (props) => {
                     </div>
 
                 </div>
-                <div className="col-2"></div>
+                <div className="col-2 d-none d-md-block"></div>
             </div>
         </div>
     );
