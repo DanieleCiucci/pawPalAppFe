@@ -16,7 +16,9 @@ const DetailDogInfoForm = (props) => {
     return (
         <div className="row mt-5">
             <div className="col-12 col-lg-6 boxGeneralInfo position-relative">
+                {! props.canNotEdit && (
                 <i className="bi bi-pencil fs-5 position-absolute" style={{ top: '-1rem', right: '0rem', cursor: 'pointer' }} onClick={handleIconClick}></i>
+                )}
                 <div className="generalInfoContainer">
                     <h5 className="p-3"><strong> General information </strong></h5>
 

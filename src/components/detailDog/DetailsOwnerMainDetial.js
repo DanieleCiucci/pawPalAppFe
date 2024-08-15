@@ -74,6 +74,7 @@ const DetailsOwnerMainDetail = (props) => {
                                 objectFit: 'cover'
                             }}
                         />
+                        {!props.canNotEdit && (
                         <i
                             className="bi bi-pencil position-absolute"
                             style={{
@@ -84,6 +85,7 @@ const DetailsOwnerMainDetail = (props) => {
                                 right: '0',
                             }}
                         ></i>
+                        ) }
                     </label>
                 </div>
                 <div className="col-md-8 col-lg-6 text-center text-md-start">

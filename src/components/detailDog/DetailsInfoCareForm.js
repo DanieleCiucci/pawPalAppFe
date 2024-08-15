@@ -26,11 +26,14 @@ const DetailInfoCareForm = (props) => {
                         <img src={infoIcon} alt="info icon"/>
                         <h5 className="p-3 mb-0"><strong>Info About Care</strong></h5>
                     </div>
-                    <i
-                        className="bi bi-pencil fs-5 position-absolute"
-                        style={{top: '1rem', right: '0rem', cursor: 'pointer'}}
-                        onClick={handleIconClick}
-                    ></i>
+
+                    {!props.canNotEdit && (
+                        <i
+                            className="bi bi-pencil fs-5 position-absolute"
+                            style={{top: '1rem', right: '0rem', cursor: 'pointer'}}
+                            onClick={handleIconClick}
+                        ></i>
+                    )}
 
                     <div className="row m-1">
                         <div className="col-4">

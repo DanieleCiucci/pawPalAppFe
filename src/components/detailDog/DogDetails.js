@@ -22,6 +22,8 @@ const DogDetails = (props) => {
     const fileInputRef = useRef(null);
     const [role, setRole] = useState(null);
 
+    const [canNotEdit, setCanNotEdit] = useState(null);
+
     const location = useLocation();
     const { personalSitterDog } = location.state || {};
 
@@ -43,6 +45,9 @@ const DogDetails = (props) => {
 
                 const responseBody = await response.json();
                 setDog(responseBody);
+                setCanNotEdit(responseBody.canNotEditOwner);
+
+
             } catch (error) {
                 console.error("Error fetching dog details:", error);
             }
@@ -118,15 +123,15 @@ const DogDetails = (props) => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'general':
-                return <DetailDogInfoForm dog={dog} handleChange={handleChange} />;
+                return <DetailDogInfoForm dog={dog} handleChange={handleChange}  canNotEdit={canNotEdit}/>;
             case 'owner':
-                return <DetailsOwnerInfoForm dog={dog} handleChange={handleChange} />;
+                return <DetailsOwnerInfoForm dog={dog} handleChange={handleChange} canNotEdit={canNotEdit} />;
             case 'additionalDetail':
-                return <DetailsAdditionalDetailForm dog={dog} handleChange={handleChange} />;
+                return <DetailsAdditionalDetailForm dog={dog} handleChange={handleChange} canNotEdit={canNotEdit} />;
             case 'infoCare':
-                return <DetailsInfoCareForm dog={dog} handleChange={handleChange} />;
+                return <DetailsInfoCareForm dog={dog} handleChange={handleChange} canNotEdit={canNotEdit}/>;
             default:
-                return <DetailDogInfoForm dog={dog} handleChange={handleChange} />;
+                return <DetailDogInfoForm dog={dog} handleChange={handleChange}  canNotEdit={canNotEdit} />;
         }
     };
 
@@ -151,6 +156,7 @@ const DogDetails = (props) => {
         initializePage();
     }, []);
 
+
     return (
         <div className="DogDetails">
             <AuthHeader logout={props.logout} />
@@ -173,7 +179,10 @@ const DogDetails = (props) => {
                                                 objectFit: 'cover'
                                             }}
                                         />
+                                        {!canNotEdit &&(
                                         <div className="position-absolute bottom-0 end-0 p-3">
+
+
                                             <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>
                                                 Update Image
                                             </button>
@@ -186,6 +195,7 @@ const DogDetails = (props) => {
                                                 style={{ display: "none" }}
                                             />
                                         </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -194,16 +204,18 @@ const DogDetails = (props) => {
                                         <div className="col-sm-5 col-md-4 col-lg-3 col-6 position-relative">
                                             <h2><strong>{dog.name}</strong></h2>
                                             <p className="mb-4">{dog.breeds}</p>
+                                            {!canNotEdit &&(
                                             <i
                                                 className="bi bi-pencil position-absolute top-50 start-100 translate-middle"
                                                 style={{cursor: 'pointer'}}
                                                 onClick={handleIconClick}
                                             ></i>
+                                            )}
                                         </div>
                                     </div>
 
                                 ) : (
-                                    <DetailsOwnerMainDetail dog={dog}/>
+                                    <DetailsOwnerMainDetail dog={dog} canNotEdit = {canNotEdit}/>
                                 )}
 
                                 <hr style={{borderTop: "1px solid #838383"}}/>
