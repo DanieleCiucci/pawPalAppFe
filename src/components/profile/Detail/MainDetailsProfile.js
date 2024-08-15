@@ -68,7 +68,6 @@ const MainDetailsProfile = (props) => {
                             style={{
                                 maxHeight: '8.5rem',
                                 maxWidth: '8.5rem',
-                                border: '1px solid white',
                                 objectFit: 'cover'
                             }}
                         />
