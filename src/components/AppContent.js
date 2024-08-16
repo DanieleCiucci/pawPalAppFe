@@ -12,6 +12,7 @@ import  FindNewOwner from "./FindNewOwner"
 import Profile from "./profile/Profile";
 import Appointment from "./appointment/Appointment";
 import ScheduleAppointment from "./appointment/ScheudleAppointment";
+import SessionExpired from "./SessionExpired";
 
 export default class AppContent extends React.Component {
     constructor(props) {
@@ -84,6 +85,9 @@ export default class AppContent extends React.Component {
                 <Routes>
                     <Route path="/" element={<WelcomeContent />} />
                     <Route path="/auth" element={user ? <AuthContent logout={this.logout} user={user} /> : <Navigate to="/" />} />
+
+
+                    <Route path="/session-expired" element={<SessionExpired />} />
 
                     <Route path="/appointment/schedule-appointment" element={user ? <ScheduleAppointment logout={this.logout} user={user}  />  : <Navigate to="/" />} />
                     <Route path="/appointment" element={user ? <Appointment logout={this.logout} user={user} />  : <Navigate to="/" />}/>
