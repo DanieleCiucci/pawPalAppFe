@@ -68,10 +68,11 @@ const DetailsOwnerMainDetail = (props) => {
                             alt="Profile"
                             className="img-fluid rounded-circle"
                             style={{
-                                maxHeight: '8.5rem',
-                                maxWidth: '8.5rem',
-                                border: '1px solid white',
-                                objectFit: 'cover'
+                                width: "9.4rem",
+                                height: "9.4rem",
+                                objectFit: "cover",
+                                borderRadius: "50%",
+                                border: "1px solid #ccc",
                             }}
                         />
                         {!props.canNotEdit && (
