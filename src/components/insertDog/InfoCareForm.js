@@ -1,7 +1,7 @@
 import React from "react";
 import '../App.css';
 
-const InfoCareForm = ({ formData, handleChange }) => {
+const InfoCareForm = ({ formData, handleChange, handleNext, handlePrev, userRole, handleFormSubmit, personalSitterDog  }) => {
     return (
         <div className="form-container">
             <div className="row">
@@ -14,7 +14,7 @@ const InfoCareForm = ({ formData, handleChange }) => {
                         onChange={handleChange}>
                         <option>Select a choice</option>
                         <option value="0"> No</option>
-                        <option value="1">  Yes </option>
+                        <option value="1"> Yes</option>
 
                     </select>
                 </div>
@@ -88,6 +88,24 @@ const InfoCareForm = ({ formData, handleChange }) => {
                     style={{height: "8rem"}}
                 ></textarea>
                 <label htmlFor="dogInfoCare.description">Comments</label>
+            </div>
+
+            <div className="row mt-5">
+                <div className="col-12">
+                    <div className="d-flex justify-content-between">
+                        <button className="btn btn-secondary" onClick={handlePrev}>Previous</button>
+
+                        {!(userRole === 0 && !personalSitterDog) ? (
+
+                            <button className="btn btn-primary" onClick={handleFormSubmit}>Insert dog</button>
+                        ): (
+                            <button className="btn btn-outline-primary customInsetDog" onClick={handleNext}>Next</button>
+
+                    )}
+
+
+                </div>
+                </div>
             </div>
 
         </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchOwners } from "../appointment/service/AppointmentService";
 
-const OwnerInfoForm = ({ formData, handleChange }) => {
+const OwnerInfoForm = ({ formData, handleChange, handlePrev, handleFormSubmit}) => {
     const [photoPreview, setPhotoPreview] = useState(formData.owner.photo || "");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -269,7 +269,7 @@ const OwnerInfoForm = ({ formData, handleChange }) => {
                             name="owner.aboutOwner"
                             value={formData.owner.aboutOwner || ""}
                             onChange={handleChange}
-                            style={{ height: "8rem" }}
+                            style={{height: "8rem"}}
                         ></textarea>
                         <label htmlFor="commentCare">About the owner</label>
                     </div>
@@ -282,12 +282,22 @@ const OwnerInfoForm = ({ formData, handleChange }) => {
                             name="owner.personalNoteAboutOwner"
                             value={formData.owner.personalNoteAboutOwner || ""}
                             onChange={handleChange}
-                            style={{ height: "8rem" }}
+                            style={{height: "8rem"}}
                         ></textarea>
                         <label htmlFor="commentCare">Personal note about the owner</label>
                     </div>
                 </>
             )}
+
+            <div className="row mt-5">
+                <div className="col-12">
+                    <div className="d-flex justify-content-between">
+                        <button className="btn btn-secondary" onClick={handlePrev}>Previous</button>
+                        <button className="btn btn-primary" onClick={handleFormSubmit}>Insert dog</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     );
 };

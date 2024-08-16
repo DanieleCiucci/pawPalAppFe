@@ -17,6 +17,27 @@ const InsertDogForm = ({ logout }) => {
     const fileInputRef = useRef(null);
     const [userRole, setUserRole] = useState(null);
 
+    const tabOrder = ['general', 'additionalDetail', 'infoCare', 'owner'];
+
+
+    const handleNext = () => {
+        const currentIndex = tabOrder.indexOf(activeTab);
+        const nextIndex = currentIndex + 1;
+
+        if (nextIndex < tabOrder.length) {
+            setActiveTab(tabOrder[nextIndex]);
+        }
+    };
+
+    const handlePrev = () => {
+        const currentIndex = tabOrder.indexOf(activeTab);
+        const prevIndex = currentIndex - 1;
+
+        if (prevIndex >= 0) {
+            setActiveTab(tabOrder[prevIndex]);
+        }
+    };
+
     const location = useLocation();
     const { personalSitterDog } = location.state || {};
 
@@ -96,15 +117,15 @@ const InsertDogForm = ({ logout }) => {
 
         let modifiedFormData = { ...formData };
 
-        if (formData.owner.id) {
-
+        // Check if owner ID exists safely using optional chaining
+        if (formData?.owner?.id) {
             modifiedFormData.owner = { id: formData.owner.id };
         } else {
-
-            const hasOwnerData = Object.keys(formData.owner).some(key => formData.owner[key]);
+            // Check if any other owner data exists
+            const hasOwnerData = Object.keys(modifiedFormData?.owner || {}).some(key => formData.owner[key]);
 
             if (!hasOwnerData) {
-
+                // If no owner data, remove the owner field
                 delete modifiedFormData.owner;
             }
         }
@@ -113,6 +134,10 @@ const InsertDogForm = ({ logout }) => {
 
         handleSubmit(e, modifiedFormData, userRole, personalSitterDog);
     };
+
+
+
+
 
     const handleFileButtonClick = () => {
         fileInputRef.current.click();
@@ -142,13 +167,20 @@ const InsertDogForm = ({ logout }) => {
     const renderTabContent = () => {
         switch (activeTab) {
             case 'general':
-                return <DogInfoForm formData={formData} handleChange={handleChange} />;
+                return <DogInfoForm formData={formData} handleChange={handleChange} handleNext={handleNext} />;
             case 'owner':
-                return <OwnerInfoForm formData={formData} handleChange={handleChange} />;
+                return <OwnerInfoForm formData={formData} handleChange={handleChange} handlePrev={handlePrev} handleFormSubmit={handleFormSubmit}/>;
             case 'additionalDetail':
-                return <AdditionalDetailForm formData={formData} handleChange={handleChange} />;
+                return <AdditionalDetailForm formData={formData} handleChange={handleChange} handleNext={handleNext} handlePrev={handlePrev}/>;
             case 'infoCare':
-                return <InfoCareForm formData={formData} handleChange={handleChange} />;
+                return <InfoCareForm
+                    formData={formData}
+                    handleChange={handleChange}
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                    userRole = {userRole}
+                    personalSitterDog = {personalSitterDog}
+                    handleFormSubmit={handleFormSubmit}/>;
             default:
                 return <DogInfoForm formData={formData} handleChange={handleChange} />;
         }
@@ -221,7 +253,7 @@ const InsertDogForm = ({ logout }) => {
                             {renderTabContent()}
                         </div>
                         <div className="mt-5">
-                            <button type="submit" className="btn btn-primary mb-5" onClick={handleFormSubmit}>Insert Dog</button>
+
                         </div>
                     </div>
                     <div className="col-2 d-none d-sm-block"></div>

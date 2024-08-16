@@ -1,7 +1,7 @@
 import React from "react";
 import '../App.css';
 
-const AdditionalDetailForm = ({ formData, handleChange }) => {
+const AdditionalDetailForm = ({ formData, handleChange, handleNext, handlePrev  }) => {
     return (
         <div className="form-container">
             <div className="row">
@@ -67,6 +67,15 @@ const AdditionalDetailForm = ({ formData, handleChange }) => {
                     style={{height: "8rem"}}
                 ></textarea>
                 <label htmlFor="additionalDetail">Comments</label>
+            </div>
+
+            <div className="row mt-5">
+                <div className="col-12">
+                    <div className="d-flex justify-content-between">
+                        <button className="btn btn-secondary" onClick={handlePrev}>Previous</button>
+                        <button className="btn btn-outline-primary customInsetDog" onClick={handleNext}>Next</button>
+                    </div>
+                </div>
             </div>
 
         </div>
