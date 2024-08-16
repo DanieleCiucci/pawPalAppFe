@@ -110,6 +110,8 @@ export const scheduleAppointment = async (appointmentData) => {
 const API_URL = 'http://localhost:8080/api/appointment';
 
 export const fetchOwners = async (token) => {
+
+    const API_URL = 'http://localhost:8080/api/appointment';
     try {
         const response = await fetch(`${API_URL}/get-all-owner-linked-to-sitter`, {
             method: 'GET',

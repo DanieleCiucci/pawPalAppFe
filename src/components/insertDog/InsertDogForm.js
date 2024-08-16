@@ -41,6 +41,7 @@ const InsertDogForm = ({ logout }) => {
             image: "",
         },
         owner: {
+            id: "",  // Initially set to empty, will be populated if owner is selected
             name: "",
             surname: "",
             email: "",
@@ -51,10 +52,10 @@ const InsertDogForm = ({ logout }) => {
             aboutOwner: "",
             city: undefined,
             address: undefined,
-            state:undefined,
-            postalCode:undefined,
-            geoX:undefined,
-            geoY:undefined
+            state: undefined,
+            postalCode: undefined,
+            geoX: undefined,
+            geoY: undefined
         },
         dogAdditionalDetail: {
             getAlongWellWithOtherDog: false,
@@ -91,7 +92,26 @@ const InsertDogForm = ({ logout }) => {
     };
 
     const handleFormSubmit = (e) => {
-        handleSubmit(e, formData, userRole, personalSitterDog);
+        e.preventDefault();
+
+        let modifiedFormData = { ...formData };
+
+        if (formData.owner.id) {
+
+            modifiedFormData.owner = { id: formData.owner.id };
+        } else {
+
+            const hasOwnerData = Object.keys(formData.owner).some(key => formData.owner[key]);
+
+            if (!hasOwnerData) {
+
+                delete modifiedFormData.owner;
+            }
+        }
+
+        console.log(modifiedFormData, "Final payload before submission");
+
+        handleSubmit(e, modifiedFormData, userRole, personalSitterDog);
     };
 
     const handleFileButtonClick = () => {
