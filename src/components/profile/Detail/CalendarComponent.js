@@ -1,31 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'rsuite/dist/rsuite.min.css';
 import { Calendar, Whisper, Popover, Badge } from 'rsuite';
 
-function getTodoList(date) {
-    const day = date.getDate();
-
-    switch (day) {
-        case 10:
-            return [
-                { time: '10:30 am', title: 'Meeting' },
-                { time: '12:00 pm', title: 'Lunch' }
-            ];
-        case 15:
-            return [
-                { time: '09:30 am', title: 'Products Introduction Meeting' },
-                { time: '12:30 pm', title: 'Client entertaining' },
-                { time: '02:00 pm', title: 'Product design discussion' },
-                { time: '05:00 pm', title: 'Product test and acceptance' },
-                { time: '06:30 pm', title: 'Reporting' },
-                { time: '10:00 pm', title: 'Going home to walk the dog' }
-            ];
-        default:
-            return [];
-    }
-}
-
 const CalendarComponent = () => {
+    const [appointments, setAppointments] = useState([]);
+
+    useEffect(() => {
+        const fetchAppointments = async () => {
+            const token = localStorage.getItem('authToken');
+
+            try {
+                const response = await fetch('http://localhost:8080/api/appointment/calendar', {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setAppointments(data);  // Update state with the fetched data
+
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+            }
+        };
+
+        fetchAppointments();
+
+    }, []);
+
+    function getTodoList(date) {
+        const dateStr = date.toISOString().split('T')[0]; // Format date to "YYYY-MM-DD"
+        return appointments
+            .filter(appointment => {
+                const [year, month, day] = appointment.startDate;
+                const appointmentDateStr = new Date(year, month - 1, day).toISOString().split('T')[0];
+                return appointmentDateStr === dateStr;
+            })
+            .map(appointment => ({
+                time: `${appointment.startDate[3].toString().padStart(2, '0')}:${appointment.startDate[4].toString().padStart(2, '0')} am`, // Adjust time format if needed
+                title: `${appointment.ownerName} - ${appointment.state}`
+            }));
+    }
+
     function renderCell(date) {
         const list = getTodoList(date);
 

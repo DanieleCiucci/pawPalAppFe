@@ -6,10 +6,9 @@ const SessionExpired = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Clear the local storage
+
         localStorage.clear();
 
-        // Redirect to the login page
         navigate('/');
     };
 
