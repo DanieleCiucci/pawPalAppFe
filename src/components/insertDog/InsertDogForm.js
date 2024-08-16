@@ -136,9 +136,6 @@ const InsertDogForm = ({ logout }) => {
     };
 
 
-
-
-
     const handleFileButtonClick = () => {
         fileInputRef.current.click();
     };
