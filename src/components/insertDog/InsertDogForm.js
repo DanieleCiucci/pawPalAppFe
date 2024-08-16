@@ -285,6 +285,8 @@ const InsertDogForm = ({ logout }) => {
                     </div>
                     <div className="col-2 d-none d-sm-block"></div>
                 </div>
+
+                <div className="row mt-5"></div>
             </div>
         </div>
     );

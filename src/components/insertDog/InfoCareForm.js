@@ -3,7 +3,7 @@ import '../App.css';
 
 const InfoCareForm = ({ formData, handleChange, handleNext, handlePrev, userRole, handleFormSubmit, personalSitterDog  }) => {
     return (
-        <div className="form-container">
+        <div className="form-container mb-5">
             <div className="row">
                 <div className="col-6 form-group">
                     <label>Can be left alone?</label>

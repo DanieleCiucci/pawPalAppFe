@@ -97,7 +97,7 @@ const OwnerInfoForm = ({ formData, handleChange, handlePrev, handleFormSubmit}) 
     console.log(ownersList);
 
     return (
-        <div className="form-container">
+        <div className="form-container mb-5">
             <div className="form-group mt-3">
                 <label>
                     <input

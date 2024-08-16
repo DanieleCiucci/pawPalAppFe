@@ -3,7 +3,7 @@ import '../App.css';
 
 const DogInfoForm = ({ formData, handleChange, handleNext }) => {
     return (
-        <div className="form-container">
+        <div className="form-container mb-5">
             <div className="row">
                 <div className="col-6 form-group">
                     <label>Name:</label>
