@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import marker from '../assets/pin.svg';
 import { Icon } from 'leaflet';
+import {useNavigate} from "react-router-dom";
 
 const popUpIcon = new Icon({
     iconUrl: marker,
@@ -18,6 +19,8 @@ const FindNewOwner = (props) => {
     const [userRole, setUserRole] = useState(null);
     const [owners, setOwners] = useState([]);
     const [mapCenter, setMapCenter] = useState(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const initializePage = async () => {
@@ -62,6 +65,8 @@ const FindNewOwner = (props) => {
         setUserLocation();
         initializePage();
     }, []);
+
+
 
     return (
         <div className="AuthHome">
@@ -111,10 +116,16 @@ const FindNewOwner = (props) => {
                                     >
                                         <Popup>
                                             <>
-                                                <strong>{owner.name} {owner.surname}</strong><br />
-                                                {owner.address}<br />
-                                                {owner.city}, {owner.postalCode} <br />
-                                                {owner.email}
+                                                <strong>{owner.name} {owner.surname}</strong><br/>
+                                                {owner.address}<br/>
+                                                {owner.city}, {owner.postalCode} <br/>
+                                                {owner.email} <br/> <br/>
+                                                {userRole === 1 && (
+                                                    <a href={`/profile/${owner.id}`}
+                                                       rel="noopener noreferrer">
+                                                        View Profile
+                                                    </a>
+                                                )}
                                             </>
                                         </Popup>
                                     </Marker>
