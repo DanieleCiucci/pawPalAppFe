@@ -3,22 +3,17 @@ import { geocodeAddress } from './geocodeAdress';
 export const handleSubmit = async (e, formData, userRole, personalSitterDog) => {
     e.preventDefault();
 
-    // Create a copy of the formData to manipulate
     let submissionData = { ...formData };
 
     // GEOLOCATION SERVICE
     const { address: streetAddress, city, postalCode, state } = formData.owner || {};
-
-    // Construct the address
     const addressParts = [streetAddress, city, postalCode, state].filter(part => part && part.trim());
     const address = addressParts.join(', ');
 
-    // Check if the constructed address is valid before calling the geocode service
     if (address) {
         try {
             const location = await geocodeAddress(address);
 
-            // Handle the response from the geolocation service
             if (location) {
                 submissionData.owner = {
                     ...submissionData.owner,
@@ -37,12 +32,10 @@ export const handleSubmit = async (e, formData, userRole, personalSitterDog) => 
 
     const token = localStorage.getItem('authToken');
 
-    // If user role is 1, remove the owner data from the formData
     if (userRole === 1) {
         delete submissionData.owner;
     }
 
-    // Format the additional detail data
     submissionData = {
         ...submissionData,
         dogAdditionalDetail: {
@@ -54,12 +47,10 @@ export const handleSubmit = async (e, formData, userRole, personalSitterDog) => 
         }
     };
 
-    // Determine the appropriate URL based on personalSitterDog
     const url = personalSitterDog
         ? "http://localhost:8080/api/dog/insert-sitter-dog"
         : "http://localhost:8080/api/dog/insert";
 
-    // Send the data to the server
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -78,7 +69,10 @@ export const handleSubmit = async (e, formData, userRole, personalSitterDog) => 
         const data = responseBody ? JSON.parse(responseBody) : {};
 
         console.log("Success:", data);
+        return { success: true, data };
     } catch (error) {
+        console.log("bella tempe");
         console.error("Error:", error);
+        return { success: false, error: error.message };
     }
 };

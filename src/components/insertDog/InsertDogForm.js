@@ -7,8 +7,8 @@ import OwnerInfoForm from "./OwnerInfoForm";
 import AdditionalDetailForm from "./AdditionalDetailForm";
 import InfoCareForm from "./InfoCareForm";
 import { fetchUserRole } from "../../services/roleSerivces";
-import { handleSubmit } from "../../services/insertDogServices"
-import {useLocation} from "react-router-dom";
+import { handleSubmit } from "../../services/insertDogServices";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const InsertDogForm = ({ logout }) => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -16,40 +16,6 @@ const InsertDogForm = ({ logout }) => {
     const [activeTab, setActiveTab] = useState('general');
     const fileInputRef = useRef(null);
     const [userRole, setUserRole] = useState(null);
-
-    const tabOrder = ['general', 'additionalDetail', 'infoCare', 'owner'];
-
-
-    const handleNext = () => {
-        const currentIndex = tabOrder.indexOf(activeTab);
-        const nextIndex = currentIndex + 1;
-
-        if (nextIndex < tabOrder.length) {
-            setActiveTab(tabOrder[nextIndex]);
-        }
-    };
-
-    const handlePrev = () => {
-        const currentIndex = tabOrder.indexOf(activeTab);
-        const prevIndex = currentIndex - 1;
-
-        if (prevIndex >= 0) {
-            setActiveTab(tabOrder[prevIndex]);
-        }
-    };
-
-    const location = useLocation();
-    const { personalSitterDog } = location.state || {};
-
-    useEffect(() => {
-        const initializeRole = async () => {
-            const role = await fetchUserRole();
-            setUserRole(role);
-        };
-
-        initializeRole();
-    }, []);
-
     const [formData, setFormData] = useState({
         dog: {
             name: "",
@@ -62,7 +28,7 @@ const InsertDogForm = ({ logout }) => {
             image: "",
         },
         owner: {
-            id: "",  // Initially set to empty, will be populated if owner is selected
+            id: "",
             name: "",
             surname: "",
             email: "",
@@ -97,12 +63,45 @@ const InsertDogForm = ({ logout }) => {
         }
     });
 
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+
+    const successMessageRef = useRef(null);
+    const errorMessageRef = useRef(null);
+
+    const location = useLocation();
+    const { personalSitterDog } = location.state || {};
+
+    const navigate = useNavigate();
+
+    const tabOrder = ['general', 'additionalDetail', 'infoCare', 'owner'];
+
+    useEffect(() => {
+        const initializeRole = async () => {
+            const role = await fetchUserRole();
+            setUserRole(role);
+        };
+        initializeRole();
+    }, []);
+
+    useEffect(() => {
+        if (showSuccessMessage) {
+            successMessageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => setShowSuccessMessage(false), 3000);
+        }
+    }, [showSuccessMessage]);
+
+    useEffect(() => {
+        if (showErrorMessage) {
+            errorMessageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => setShowErrorMessage(false), 3000);
+        }
+    }, [showErrorMessage]);
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         const [section, field] = name.split(".");
-
         const fieldValue = type === 'checkbox' ? checked : value;
-
         setFormData((prevData) => ({
             ...prevData,
             [section]: {
@@ -112,29 +111,21 @@ const InsertDogForm = ({ logout }) => {
         }));
     };
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-
-        let modifiedFormData = { ...formData };
-
-        // Check if owner ID exists safely using optional chaining
-        if (formData?.owner?.id) {
-            modifiedFormData.owner = { id: formData.owner.id };
-        } else {
-            // Check if any other owner data exists
-            const hasOwnerData = Object.keys(modifiedFormData?.owner || {}).some(key => formData.owner[key]);
-
-            if (!hasOwnerData) {
-                // If no owner data, remove the owner field
-                delete modifiedFormData.owner;
-            }
+    const handleNext = () => {
+        const currentIndex = tabOrder.indexOf(activeTab);
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < tabOrder.length) {
+            setActiveTab(tabOrder[nextIndex]);
         }
-
-        console.log(modifiedFormData, "Final payload before submission");
-
-        handleSubmit(e, modifiedFormData, userRole, personalSitterDog);
     };
 
+    const handlePrev = () => {
+        const currentIndex = tabOrder.indexOf(activeTab);
+        const prevIndex = currentIndex - 1;
+        if (prevIndex >= 0) {
+            setActiveTab(tabOrder[prevIndex]);
+        }
+    };
 
     const handleFileButtonClick = () => {
         fileInputRef.current.click();
@@ -146,7 +137,6 @@ const InsertDogForm = ({ logout }) => {
         setSelectedFileUrl(URL.createObjectURL(file));
 
         const reader = new FileReader();
-
         reader.onloadend = () => {
             const base64String = reader.result.split(',')[1];
             setFormData(prevData => ({
@@ -157,27 +147,59 @@ const InsertDogForm = ({ logout }) => {
                 }
             }));
         };
-
         reader.readAsDataURL(file);
     };
+
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+
+        let modifiedFormData = { ...formData };
+
+        if (formData?.owner?.id) {
+            modifiedFormData.owner = { id: formData.owner.id };
+        } else {
+            const hasOwnerData = Object.keys(modifiedFormData?.owner || {}).some(key => formData.owner[key]);
+            if (!hasOwnerData) {
+                delete modifiedFormData.owner;
+            }
+        }
+
+        const result = await handleSubmit(e, modifiedFormData, userRole, personalSitterDog);
+
+        if (result.success) {
+            setShowSuccessMessage(true);
+            setShowErrorMessage(false);
+
+            // Redirect to "Your Dogs" page after a short delay
+            setTimeout(() => {
+                navigate('/yourdogs');
+            }, 3000);
+        } else {
+            console.log("Error detected: bella tempe");
+            setShowSuccessMessage(false);
+            setShowErrorMessage(true);
+        }
+    };
+
 
     const renderTabContent = () => {
         switch (activeTab) {
             case 'general':
                 return <DogInfoForm formData={formData} handleChange={handleChange} handleNext={handleNext} />;
             case 'owner':
-                return <OwnerInfoForm formData={formData} handleChange={handleChange} handlePrev={handlePrev} handleFormSubmit={handleFormSubmit}/>;
+                return <OwnerInfoForm formData={formData} handleChange={handleChange} handlePrev={handlePrev} handleFormSubmit={handleFormSubmit} />;
             case 'additionalDetail':
-                return <AdditionalDetailForm formData={formData} handleChange={handleChange} handleNext={handleNext} handlePrev={handlePrev}/>;
+                return <AdditionalDetailForm formData={formData} handleChange={handleChange} handleNext={handleNext} handlePrev={handlePrev} />;
             case 'infoCare':
                 return <InfoCareForm
                     formData={formData}
                     handleChange={handleChange}
                     handleNext={handleNext}
                     handlePrev={handlePrev}
-                    userRole = {userRole}
-                    personalSitterDog = {personalSitterDog}
-                    handleFormSubmit={handleFormSubmit}/>;
+                    userRole={userRole}
+                    personalSitterDog={personalSitterDog}
+                    handleFormSubmit={handleFormSubmit}
+                />;
             default:
                 return <DogInfoForm formData={formData} handleChange={handleChange} />;
         }
@@ -190,22 +212,30 @@ const InsertDogForm = ({ logout }) => {
                 <div className="row">
                     <div className="col-2 d-none d-sm-block"></div>
                     <div className="col-12 col-sm-8">
-
                         {personalSitterDog ? (
                             <>
-                                <h1 style={{fontWeight: 'bold'}}>Insert your personal dog</h1>
+                                <h1 style={{ fontWeight: 'bold' }}>Insert your personal dog</h1>
                                 <p className="mt-3">In this section you can insert your personal dog's information</p>
                             </>
-                        ): (
+                        ) : (
                             <>
                                 <h1 style={{ fontWeight: 'bold' }}>Insert dog</h1>
                                 <p>In this section you can insert your dog's information</p>
                             </>
-
                         )}
                         <div className="position-relative mt-4">
                             <div className="image-preview-container mb-4">
-                                <img src={selectedFileUrl || defaultImg} alt="Dog Preview" style={{ height: '19rem', width: '100%', border: '1px solid #ccc', borderRadius: '8px', objectFit: 'cover' }} />
+                                <img
+                                    src={selectedFileUrl || defaultImg}
+                                    alt="Dog Preview"
+                                    style={{
+                                        height: '19rem',
+                                        width: '100%',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '8px',
+                                        objectFit: 'cover'
+                                    }}
+                                />
                                 <div className="position-absolute bottom-0 end-0 p-3">
                                     <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>Select Image</button>
                                     <input
@@ -218,39 +248,39 @@ const InsertDogForm = ({ logout }) => {
                                     />
                                 </div>
                             </div>
+
+                            {showSuccessMessage && (
+                                <div ref={successMessageRef} className="alert alert-success position-absolute bottom-0 end-0" role="alert">
+                                    Dog saved successfully
+                                </div>
+                            )}
+                            {showErrorMessage && (
+                                <div ref={errorMessageRef} className="alert alert-danger position-absolute bottom-0 end-0" role="alert">
+                                    Error: the dog is not saved, retry later.
+                                </div>
+                            )}
                         </div>
                         <hr style={{ borderTop: "1px solid #838383" }} />
 
                         <ul className="nav nav-tabs CustomNav" style={{ borderBottom: 'none' }}>
                             <li className="nav-item">
-                                <button className={`nav-link ${activeTab === 'general' ? 'active' : ''}`}
-                                        onClick={() => setActiveTab('general')}>General Information
-                                </button>
+                                <button className={`nav-link ${activeTab === 'general' ? 'active' : ''}`} onClick={() => setActiveTab('general')}>General Information</button>
                             </li>
                             <li className="nav-item">
-                                <button className={`nav-link ${activeTab === 'additionalDetail' ? 'active' : ''}`}
-                                        onClick={() => setActiveTab('additionalDetail')}>Additional Details
-                                </button>
+                                <button className={`nav-link ${activeTab === 'additionalDetail' ? 'active' : ''}`} onClick={() => setActiveTab('additionalDetail')}>Additional Details</button>
                             </li>
                             <li className="nav-item">
-                                <button className={`nav-link ${activeTab === 'infoCare' ? 'active' : ''}`}
-                                        onClick={() => setActiveTab('infoCare')}>Info about Care
-                                </button>
+                                <button className={`nav-link ${activeTab === 'infoCare' ? 'active' : ''}`} onClick={() => setActiveTab('infoCare')}>Info about Care</button>
                             </li>
                             {(userRole === 0 && !personalSitterDog) && (
                                 <li className="nav-item">
-                                    <button className={`nav-link ${activeTab === 'owner' ? 'active' : ''}`}
-                                            onClick={() => setActiveTab('owner')}>Owner
-                                    </button>
+                                    <button className={`nav-link ${activeTab === 'owner' ? 'active' : ''}`} onClick={() => setActiveTab('owner')}>Owner</button>
                                 </li>
                             )}
                         </ul>
 
                         <div className="tab-content mt-4">
                             {renderTabContent()}
-                        </div>
-                        <div className="mt-5">
-
                         </div>
                     </div>
                     <div className="col-2 d-none d-sm-block"></div>
