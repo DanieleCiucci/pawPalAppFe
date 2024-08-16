@@ -2,15 +2,26 @@ import React, { useState, useEffect } from 'react';
 import 'rsuite/dist/rsuite.min.css';
 import { Calendar, Whisper, Popover, Badge } from 'rsuite';
 
-const CalendarComponent = () => {
+const CalendarComponent = (props) => {
     const [appointments, setAppointments] = useState([]);
 
     useEffect(() => {
         const fetchAppointments = async () => {
             const token = localStorage.getItem('authToken');
 
+            //conditionalApiUrl
+            let apiURL;
+
+            if(props.role === 0){
+
+                apiURL = 'http://localhost:8080/api/appointment/calendar'
+            }else{
+                const sitterId = props.sitterId;
+                apiURL = `http://localhost:8080/api/appointment/calendar?sitterId=${sitterId}`;
+            }
+
             try {
-                const response = await fetch('http://localhost:8080/api/appointment/calendar', {
+                const response = await fetch(apiURL, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -35,7 +46,7 @@ const CalendarComponent = () => {
     }, []);
 
     function getTodoList(date) {
-        const dateStr = date.toISOString().split('T')[0]; // Format date to "YYYY-MM-DD"
+        const dateStr = date.toISOString().split('T')[0];
         return appointments
             .filter(appointment => {
                 const [year, month, day] = appointment.startDate;
@@ -43,7 +54,7 @@ const CalendarComponent = () => {
                 return appointmentDateStr === dateStr;
             })
             .map(appointment => ({
-                time: `${appointment.startDate[3].toString().padStart(2, '0')}:${appointment.startDate[4].toString().padStart(2, '0')} am`, // Adjust time format if needed
+                time: `${appointment.startDate[3].toString().padStart(2, '0')}:${appointment.startDate[4].toString().padStart(2, '0')} am`,
                 title: `${appointment.ownerName} - ${appointment.state}`
             }));
     }

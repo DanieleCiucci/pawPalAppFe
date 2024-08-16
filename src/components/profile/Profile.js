@@ -3,15 +3,10 @@ import AuthHeader from "../AuthHeader";
 import defaultImg from "../../assets/defaultImg.svg";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { fetchUserRole } from "../../services/roleSerivces";
-import {
-    fetchProfileDetails,
-    updateProfileImage,
-    fetchDogsOwnedBySitter,
-    fetchProfileDetailsOwner,
-    fetchDogsOwnedByOwner,
-    fetchProfileDetailsSitter,
-    fetchDogsOwnedByIdSitter
-} from "./services/ProfileMainService";
+import {fetchProfileDetails, updateProfileImage, fetchDogsOwnedBySitter,
+    fetchProfileDetailsOwner, fetchDogsOwnedByOwner, fetchProfileDetailsSitter,
+    fetchDogsOwnedByIdSitter} from "./services/ProfileMainService";
+
 import GeneralInfoProfile from "./Detail/GeneralInfoProfile";
 import MainDetailsProfile from "./Detail/MainDetailsProfile";
 import Calendar from "./Detail/CalendarComponent";
@@ -113,7 +108,7 @@ const Profile = (props) => {
             case 'services':
                 return <Service profile={profile} sitterId={sitterId} />;
             case 'calendar':
-                return <Calendar />;
+                return <Calendar sitterId={sitterId} role={role}/>;
             default:
                 return <div>Select a tab to view content</div>;
         }
