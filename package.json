@@ -2,6 +2,7 @@
   "name": "pawpalfe",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "yarn@1.22.22",
   "dependencies": {
     "@restart/ui": "^1.8.0",
     "@testing-library/jest-dom": "^5.17.0",
@@ -18,7 +19,8 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
-    "rsuite": "^5.68.1",
+    "rsuite": "^5.69.0",
+    "svgo": "^3.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
