@@ -29,8 +29,10 @@ const AboutOwnerPopUp = ({ show, handleClose, dog }) => {
 
         };
 
+        const apiUrl = process.env.REACT_APP_API_URL;
+
         try {
-            const response = await fetch("http://localhost:8080/api/dog/update-about-owner", {
+            const response = await fetch(apiUrl + "/api/dog/update-about-owner", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

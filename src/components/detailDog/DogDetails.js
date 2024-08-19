@@ -27,11 +27,13 @@ const DogDetails = (props) => {
     const location = useLocation();
     const { personalSitterDog } = location.state || {};
 
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     useEffect(() => {
         const fetchDogDetails = async () => {
             const token = localStorage.getItem('authToken');
             try {
-                const response = await fetch(`http://localhost:8080/api/dog/get-dog/${id}`, {
+                const response = await fetch(apiUrl + `/api/dog/get-dog/${id}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -82,7 +84,7 @@ const DogDetails = (props) => {
                 // Send the base64 image to the backend
                 try {
                     const token = localStorage.getItem('authToken');
-                    const response = await fetch(`http://localhost:8080/api/dog/update-main-image`, {
+                    const response = await fetch(apiUrl + `/api/dog/update-main-image`, {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",

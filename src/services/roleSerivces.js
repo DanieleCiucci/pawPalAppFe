@@ -1,7 +1,10 @@
 export const fetchUserRole = async () => {
     const token = localStorage.getItem('authToken');
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     try {
-        const response = await fetch("http://localhost:8080/role", {
+        const response = await fetch(apiUrl + "/role", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

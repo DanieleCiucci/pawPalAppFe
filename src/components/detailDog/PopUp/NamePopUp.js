@@ -28,8 +28,10 @@ const NamePopUp = ({ show, handleClose, dog }) => {
             breeds: formData.breeds
         };
 
+        const apiUrl = process.env.REACT_APP_API_URL;
+
         try {
-            const response = await fetch("http://localhost:8080/api/dog/update-main-info", {
+            const response = await fetch(apiUrl + "/api/dog/update-main-info", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

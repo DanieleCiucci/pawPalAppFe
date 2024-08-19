@@ -1,7 +1,9 @@
+const apiUrl = process.env.REACT_APP_API_URL;
+
 export const fetchProfileDetails = async () => {
     const token = localStorage.getItem('authToken');
     try {
-        const response = await fetch(`http://localhost:8080/api/profile/sitter`, {
+        const response = await fetch(apiUrl + `/api/profile/sitter`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -23,7 +25,7 @@ export const fetchProfileDetails = async () => {
 export const fetchProfileDetailsSitter = async (sitterId) => {
     const token = localStorage.getItem('authToken');
     try {
-        const response = await fetch(`http://localhost:8080/api/profile/sitter/`+sitterId, {
+        const response = await fetch(apiUrl + `/api/profile/sitter/`+sitterId, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -46,7 +48,7 @@ export const fetchProfileDetailsSitter = async (sitterId) => {
 export const fetchProfileDetailsOwner = async () => {
     const token = localStorage.getItem('authToken');
     try {
-        const response = await fetch(`http://localhost:8080/api/profile/owner`, {
+        const response = await fetch(apiUrl + `/api/profile/owner`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -70,7 +72,7 @@ export const fetchProfileDetailsOwner = async () => {
 export const updateProfileImage = async (profileId, base64String) => {
     const token = localStorage.getItem('authToken');
     try {
-        const response = await fetch(`http://localhost:8080/api/profile/update-main-image`, {
+        const response = await fetch(apiUrl + `/api/profile/update-main-image`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -93,7 +95,7 @@ export const updateProfileImage = async (profileId, base64String) => {
 export const fetchDogsOwnedBySitter = async () => {
     const token = localStorage.getItem('authToken');
     try {
-        const response = await fetch(`http://localhost:8080/api/profile/get-all-dog-owned-by-sitter`, {
+        const response = await fetch(apiUrl + `/api/profile/get-all-dog-owned-by-sitter`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -115,7 +117,7 @@ export const fetchDogsOwnedBySitter = async () => {
 export const fetchDogsOwnedByIdSitter = async (sitterId) => {
     const token = localStorage.getItem('authToken');
     try {
-        const response = await fetch(`http://localhost:8080/api/profile/get-all-dog-owned-by-sitter/`+sitterId, {
+        const response = await fetch(apiUrl +`/api/profile/get-all-dog-owned-by-sitter/`+sitterId, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -139,7 +141,7 @@ export const fetchDogsOwnedByIdSitter = async (sitterId) => {
 export const fetchDogsOwnedByOwner = async () => {
     const token = localStorage.getItem('authToken');
     try {
-        const response = await fetch(`http://localhost:8080/api/profile/get-all-dog-owned-by-owner`, {
+        const response = await fetch(apiUrl +`/api/profile/get-all-dog-owned-by-owner`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

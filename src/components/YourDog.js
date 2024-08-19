@@ -6,6 +6,8 @@ import imageCard from "../assets/dog1.jpg";
 import Pagination from "./Paginator";
 import { fetchUserRole } from "../services/roleSerivces";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const YourDog = (props) => {
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
@@ -20,7 +22,7 @@ const YourDog = (props) => {
 
             if (role === 0) {
                 console.log("Fetching dogs for sitter");
-                response = await fetch(`http://localhost:8080/api/dog/all-dog-sitter?page=${page}&size=6`, {
+                response = await fetch(apiUrl +`/api/dog/all-dog-sitter?page=${page}&size=6`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -29,7 +31,7 @@ const YourDog = (props) => {
                 });
             } else if (role === 1) {
                 console.log("Fetching dogs for owner");
-                response = await fetch(`http://localhost:8080/api/dog/all-dog-owner?page=${page}&size=6`, {
+                response = await fetch(apiUrl + `/api/dog/all-dog-owner?page=${page}&size=6`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

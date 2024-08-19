@@ -33,8 +33,10 @@ const LocationAndGeneralInfoPopUp = ({ show, handleClose, dog }) => {
             addressInfo: formData.addressInfo
         };
 
+        const apiUrl = process.env.REACT_APP_API_URL;
+
         try {
-            const response = await fetch("http://localhost:8080/api/dog/update-owner-information", {
+            const response = await fetch(apiUrl + "/api/dog/update-owner-information", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

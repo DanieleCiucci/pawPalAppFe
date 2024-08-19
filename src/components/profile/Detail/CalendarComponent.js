@@ -9,15 +9,17 @@ const CalendarComponent = (props) => {
         const fetchAppointments = async () => {
             const token = localStorage.getItem('authToken');
 
+
+            let apiUrl = process.env.REACT_APP_API_URL;
             //conditionalApiUrl
-            let apiURL;
+            let apiURL = apiUrl;
 
             if(props.role === 0){
 
-                apiURL = 'http://localhost:8080/api/appointment/calendar'
+                apiURL = apiUrl +'/api/appointment/calendar'
             }else{
                 const sitterId = props.sitterId;
-                apiURL = `http://localhost:8080/api/appointment/calendar?sitterId=${sitterId}`;
+                apiURL = apiUrl + `/api/appointment/calendar?sitterId=${sitterId}`;
             }
 
             try {

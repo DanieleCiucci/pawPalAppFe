@@ -1,8 +1,10 @@
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 export const findNewOwner = async (role) => {
     try {
         const endpoint = role === 0 ? "owner" : "sitter";
-        const response = await fetch(`http://localhost:8080/api/find-new-user/${endpoint}`, {
+        const response = await fetch(apiUrl + `/api/find-new-user/${endpoint}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

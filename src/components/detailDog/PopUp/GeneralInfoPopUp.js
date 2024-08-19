@@ -37,9 +37,11 @@ const GeneralInfoPopUp = ({ show, handleClose, dog }) => {
             idGender: idGenderRequest
         };
 
+        const apiUrl = process.env.REACT_APP_API_URL;
+
 
         try {
-            const response = await fetch("http://localhost:8080/api/dog/update-general-info", {
+            const response = await fetch(apiUrl + "/api/dog/update-general-info", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

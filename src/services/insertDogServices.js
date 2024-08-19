@@ -47,9 +47,11 @@ export const handleSubmit = async (e, formData, userRole, personalSitterDog) => 
         }
     };
 
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const url = personalSitterDog
-        ? "http://localhost:8080/api/dog/insert-sitter-dog"
-        : "http://localhost:8080/api/dog/insert";
+        ?  apiUrl + "/api/dog/insert-sitter-dog"
+        :  apiUrl + "/api/dog/insert";
 
     try {
         const response = await fetch(url, {

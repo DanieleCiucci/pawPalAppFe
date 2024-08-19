@@ -28,8 +28,10 @@ const AboutProfileOwnerPopUp = ({ show, handleClose, profile }) => {
 
         };
 
+        const apiUrl = process.env.REACT_APP_API_URL;
+
         try {
-            const response = await fetch("http://localhost:8080/api/profile/update-about-owner", {
+            const response = await fetch(apiUrl + "/api/profile/update-about-owner", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

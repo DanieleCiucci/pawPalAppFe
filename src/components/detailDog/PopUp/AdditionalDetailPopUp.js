@@ -54,8 +54,10 @@ const AdditionalDetailPopUp = ({ show, handleClose, dog }) => {
             additionalDetail: formData.additionalDetail
         };
 
+        const apiUrl = process.env.REACT_APP_API_URL;
+
         try {
-            const response = await fetch("http://localhost:8080/api/dog/update-additional-detail", {
+            const response = await fetch(apiUrl + "/api/dog/update-additional-detail", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

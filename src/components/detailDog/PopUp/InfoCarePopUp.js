@@ -50,8 +50,10 @@ const InfoCarePopUp = ({ show, handleClose, dog }) => {
 
         updatedFields.id = dog.id;
 
+        const apiUrl = process.env.REACT_APP_API_URL
+
         try {
-            const response = await fetch("http://localhost:8080/api/dog/update-info-care", {
+            const response = await fetch(apiUrl + "/api/dog/update-info-care", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

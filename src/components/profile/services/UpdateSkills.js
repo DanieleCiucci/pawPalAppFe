@@ -1,8 +1,10 @@
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 export const updateSkills = async (checkedSkillIds) => {
     const token = localStorage.getItem('authToken');
     try {
-        const response = await fetch(`http://localhost:8080/api/profile/update-skills`, {
+        const response = await fetch(apiUrl + `/api/profile/update-skills`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -26,13 +28,13 @@ export const updateSkills = async (checkedSkillIds) => {
 export const updateServices = async (checkedSkillIds) => {
     const token = localStorage.getItem('authToken');
     try {
-        const response = await fetch(`http://localhost:8080/api/profile/update-services`, {
+        const response = await fetch(apiUrl + `/api/profile/update-services`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify(checkedSkillIds), // Send array directly
+            body: JSON.stringify(checkedSkillIds),
         });
 
         if (!response.ok) {

@@ -1,8 +1,10 @@
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 export const fetchAppointmentsByState = async (idState, page, size) => {
     const token = localStorage.getItem('authToken'); // Retrieve the token from localStorage
     try {
-        const response = await fetch(`http://localhost:8080/api/appointment/get-sitter-appointment?idState=${idState}&page=${page}&size=${size}`, {
+        const response = await fetch(apiUrl + `/api/appointment/get-sitter-appointment?idState=${idState}&page=${page}&size=${size}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -24,7 +26,7 @@ export const fetchAppointmentsByState = async (idState, page, size) => {
 export const fetchAppointmentsOwnerByState = async (idState, page, size) => {
     const token = localStorage.getItem('authToken');
     try {
-        const response = await fetch(`http://localhost:8080/api/appointment/get-owner-appointment?idState=${idState}&page=${page}&size=${size}`, {
+        const response = await fetch(apiUrl + `/api/appointment/get-owner-appointment?idState=${idState}&page=${page}&size=${size}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -44,7 +46,10 @@ export const fetchAppointmentsOwnerByState = async (idState, page, size) => {
 };
 
 export const fetchNearbySitters = async (filters, token, page, size=6) => {
-    const baseUrl = 'http://localhost:8080/api/sitters/nearby';
+
+     apiUrl = process.env.REACT_APP_API_URL;
+
+    const baseUrl =  apiUrl + '/api/sitters/nearby';
 
     const queryParams = [];
     if (filters.appointmentDateTime) {
@@ -62,7 +67,7 @@ export const fetchNearbySitters = async (filters, token, page, size=6) => {
     queryParams.push(`page=${page}`);
     queryParams.push(`size=${size}`);
 
-    const apiUrl = `${baseUrl}?${queryParams.join('&')}`;
+    let apiUrl = `${baseUrl}?${queryParams.join('&')}`;
 
     try {
         const response = await fetch(apiUrl, {
@@ -91,7 +96,7 @@ export const scheduleAppointment = async (appointmentData) => {
         throw new Error('User not authenticated.');
     }
 
-    const response = await fetch("http://localhost:8080/api/appointment/schedule-appointment", {
+    const response = await fetch(apiUrl + "/api/appointment/schedule-appointment", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -107,11 +112,11 @@ export const scheduleAppointment = async (appointmentData) => {
     return await response.json();
 };
 
-const API_URL = 'http://localhost:8080/api/appointment';
+const API_URL = apiUrl + '/api/appointment';
 
 export const fetchOwners = async (token) => {
 
-    const API_URL = 'http://localhost:8080/api/appointment';
+    const API_URL = apiUrl +'/api/appointment';
     try {
         const response = await fetch(`${API_URL}/get-all-owner-linked-to-sitter`, {
             method: 'GET',
@@ -168,7 +173,7 @@ export const scheduleAppointmentSitter = async (appointmentData) => {
 export const fetchDogsOwner = async (currentPage) => {
     try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8080/api/dog/all-dog-owner?page=${currentPage}&size=6`, {
+        const response = await fetch(apiUrl + `/api/dog/all-dog-owner?page=${currentPage}&size=6`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -188,7 +193,7 @@ export const fetchDogsOwner = async (currentPage) => {
 export const fetchAppointmentDetails = async (idAppointment) => {
     try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8080/api/appointment/detail/${idAppointment}`, {
+        const response = await fetch(apiUrl + `/api/appointment/detail/${idAppointment}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -208,7 +213,7 @@ export const fetchAppointmentDetails = async (idAppointment) => {
 export const fetchAllDogsInAppointment = async (idAppointment,currentPage )=>{
     try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8080/api/appointment/all-dog-in-appointment/${idAppointment}?page=${currentPage}&size=6`, {
+        const response = await fetch(apiUrl  +`/api/appointment/all-dog-in-appointment/${idAppointment}?page=${currentPage}&size=6`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -229,7 +234,7 @@ export const fetchAllDogsInAppointment = async (idAppointment,currentPage )=>{
 export const acceptAppointment = async (idAppointment )=>{
     try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8080/api/appointment/accept/${idAppointment}`, {
+        const response = await fetch(apiUrl + `/api/appointment/accept/${idAppointment}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -249,7 +254,7 @@ export const acceptAppointment = async (idAppointment )=>{
 export const refuseAppointment = async (idAppointment )=>{
     try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8080/api/appointment/reject/${idAppointment}`, {
+        const response = await fetch(apiUrl + `/api/appointment/reject/${idAppointment}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -269,7 +274,7 @@ export const refuseAppointment = async (idAppointment )=>{
 export const cancelAppointment = async (idAppointment) => {
     try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:8080/api/appointment/cancel/${idAppointment}`, {
+        const response = await fetch(apiUrl + `/api/appointment/cancel/${idAppointment}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
