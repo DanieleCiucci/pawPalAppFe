@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import 'rsuite/dist/rsuite.min.css';
 import { Calendar, Whisper, Popover, Badge } from 'rsuite';
+import Spinner from 'react-bootstrap/Spinner'; // Importing Spinner component
 
 const CalendarComponent = (props) => {
     const [appointments, setAppointments] = useState([]);
+    const [loading, setLoading] = useState(true); // Spinner state
 
     useEffect(() => {
         const fetchAppointments = async () => {
             const token = localStorage.getItem('authToken');
 
-
             let apiUrl = process.env.REACT_APP_API_URL;
-            //conditionalApiUrl
             let apiURL = apiUrl;
 
-            if(props.role === 0){
-
-                apiURL = apiUrl +'/api/appointment/calendar'
-            }else{
+            if (props.role === 0) {
+                apiURL = apiUrl + '/api/appointment/calendar';
+            } else {
                 const sitterId = props.sitterId;
                 apiURL = apiUrl + `/api/appointment/calendar?sitterId=${sitterId}`;
             }
@@ -37,15 +36,15 @@ const CalendarComponent = (props) => {
 
                 const data = await response.json();
                 setAppointments(data);  // Update state with the fetched data
-
             } catch (error) {
                 console.error('Error fetching appointments:', error);
+            } finally {
+                setLoading(false); // Hide spinner after data is loaded or error occurs
             }
         };
 
         fetchAppointments();
-
-    }, []);
+    }, [props.role, props.sitterId]);
 
     function getTodoList(date) {
         const dateStr = date.toISOString().split('T')[0];
@@ -99,7 +98,13 @@ const CalendarComponent = (props) => {
     return (
         <div style={{ maxWidth: '100%' }}>
             <div style={{ backgroundColor: 'white', borderRadius: '8px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
-                <Calendar bordered renderCell={renderCell} />
+                {loading ? (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                        <Spinner animation="border" role="status" />
+                    </div>
+                ) : (
+                    <Calendar bordered renderCell={renderCell} />
+                )}
             </div>
         </div>
     );

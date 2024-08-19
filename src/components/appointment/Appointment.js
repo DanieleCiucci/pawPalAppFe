@@ -7,6 +7,7 @@ import AppointmentCard from './AppointmentCard';
 import Pagination from '../Paginator';
 import { useNavigate } from "react-router-dom";
 import AppointmentModalSitter from "./popUp/NewAppointmentPopUpSitter";
+import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component from react-bootstrap
 
 const Appointments = (props) => {
     const [activeTab, setActiveTab] = useState('pending');
@@ -14,7 +15,7 @@ const Appointments = (props) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const [role, setRole] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true); // Spinner state
     const pageSize = 6;
     const navigate = useNavigate();
     const [modalShow, setModalShow] = useState(false);
@@ -38,6 +39,7 @@ const Appointments = (props) => {
     // Fetch appointments whenever the active tab, current page, or role changes
     useEffect(() => {
         const fetchAppointments = async () => {
+            setIsLoading(true); // Show spinner
             try {
                 const idState = getIdStateForTab(activeTab);
                 let data;
@@ -52,13 +54,15 @@ const Appointments = (props) => {
                 setTotalPages(data.totalPages);
             } catch (error) {
                 console.error("Error fetching appointments:", error);
+            } finally {
+                setIsLoading(false); // Hide spinner
             }
         };
 
         if (!isLoading) {
             fetchAppointments();
         }
-    }, [activeTab, currentPage, role, isLoading]);
+    }, [activeTab, currentPage, role]);
 
     // Determine ID state based on active tab
     const getIdStateForTab = (tab) => {
@@ -81,10 +85,6 @@ const Appointments = (props) => {
         setCurrentPage(pageNumber);
     };
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     const handleInsertAppointment = () => {
         if (role === 1) {
             navigate("/appointment/schedule-appointment");
@@ -98,123 +98,133 @@ const Appointments = (props) => {
     return (
         <div className="AuthHome">
             <AuthHeader logout={props.logout} />
-            <div className="row mb-0">
-                <div className="col-2 d-none d-sm-block"></div>
-                <div className="col-12 m-3 col-md-5 m-md-0">
-                    <h1 style={{ fontWeight: 'bold' }}>
-                        Appointments
-                    </h1>
-                    <div className="mt-2 col-12">
-                        <p style={{ fontSize: '1rem', color: '#686565' }}>
-                            In this section, you can view the list of appointments. <br />
-                            You can schedule a new appointment using the "Schedule Appointment" button.
-                        </p>
+            <div>
+                <div className="row mb-0">
+                    <div className="col-2 d-none d-sm-block"></div>
+                    <div className="col-12 m-3 col-md-5 m-md-0">
+                        <h1 style={{ fontWeight: 'bold' }}>
+                            Appointments
+                        </h1>
+                        <div className="mt-2 col-12">
+                            <p style={{ fontSize: '1rem', color: '#686565' }}>
+                                In this section, you can view the list of appointments. <br />
+                                You can schedule a new appointment using the "Schedule Appointment" button.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="col-8 m-3 col-md-2 mt-md-5">
+                        <button className="btn btn-primary" onClick={handleInsertAppointment}>Schedule Appointment</button>
+                    </div>
+
+                    <div className="row mt-2 mt-md-0" style={{ marginTop: '-2rem !important' }}>
+                        <div className="col-2 d-none d-md-block"></div>
+                        <div className="col-12 m-3 col-md-8 m-md-0">
+                            <hr style={{ borderTop: "1px solid #838383" }} />
+                        </div>
                     </div>
                 </div>
-                <div className="col-8 m-3 col-md-2 mt-md-5">
-                    <button className="btn btn-primary" onClick={handleInsertAppointment}>Schedule Appointment</button>
-                </div>
 
-                <div className="row mt-2 mt-md-0" style={{ marginTop: '-2rem !important' }}>
+                <div className="row">
                     <div className="col-2 d-none d-md-block"></div>
-                    <div className="col-12 m-3 col-md-8 m-md-0">
-                        <hr style={{ borderTop: "1px solid #838383" }} />
-                    </div>
-                </div>
-            </div>
+                    <div className="col-10 m-3 col-md-8 m-md-0">
+                        {/* Tabs for larger screens */}
+                        <ul className="nav nav-tabs CustomNav d-none d-md-flex" style={{ borderBottom: 'none', marginLeft: '2rem' }}>
+                            <li className="nav-item">
+                                <button
+                                    className={`nav-link ${activeTab === 'pending' ? 'active' : ''}`}
+                                    onClick={() => handleTabChange('pending')}
+                                >
+                                    Pending
+                                </button>
+                            </li>
+                            <li className="nav-item">
+                                <button
+                                    className={`nav-link ${activeTab === 'confirmed' ? 'active' : ''}`}
+                                    onClick={() => handleTabChange('confirmed')}
+                                >
+                                    Confirmed
+                                </button>
+                            </li>
+                            <li className="nav-item">
+                                <button
+                                    className={`nav-link ${activeTab === 'rejected' ? 'active' : ''}`}
+                                    onClick={() => handleTabChange('rejected')}
+                                >
+                                    Rejected
+                                </button>
+                            </li>
+                            <li className="nav-item">
+                                <button
+                                    className={`nav-link ${activeTab === 'cancelled' ? 'active' : ''}`}
+                                    onClick={() => handleTabChange('cancelled')}
+                                >
+                                    Cancelled
+                                </button>
+                            </li>
+                            <li className="nav-item">
+                                <button
+                                    className={`nav-link ${activeTab === 'passed' ? 'active' : ''}`}
+                                    onClick={() => handleTabChange('passed')}
+                                >
+                                    Passed
+                                </button>
+                            </li>
+                        </ul>
 
-            <div className="row">
-                <div className="col-2 d-none d-md-block"></div>
-                <div className="col-10 m-3 col-md-8 m-md-0">
-                    {/* Tabs for larger screens */}
-                    <ul className="nav nav-tabs CustomNav d-none d-md-flex" style={{ borderBottom: 'none', marginLeft: '2rem' }}>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeTab === 'pending' ? 'active' : ''}`}
-                                onClick={() => handleTabChange('pending')}
-                            >
-                                Pending
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeTab === 'confirmed' ? 'active' : ''}`}
-                                onClick={() => handleTabChange('confirmed')}
-                            >
-                                Confirmed
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeTab === 'rejected' ? 'active' : ''}`}
-                                onClick={() => handleTabChange('rejected')}
-                            >
-                                Rejected
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeTab === 'cancelled' ? 'active' : ''}`}
-                                onClick={() => handleTabChange('cancelled')}
-                            >
-                                Cancelled
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeTab === 'passed' ? 'active' : ''}`}
-                                onClick={() => handleTabChange('passed')}
-                            >
-                                Passed
-                            </button>
-                        </li>
-                    </ul>
-
-                    {/* Dropdown for small screens */}
-                    <div className="d-md-none">
-                        <div className="col-8 mb-3">
-                            <label htmlFor="appointmentFilter" className="form-label">Filter by Status</label>
-                            <select
-                                id="appointmentFilter"
-                                className="form-select"
-                                value={activeTab}
-                                onChange={(e) => handleTabChange(e.target.value)}
-                            >
-                                <option value="pending">Pending</option>
-                                <option value="confirmed">Confirmed</option>
-                                <option value="rejected">Rejected</option>
-                                <option value="cancelled">Cancelled</option>
-                                <option value="passed">Passed</option>
-                            </select>
+                        {/* Dropdown for small screens */}
+                        <div className="d-md-none">
+                            <div className="col-8 mb-3">
+                                <label htmlFor="appointmentFilter" className="form-label">Filter by Status</label>
+                                <select
+                                    id="appointmentFilter"
+                                    className="form-select"
+                                    value={activeTab}
+                                    onChange={(e) => handleTabChange(e.target.value)}
+                                >
+                                    <option value="pending">Pending</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="rejected">Rejected</option>
+                                    <option value="cancelled">Cancelled</option>
+                                    <option value="passed">Passed</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="tab-content mt-4">
-                        <div className="row mt-5">
-                            {appointments.length > 0 ? (
-                                appointments.map((appointment, index) => (
-                                    <AppointmentCard key={index} appointment={appointment} role={role} />
-                                ))
-                            ) : (
-                                <div className="col-12 text-center">
-                                    <p>No appointments available.</p>
+                        {isLoading ? (
+                            <div className="mt-5"  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner>
+                            </div>
+                        ) : (
+                            <div className="tab-content mt-4">
+                                <div className="row mt-5">
+                                    {appointments.length > 0 ? (
+                                        appointments.map((appointment, index) => (
+                                            <AppointmentCard key={index} appointment={appointment} role={role} />
+                                        ))
+                                    ) : (
+                                        <div className="col-12 text-center">
+                                            <p>No appointments available.</p>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                        {totalPages > 1 && (
-                            <div className="d-flex justify-content-end mt-4 mb-4">
-                                <Pagination
-                                    currentPage={currentPage}
-                                    totalPages={totalPages}
-                                    onPageChange={handlePageChange}
-                                />
+                                {totalPages > 1 && (
+                                    <div className="d-flex justify-content-end mt-4 mb-4">
+                                        <Pagination
+                                            currentPage={currentPage}
+                                            totalPages={totalPages}
+                                            onPageChange={handlePageChange}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
+                    <div className="col-2"></div>
                 </div>
-                <div className="col-2"></div>
+                <AppointmentModalSitter show={modalShow} handleClose={handleCloseModal} sitterId={props.sitterId} />
             </div>
-            <AppointmentModalSitter show={modalShow} handleClose={handleCloseModal} sitterId={props.sitterId}/>
         </div>
     );
 };

@@ -7,7 +7,8 @@ import 'leaflet/dist/leaflet.css';
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import marker from '../assets/pin.svg';
 import { Icon } from 'leaflet';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component from react-bootstrap
 
 const popUpIcon = new Icon({
     iconUrl: marker,
@@ -19,6 +20,7 @@ const FindNewOwner = (props) => {
     const [userRole, setUserRole] = useState(null);
     const [owners, setOwners] = useState([]);
     const [mapCenter, setMapCenter] = useState(null);
+    const [loading, setLoading] = useState(true); // Spinner state
 
     const navigate = useNavigate();
 
@@ -37,6 +39,8 @@ const FindNewOwner = (props) => {
 
             } catch (error) {
                 console.error("Error during page initialization:", error);
+            } finally {
+                setLoading(false); // Hide spinner
             }
         };
 
@@ -65,8 +69,6 @@ const FindNewOwner = (props) => {
         setUserLocation();
         initializePage();
     }, []);
-
-
 
     return (
         <div className="AuthHome">
@@ -102,35 +104,42 @@ const FindNewOwner = (props) => {
                 <div className="col-2 d-none d-lg-block"></div>
                 <div className="col-12 col-lg-8">
                     <div style={{ height: '500px' }}>
-                        {mapCenter && (
-                            <MapContainer center={mapCenter} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
-                                <TileLayer
-                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                />
-                                {owners.map(owner => (
-                                    <Marker
-                                        key={owner.id}
-                                        position={[owner.geoX, owner.geoY]}
-                                        icon={popUpIcon}
-                                    >
-                                        <Popup>
-                                            <>
-                                                <strong>{owner.name} {owner.surname}</strong><br/>
-                                                {owner.address}<br/>
-                                                {owner.city}, {owner.postalCode} <br/>
-                                                {owner.email} <br/> <br/>
-                                                {userRole === 1 && (
-                                                    <a href={`/profile/${owner.id}`}
-                                                       rel="noopener noreferrer">
-                                                        View Profile
-                                                    </a>
-                                                )}
-                                            </>
-                                        </Popup>
-                                    </Marker>
-                                ))}
-                            </MapContainer>
+                        {loading ? (
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner>
+                            </div>
+                        ) : (
+                            mapCenter && (
+                                <MapContainer center={mapCenter} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
+                                    <TileLayer
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                    {owners.map(owner => (
+                                        <Marker
+                                            key={owner.id}
+                                            position={[owner.geoX, owner.geoY]}
+                                            icon={popUpIcon}
+                                        >
+                                            <Popup>
+                                                <>
+                                                    <strong>{owner.name} {owner.surname}</strong><br/>
+                                                    {owner.address}<br/>
+                                                    {owner.city}, {owner.postalCode} <br/>
+                                                    {owner.email} <br/> <br/>
+                                                    {userRole === 1 && (
+                                                        <a href={`/profile/${owner.id}`} rel="noopener noreferrer">
+                                                            View Profile
+                                                        </a>
+                                                    )}
+                                                </>
+                                            </Popup>
+                                        </Marker>
+                                    ))}
+                                </MapContainer>
+                            )
                         )}
                     </div>
                 </div>

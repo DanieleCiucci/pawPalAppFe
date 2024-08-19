@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { request } from '../axios_helper';
-import dogFooter from '../assets/dogFooter.svg';
-import dogFooter2 from '../assets/dogFooter2.svg';
-import backGroudFooterImage from '../assets/backGroudLogoFooter.svg';
+import footerLeft from '../assets/footerLeft.svg';
+import backGroudFooterImage from '../assets/imgFooterRight.svg';
 import AuthHeader from './AuthHeader';
 
 const AuthContent = ({ logout, user }) => {
@@ -63,12 +62,12 @@ const AuthContent = ({ logout, user }) => {
             <div className="footer">
                 <div className="row mt-5">
                     <div className="col-3 px-md-5">
-                        <img src={dogFooter2} alt="Dog Footer" className="footerHomeDog2img" />
+                        <img src={footerLeft} alt="Dog Footer" className="footerHomeDog2img" />
                     </div>
                     <div className="col-6 align-content-center">
                     </div>
                     <div className="col-3 d-flex flex-row-reverse bd-highlight">
-                        <img src={dogFooter} alt="Dog Footer" className="footerHomeDog1img" />
+
                         <img src={backGroudFooterImage} alt="Background Footer" className="footerBackGroudLogo" />
                     </div>
                 </div>

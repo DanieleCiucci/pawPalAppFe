@@ -3,10 +3,9 @@ import AuthHeader from "../AuthHeader";
 import defaultImg from "../../assets/defaultImg.svg";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { fetchUserRole } from "../../services/roleSerivces";
-import {fetchProfileDetails, updateProfileImage, fetchDogsOwnedBySitter,
+import { fetchProfileDetails, updateProfileImage, fetchDogsOwnedBySitter,
     fetchProfileDetailsOwner, fetchDogsOwnedByOwner, fetchProfileDetailsSitter,
-    fetchDogsOwnedByIdSitter} from "./services/ProfileMainService";
-
+    fetchDogsOwnedByIdSitter } from "./services/ProfileMainService";
 import GeneralInfoProfile from "./Detail/GeneralInfoProfile";
 import MainDetailsProfile from "./Detail/MainDetailsProfile";
 import Calendar from "./Detail/CalendarComponent";
@@ -14,6 +13,7 @@ import PetOwned from "./Detail/PetOwned";
 import Skill from "./Detail/Skill";
 import Service from "./Detail/Service";
 import { useParams } from 'react-router-dom';
+import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component from react-bootstrap
 
 const Profile = (props) => {
     const [profile, setProfile] = useState(null);
@@ -22,6 +22,7 @@ const Profile = (props) => {
     const [dogsOwned, setDogsOwned] = useState([]);
     const fileInputRef = useRef(null);
     const [role, setRole] = useState(null);
+    const [loading, setLoading] = useState(true); // Spinner state
     const { sitterId } = useParams();
 
     useEffect(() => {
@@ -45,6 +46,8 @@ const Profile = (props) => {
                 let profileData;
                 let dogs;
 
+                setLoading(true); // Show spinner
+
                 if (sitterId === undefined) {
                     if (role === 0) {
                         profileData = await fetchProfileDetails();
@@ -64,6 +67,8 @@ const Profile = (props) => {
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false); // Hide spinner
             }
         };
 
@@ -102,13 +107,13 @@ const Profile = (props) => {
             case 'general':
                 return <GeneralInfoProfile profile={profile} sitterId={sitterId} />;
             case 'petOwned':
-                return <PetOwned dogsOwned={dogsOwned} sitterId={sitterId}/>;
+                return <PetOwned dogsOwned={dogsOwned} sitterId={sitterId} />;
             case 'skill':
-                return <Skill profile={profile} sitterId={sitterId}/>;
+                return <Skill profile={profile} sitterId={sitterId} />;
             case 'services':
                 return <Service profile={profile} sitterId={sitterId} />;
             case 'calendar':
-                return <Calendar sitterId={sitterId} role={role}/>;
+                return <Calendar sitterId={sitterId} role={role} />;
             default:
                 return <div>Select a tab to view content</div>;
         }
@@ -120,97 +125,107 @@ const Profile = (props) => {
             <div className="container">
                 <div className="row align-items-center">
                     <div className="col-12 col-mg-8">
-                        {profile ? (
-                            <>
-                                <div className="position-relative mt-4">
-                                    <img
-                                        src={selectedFileUrl || (profile.mainPhoto ? `data:image/jpeg;base64,${profile.mainPhoto}` : defaultImg)}
-                                        alt="Profile"
-                                        className="img-fluid"
-                                        style={{
-                                            height: '19rem',
-                                            width: '100%',
-                                            border: '1px solid #ccc',
-                                            borderRadius: '8px',
-                                            objectFit: 'cover'
-                                        }}
-                                    />
-                                    {!sitterId && (
-                                        <div className="position-absolute bottom-0 end-0 p-3">
-                                            <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>
-                                                Update Image
-                                            </button>
-                                            <input
-                                                ref={fileInputRef}
-                                                type="file"
-                                                className="form-control-file"
-                                                onChange={handleFileChange}
-                                                accept="image/*"
-                                                style={{ display: "none" }}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="row">
-                                    <MainDetailsProfile profile={profile} role={role} activeButtonPetOwned={activeTab === 'petOwned'} sitterId={sitterId} />
-                                </div>
-
-                                <hr style={{ borderTop: "1px solid #838383" }} />
-
-                                <ul className="nav nav-tabs CustomNav" style={{ borderBottom: 'none' }}>
-                                    <li className="nav-item">
-                                        <button
-                                            className={`nav-link ${activeTab === 'general' ? 'active' : ''}`}
-                                            onClick={() => setActiveTab('general')}
-                                        >
-                                            General Information
-                                        </button>
-                                    </li>
-                                    <li className="nav-item">
-                                        <button
-                                            className={`nav-link ${activeTab === 'petOwned' ? 'active' : ''}`}
-                                            onClick={() => setActiveTab('petOwned')}
-                                        >
-                                            Pet Owned
-                                        </button>
-                                    </li>
-                                    {(role !== 1 || sitterId) && (
-                                        <>
-                                            <li className="nav-item">
-                                                <button
-                                                    className={`nav-link ${activeTab === 'skill' ? 'active' : ''}`}
-                                                    onClick={() => setActiveTab('skill')}
-                                                >
-                                                    Skill
-                                                </button>
-                                            </li>
-                                            <li className="nav-item">
-                                                <button
-                                                    className={`nav-link ${activeTab === 'services' ? 'active' : ''}`}
-                                                    onClick={() => setActiveTab('services')}
-                                                >
-                                                    Services
-                                                </button>
-                                            </li>
-                                            <li className="nav-item">
-                                                <button
-                                                    className={`nav-link ${activeTab === 'calendar' ? 'active' : ''}`}
-                                                    onClick={() => setActiveTab('calendar')}
-                                                >
-                                                    Calendar
-                                                </button>
-                                            </li>
-                                        </>
-                                    )}
-                                </ul>
-
-                                <div className="tab-content mt-4">
-                                    {renderTabContent()}
-                                </div>
-                            </>
+                        {loading ? (
+                            <div
+                            className="mt-5"
+                                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner>
+                            </div>
                         ) : (
-                            <p>Loading...</p>
+                            <>
+                                {profile && (
+                                    <>
+                                        <div className="position-relative mt-4">
+                                            <img
+                                                src={selectedFileUrl || (profile.mainPhoto ? `data:image/jpeg;base64,${profile.mainPhoto}` : defaultImg)}
+                                                alt="Profile"
+                                                className="img-fluid"
+                                                style={{
+                                                    height: '19rem',
+                                                    width: '100%',
+                                                    border: '1px solid #ccc',
+                                                    borderRadius: '8px',
+                                                    objectFit: 'cover'
+                                                }}
+                                            />
+                                            {!sitterId && (
+                                                <div className="position-absolute bottom-0 end-0 p-3">
+                                                    <button type="button" className="btn btn-primary" onClick={handleFileButtonClick}>
+                                                        Update Image
+                                                    </button>
+                                                    <input
+                                                        ref={fileInputRef}
+                                                        type="file"
+                                                        className="form-control-file"
+                                                        onChange={handleFileChange}
+                                                        accept="image/*"
+                                                        style={{ display: "none" }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="row">
+                                            <MainDetailsProfile profile={profile} role={role} activeButtonPetOwned={activeTab === 'petOwned'} sitterId={sitterId} />
+                                        </div>
+
+                                        <hr style={{ borderTop: "1px solid #838383" }} />
+
+                                        <ul className="nav nav-tabs CustomNav" style={{ borderBottom: 'none' }}>
+                                            <li className="nav-item">
+                                                <button
+                                                    className={`nav-link ${activeTab === 'general' ? 'active' : ''}`}
+                                                    onClick={() => setActiveTab('general')}
+                                                >
+                                                    General Information
+                                                </button>
+                                            </li>
+                                            <li className="nav-item">
+                                                <button
+                                                    className={`nav-link ${activeTab === 'petOwned' ? 'active' : ''}`}
+                                                    onClick={() => setActiveTab('petOwned')}
+                                                >
+                                                    Pet Owned
+                                                </button>
+                                            </li>
+                                            {(role !== 1 || sitterId) && (
+                                                <>
+                                                    <li className="nav-item">
+                                                        <button
+                                                            className={`nav-link ${activeTab === 'skill' ? 'active' : ''}`}
+                                                            onClick={() => setActiveTab('skill')}
+                                                        >
+                                                            Skill
+                                                        </button>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <button
+                                                            className={`nav-link ${activeTab === 'services' ? 'active' : ''}`}
+                                                            onClick={() => setActiveTab('services')}
+                                                        >
+                                                            Services
+                                                        </button>
+                                                    </li>
+                                                    <li className="nav-item">
+                                                        <button
+                                                            className={`nav-link ${activeTab === 'calendar' ? 'active' : ''}`}
+                                                            onClick={() => setActiveTab('calendar')}
+                                                        >
+                                                            Calendar
+                                                        </button>
+                                                    </li>
+                                                </>
+                                            )}
+                                        </ul>
+
+                                        <div className="tab-content mt-4">
+                                            {renderTabContent()}
+                                        </div>
+                                    </>
+                                )}
+                            </>
                         )}
                     </div>
                     <div className="col-2 d-none d-mg-block"></div>

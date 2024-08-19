@@ -14,6 +14,7 @@ const InsertDogForm = ({ logout }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedFileUrl, setSelectedFileUrl] = useState(null);
     const [activeTab, setActiveTab] = useState('general');
+    const [loading, setLoading] = useState(false); // Spinner state
     const fileInputRef = useRef(null);
     const [userRole, setUserRole] = useState(null);
     const [formData, setFormData] = useState({
@@ -66,8 +67,7 @@ const InsertDogForm = ({ logout }) => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-    const successMessageRef = useRef(null);
-    const errorMessageRef = useRef(null);
+    const showSpinner = useRef(null); // Spinner ref
 
     const location = useLocation();
     const { personalSitterDog } = location.state || {};
@@ -84,19 +84,12 @@ const InsertDogForm = ({ logout }) => {
         initializeRole();
     }, []);
 
+    // Scroll to spinner when loading is true
     useEffect(() => {
-        if (showSuccessMessage) {
-            successMessageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            setTimeout(() => setShowSuccessMessage(false), 3000);
+        if (loading && showSpinner.current) {
+            showSpinner.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-    }, [showSuccessMessage]);
-
-    useEffect(() => {
-        if (showErrorMessage) {
-            errorMessageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            setTimeout(() => setShowErrorMessage(false), 3000);
-        }
-    }, [showErrorMessage]);
+    }, [loading]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -153,6 +146,10 @@ const InsertDogForm = ({ logout }) => {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
 
+        setLoading(true);
+        setShowSuccessMessage(false);
+        setShowErrorMessage(false);
+
         let modifiedFormData = { ...formData };
 
         if (formData?.owner?.id) {
@@ -166,6 +163,8 @@ const InsertDogForm = ({ logout }) => {
 
         const result = await handleSubmit(e, modifiedFormData, userRole, personalSitterDog);
 
+        setLoading(false);
+
         if (result.success) {
             setShowSuccessMessage(true);
             setShowErrorMessage(false);
@@ -175,12 +174,15 @@ const InsertDogForm = ({ logout }) => {
                 navigate('/yourdogs');
             }, 3000);
         } else {
-            console.log("Error detected: bella tempe");
             setShowSuccessMessage(false);
             setShowErrorMessage(true);
+
+            setTimeout(() => {
+                setShowErrorMessage(false);
+            }, 5000);
+
         }
     };
-
 
     const renderTabContent = () => {
         switch (activeTab) {
@@ -249,13 +251,23 @@ const InsertDogForm = ({ logout }) => {
                                 </div>
                             </div>
 
+                            {loading && (
+                                <div ref={showSpinner} className="spinner-container">
+                                    <div className="d-flex justify-content-center">
+                                        <div className="spinner-border" role="status">
+                                            <span className="sr-only"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             {showSuccessMessage && (
-                                <div ref={successMessageRef} className="alert alert-success position-absolute bottom-0 end-0" role="alert">
+                                <div className="alert alert-success position-absolute bottom-0 end-0" role="alert">
                                     Dog saved successfully
                                 </div>
                             )}
                             {showErrorMessage && (
-                                <div ref={errorMessageRef} className="alert alert-danger position-absolute bottom-0 end-0" role="alert">
+                                <div  className="alert alert-danger position-absolute bottom-0 end-0" role="alert">
                                     Error: the dog is not saved, retry later.
                                 </div>
                             )}
