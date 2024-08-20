@@ -164,8 +164,22 @@ class LoginForm extends React.Component {
                                     <label className="form-check-label" htmlFor="roleOwner">Owner</label>
                                 </div>
 
+                                <div className="row">
+                                    <div className="col-12">
+                                        <button type="submit" className="btn btn-primary btn-block loginButton">
+                                            Register
+                                        </button>
+
+                                        <div className="d-flex d-inline-flex mt-2">
+                                            <a href="#" onClick={() => this.setActiveTab("login")}>Back to login</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
                                 <div className="d-flex d-inline-flex mt-2">
-                                    <a href="#" onClick={() => this.setActiveTab("login")}>Back to login</a>
+
                                 </div>
 
                             </form>
@@ -188,7 +202,7 @@ const LoginFormWrapper = (props) => {
         props.onRegister(e, firstName, lastName, login, password, role, () => navigate('/auth'));
     };
 
-    return <LoginForm {...props} onLogin={handleLogin} onRegister={handleRegister} />;
+    return <LoginForm {...props} onLogin={handleLogin} onRegister={handleRegister}/>;
 };
 
 export default LoginFormWrapper;
