@@ -1,9 +1,7 @@
 import React from 'react';
 import WelcomeContent from "./WelcomeContent";
 import AuthContent from "./AuthContent";
-import LoginFormWrapper from "./LoginForm";
-import { request, setAuthToken } from "../axios_helper";
-import Buttons from "./Buttons";
+import {setAuthToken } from "../axios_helper";
 import { Routes, Route, Navigate } from 'react-router-dom';
 import YourDog from "./YourDog"
 import InsertDog from "./insertDog/InsertDogForm";
@@ -22,7 +20,6 @@ export default class AppContent extends React.Component {
         const user = localStorage.getItem('user');
 
         this.state = {
-            componentToShow: token ? "messages" : "welcome",
             user: token && user ? JSON.parse(user) : null,
         };
 
@@ -31,59 +28,23 @@ export default class AppContent extends React.Component {
         }
     }
 
-    login = () => {
-        this.setState({ componentToShow: "login" });
+    setUser = (user) => {
+        this.setState({ user });
     }
 
     logout = () => {
-        this.setState({ componentToShow: "welcome", user: null });
+        this.setState({ user: null });
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
-        localStorage.removeItem('auth_token');
-    }
-
-    onLogin = (e, username, password, callback) => {
-        e.preventDefault();
-        request(
-            "POST",
-            "/login",
-            { login: username, password: password }
-        ).then((response) => {
-            const user = { username, role: response.data.role };
-            this.setState({ componentToShow: "messages", user }, callback);
-
-            localStorage.setItem('authToken', response.data.token);
-            localStorage.setItem('user', JSON.stringify(user));
-        }).catch((error) => {
-            this.setState({ componentToShow: "welcome" });
-        })
-    }
-
-    onRegister = (e, firstName, lastName, login, password, role, callback) => {
-        e.preventDefault();
-        request(
-            "POST",
-            "/register",
-            { firstName, lastName, login, password, role }
-        ).then((response) => {
-            const user = { username: login, role };
-            this.setState({ componentToShow: "messages", user }, callback);
-            setAuthToken(response.data.token);
-            localStorage.setItem('authToken', response.data.token);
-            localStorage.setItem('user', JSON.stringify(user));
-        }).catch((error) => {
-            this.setState({ componentToShow: "welcome" });
-        })
     }
 
     render() {
-        const { componentToShow, user } = this.state;
+        const { user } = this.state;
 
         return (
             <div>
-                {componentToShow !== "messages" && <Buttons login={this.login} logout={this.logout} />}
                 <Routes>
-                    <Route path="/" element={<WelcomeContent />} />
+                    <Route path="/" element={<WelcomeContent setUser={this.setUser} />} />
                     <Route path="/auth" element={user ? <AuthContent logout={this.logout} user={user} /> : <Navigate to="/" />} />
 
 
@@ -101,7 +62,6 @@ export default class AppContent extends React.Component {
                     <Route path="/yourdogs/:id" element={<DogDetails logout={this.logout} user={user} />} />
 
                 </Routes>
-                {componentToShow === "login" && <LoginFormWrapper onLogin={this.onLogin} onRegister={this.onRegister} />}
             </div>
         );
     }

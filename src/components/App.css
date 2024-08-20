@@ -312,3 +312,11 @@ body {
     background-color: white;
     max-width: 100%;
 }
+
+.loginButton{
+    width: 100%;
+}
+
+.loginImg{
+    width: 100%;
+}

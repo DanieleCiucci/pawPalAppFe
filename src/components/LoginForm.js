@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +6,7 @@ class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            active: "login",
+            active: "login", // Tracks the active form (login/register)
             firstName: "",
             lastName: "",
             login: "",
@@ -41,7 +40,7 @@ class LoginForm extends React.Component {
             this.state.lastName,
             this.state.login,
             this.state.password,
-            parseInt(this.state.role)  // Ensure role is sent as integer
+            parseInt(this.state.role)
         );
     };
 
@@ -51,31 +50,10 @@ class LoginForm extends React.Component {
 
     render() {
         return (
-            <div className="row justify-content-center">
-                <div className="col-4">
-                    <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-                        <li className="nav-item" role="presentation">
-                            <button
-                                className={classNames("nav-link", this.state.active === "login" ? "active" : "")}
-                                id="tab-login"
-                                onClick={() => this.setActiveTab("login")}
-                            >
-                                Login
-                            </button>
-                        </li>
-                        <li className="nav-item" role="presentation">
-                            <button
-                                className={classNames("nav-link", this.state.active === "register" ? "active" : "")}
-                                id="tab-register"
-                                onClick={() => this.setActiveTab("register")}
-                            >
-                                Register
-                            </button>
-                        </li>
-                    </ul>
-
-                    <div className="tab-content">
-                        <div className={classNames("tab-pane", "fade", this.state.active === "login" ? "show active" : "")}>
+            <div className="row mt-5 d-flex justify-content-center">
+                <div className="col-9">
+                    {this.state.active === "login" ? (
+                        <div>
                             <form onSubmit={this.onSubmitLogin}>
                                 <div className="form-outline mb-3">
                                     <input
@@ -99,11 +77,23 @@ class LoginForm extends React.Component {
                                     />
                                     <label className="form-label" htmlFor="loginPassword">Password</label>
                                 </div>
-                                <button type="submit" className="btn btn-primary btn-block">Login</button>
+
+                                <div className="row">
+                                    <div className="col-12">
+                                        <button type="submit" className="btn btn-primary btn-block loginButton">Login</button>
+
+                                        <div className="d-flex d-inline-flex mt-2">
+                                            <p className="me-3">Don't have an account?</p>
+                                            <a href="#" onClick={() => this.setActiveTab("register")}>Register</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+
                             </form>
                         </div>
-
-                        <div className={classNames("tab-pane", "fade", this.state.active === "register" ? "show active" : "")}>
+                    ) : (
+                        <div>
                             <form onSubmit={this.onSubmitRegister}>
                                 <div className="form-outline mb-3">
                                     <input
@@ -173,10 +163,14 @@ class LoginForm extends React.Component {
                                     />
                                     <label className="form-check-label" htmlFor="roleOwner">Owner</label>
                                 </div>
-                                <button type="submit" className="btn btn-primary btn-block">Register</button>
+
+                                <div className="d-flex d-inline-flex mt-2">
+                                    <a href="#" onClick={() => this.setActiveTab("login")}>Back to login</a>
+                                </div>
+
                             </form>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         );
