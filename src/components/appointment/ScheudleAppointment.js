@@ -4,7 +4,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { fetchNearbySitters } from './service/AppointmentService';
 import imageCard from "../../assets/dog1.jpg";
 import Pagination from "../Paginator";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import Spinner from 'react-bootstrap/Spinner'; // Import Spinner from react-bootstrap
 
 const ScheduleAppointment = (props) => {
     const [serviceType, setServiceType] = useState('');
@@ -13,6 +14,7 @@ const ScheduleAppointment = (props) => {
     const [sitters, setSitters] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
+    const [loading, setLoading] = useState(false); // Add loading state
     const pageSize = 6;
 
     const serviceOptions = [
@@ -45,6 +47,7 @@ const ScheduleAppointment = (props) => {
     };
 
     const fetchSitters = async (page = 0) => {
+        setLoading(true); // Start loading
         const token = localStorage.getItem('authToken');
         const filters = { serviceType, appointmentDateTime, distance };
 
@@ -53,23 +56,23 @@ const ScheduleAppointment = (props) => {
             setSitters(data.content); // Use the content key from the paginated response
             setTotalPages(data.totalPages);
             setCurrentPage(data.number); // Update the current page based on the response
-
-            console.log("Nearby sitters:", data);
         } catch (error) {
             console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false); // End loading
         }
     };
 
     const handleSearchClick = () => {
-        fetchSitters(0);
+        fetchSitters(0); // Fetch data for the first page
     };
 
     useEffect(() => {
-        fetchSitters(currentPage);
+        fetchSitters(currentPage); // Fetch data when the page changes
     }, [currentPage]);
 
     const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+        setCurrentPage(pageNumber); // Update the current page
     };
 
     return (
@@ -92,7 +95,7 @@ const ScheduleAppointment = (props) => {
             <div className="row" style={{ marginTop: '-2rem' }}>
                 <div className="col-2 d-none d-md-block"></div>
                 <div className="col-10 m-3  col-md-8">
-                    <hr style={{ borderTop: "1px solid #838383",  }} />
+                    <hr style={{ borderTop: "1px solid #838383" }} />
                 </div>
             </div>
 
@@ -154,50 +157,58 @@ const ScheduleAppointment = (props) => {
                         </div>
                     </div>
 
-                    <div className="aviableSitterWrapper">
-                        <div className="row mt-5">
-                            {sitters.length > 0 ? (
-                                <>
-                                    <h3>Available nearby Sitters:</h3>
-                                    {sitters.map((sitter) => (
-                                        <div key={sitter.id} className="col-lg-4 col-md-6 mb-4 d-flex justify-content-center mt-5">
-                                            <div className="card" style={{width: '18rem'}}>
-                                                <img
-                                                    className="card-img-top"
-                                                    src={sitter.photo ? `data:image/jpeg;base64,${sitter.photo}` : imageCard}
-                                                    alt={`${sitter.name} ${sitter.surname}`}
-                                                />
-                                                <div className="card-body">
-                                                    <h5 className="card-title">{sitter.name} {sitter.surname}</h5>
-                                                    <p className="card-text">
-                                                        <strong>City:</strong> {sitter.city || 'N/A'}
-                                                    </p>
-                                                    <p className="card-text">
-                                                        <strong>Address:</strong> {sitter.address || 'N/A'}
-                                                    </p>
-                                                </div>
-                                                <div className="d-flex justify-content-end">
-                                                    <Link to={{ pathname: `/profile/${sitter.id}`, state: { sitterId: sitter.id } }}
-                                                          className="btn btn-outline-primary m-3">Schedule</Link>
+                    {loading ? (
+                        <div className="d-flex justify-content-center mt-5">
+                            <Spinner animation="border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </Spinner>
+                        </div>
+                    ) : (
+                        <div className="aviableSitterWrapper">
+                            <div className="row mt-5">
+                                {sitters.length > 0 ? (
+                                    <>
+                                        <h3>Available nearby Sitters:</h3>
+                                        {sitters.map((sitter) => (
+                                            <div key={sitter.id} className="col-lg-4 col-md-6 mb-4 d-flex justify-content-center mt-5">
+                                                <div className="card" style={{ width: '18rem' }}>
+                                                    <img
+                                                        className="card-img-top"
+                                                        src={sitter.photo ? `data:image/jpeg;base64,${sitter.photo}` : imageCard}
+                                                        alt={`${sitter.name} ${sitter.surname}`}
+                                                    />
+                                                    <div className="card-body">
+                                                        <h5 className="card-title">{sitter.name} {sitter.surname}</h5>
+                                                        <p className="card-text">
+                                                            <strong>City:</strong> {sitter.city || 'N/A'}
+                                                        </p>
+                                                        <p className="card-text">
+                                                            <strong>Address:</strong> {sitter.address || 'N/A'}
+                                                        </p>
+                                                    </div>
+                                                    <div className="d-flex justify-content-end">
+                                                        <Link to={{ pathname: `/profile/${sitter.id}`, state: { sitterId: sitter.id } }}
+                                                              className="btn btn-outline-primary m-3">Schedule</Link>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                </>
-                            ) : (
-                                <p>No sitters found</p>
-                            )}
-                            {totalPages > 1 && (
-                                <div className="d-flex justify-content-end mt-4 mb-4">
-                                    <Pagination
-                                        currentPage={currentPage}
-                                        totalPages={totalPages}
-                                        onPageChange={handlePageChange}
-                                    />
-                                </div>
-                            )}
+                                        ))}
+                                    </>
+                                ) : (
+                                    <p>No sitters found</p>
+                                )}
+                                {totalPages > 1 && (
+                                    <div className="d-flex justify-content-end mt-4 mb-4">
+                                        <Pagination
+                                            currentPage={currentPage}
+                                            totalPages={totalPages}
+                                            onPageChange={handlePageChange}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                 </div>
                 <div className="col-2 d-none d-md-block"></div>

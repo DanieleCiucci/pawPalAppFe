@@ -57,7 +57,7 @@ const MainDetailsProfile = (props) => {
                     <input
                         id="file-upload"
                         type="file"
-                        style={{display: 'none'}}
+                        style={{ display: 'none' }}
                         onChange={handleFileChange}
                     />
                     <label htmlFor="file-upload" className="position-relative d-inline-block">
@@ -67,8 +67,9 @@ const MainDetailsProfile = (props) => {
                             className="img-fluid rounded-circle"
                             style={{
                                 maxHeight: '8.5rem',
-                                maxWidth: '8.5rem',
-                                objectFit: 'cover'
+                                width: '8.5rem',
+                                objectFit: 'cover',
+                                borderRadius: '50%'
                             }}
                         />
                         {!props.sitterId && (
