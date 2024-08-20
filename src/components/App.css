@@ -307,3 +307,8 @@ body {
 .customInsetDog{
     width: 6rem !important;
 }
+
+.mainLoginBg{
+    background-color: white;
+    max-width: 100%;
+}
