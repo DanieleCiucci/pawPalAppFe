@@ -7,7 +7,7 @@ import AppointmentCard from './AppointmentCard';
 import Pagination from '../Paginator';
 import { useNavigate } from "react-router-dom";
 import AppointmentModalSitter from "./popUp/NewAppointmentPopUpSitter";
-import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component from react-bootstrap
+import Spinner from 'react-bootstrap/Spinner';
 
 const Appointments = (props) => {
     const [activeTab, setActiveTab] = useState('pending');
@@ -15,7 +15,7 @@ const Appointments = (props) => {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const [role, setRole] = useState(null);
-    const [isLoading, setIsLoading] = useState(true); // Spinner state
+    const [isLoading, setIsLoading] = useState(true);
     const pageSize = 6;
     const navigate = useNavigate();
     const [modalShow, setModalShow] = useState(false);

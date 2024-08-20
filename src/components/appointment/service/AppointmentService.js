@@ -1,8 +1,11 @@
 
-const apiUrl = process.env.REACT_APP_API_URL;
+
 
 export const fetchAppointmentsByState = async (idState, page, size) => {
-    const token = localStorage.getItem('authToken'); // Retrieve the token from localStorage
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
+    const token = localStorage.getItem('authToken');
     try {
         const response = await fetch(apiUrl + `/api/appointment/get-sitter-appointment?idState=${idState}&page=${page}&size=${size}`, {
             method: "GET",
@@ -24,6 +27,9 @@ export const fetchAppointmentsByState = async (idState, page, size) => {
 };
 
 export const fetchAppointmentsOwnerByState = async (idState, page, size) => {
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const token = localStorage.getItem('authToken');
     try {
         const response = await fetch(apiUrl + `/api/appointment/get-owner-appointment?idState=${idState}&page=${page}&size=${size}`, {
@@ -47,9 +53,9 @@ export const fetchAppointmentsOwnerByState = async (idState, page, size) => {
 
 export const fetchNearbySitters = async (filters, token, page, size=6) => {
 
-     apiUrl = process.env.REACT_APP_API_URL;
+     const url = process.env.REACT_APP_API_URL;
 
-    const baseUrl =  apiUrl + '/api/sitters/nearby';
+    const baseUrl =  url + '/api/sitters/nearby';
 
     const queryParams = [];
     if (filters.appointmentDateTime) {
@@ -90,6 +96,8 @@ export const fetchNearbySitters = async (filters, token, page, size=6) => {
 };
 
 export const scheduleAppointment = async (appointmentData) => {
+
+    const apiUrl = process.env.REACT_APP_API_URL;
     const token = localStorage.getItem('authToken');
 
     if (!token) {
@@ -112,11 +120,12 @@ export const scheduleAppointment = async (appointmentData) => {
     return await response.json();
 };
 
-const API_URL = apiUrl + '/api/appointment';
 
 export const fetchOwners = async (token) => {
 
-    const API_URL = apiUrl +'/api/appointment';
+    const apiUrl = process.env.REACT_APP_API_URL;
+    const API_URL = apiUrl + '/api/appointment';
+
     try {
         const response = await fetch(`${API_URL}/get-all-owner-linked-to-sitter`, {
             method: 'GET',
@@ -134,6 +143,10 @@ export const fetchOwners = async (token) => {
 };
 
 export const fetchDogs = async (ownerId, page, token) => {
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+    const API_URL = apiUrl + '/api/appointment';
+
     try {
         const response = await fetch(`${API_URL}/all-dog-owner/?ownerId=${ownerId}&page=${page}&size=6`, {
             method: 'GET',
@@ -151,6 +164,10 @@ export const fetchDogs = async (ownerId, page, token) => {
 };
 
 export const scheduleAppointmentSitter = async (appointmentData) => {
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+    const API_URL = apiUrl + '/api/appointment';
+
     try {
         const token = localStorage.getItem('authToken');
         const response = await fetch(`${API_URL}/schedule-appointment`, {
@@ -171,6 +188,9 @@ export const scheduleAppointmentSitter = async (appointmentData) => {
 
 
 export const fetchDogsOwner = async (currentPage) => {
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     try {
         const token = localStorage.getItem('authToken');
         const response = await fetch(apiUrl + `/api/dog/all-dog-owner?page=${currentPage}&size=6`, {
@@ -191,6 +211,8 @@ export const fetchDogsOwner = async (currentPage) => {
 };
 
 export const fetchAppointmentDetails = async (idAppointment) => {
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     try {
         const token = localStorage.getItem('authToken');
         const response = await fetch(apiUrl + `/api/appointment/detail/${idAppointment}`, {
@@ -211,6 +233,9 @@ export const fetchAppointmentDetails = async (idAppointment) => {
 };
 
 export const fetchAllDogsInAppointment = async (idAppointment,currentPage )=>{
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     try {
         const token = localStorage.getItem('authToken');
         const response = await fetch(apiUrl  +`/api/appointment/all-dog-in-appointment/${idAppointment}?page=${currentPage}&size=6`, {
@@ -232,6 +257,9 @@ export const fetchAllDogsInAppointment = async (idAppointment,currentPage )=>{
 }
 
 export const acceptAppointment = async (idAppointment )=>{
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     try {
         const token = localStorage.getItem('authToken');
         const response = await fetch(apiUrl + `/api/appointment/accept/${idAppointment}`, {
@@ -252,6 +280,9 @@ export const acceptAppointment = async (idAppointment )=>{
 }
 
 export const refuseAppointment = async (idAppointment )=>{
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     try {
         const token = localStorage.getItem('authToken');
         const response = await fetch(apiUrl + `/api/appointment/reject/${idAppointment}`, {
@@ -272,6 +303,9 @@ export const refuseAppointment = async (idAppointment )=>{
 }
 
 export const cancelAppointment = async (idAppointment) => {
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     try {
         const token = localStorage.getItem('authToken');
         const response = await fetch(apiUrl + `/api/appointment/cancel/${idAppointment}`, {

@@ -13,7 +13,7 @@ import PetOwned from "./Detail/PetOwned";
 import Skill from "./Detail/Skill";
 import Service from "./Detail/Service";
 import { useParams } from 'react-router-dom';
-import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component from react-bootstrap
+import Spinner from 'react-bootstrap/Spinner';
 
 const Profile = (props) => {
     const [profile, setProfile] = useState(null);
