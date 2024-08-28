@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import mainImage from '../assets/mainImageHome.svg';
 
@@ -45,11 +45,16 @@ const WelcomeContent = ({ setUser }) => {
         });
     };
 
+    useEffect(() => {
+        localStorage.clear();
+
+    }, []);
+
     return (
         <div className="row justify-content-md-center">
             <div className="jumbotron jumbotron-fluid">
                 <div className="container">
-                    <div className="row mainLoginBg p-md-5 m-5 p-3">
+                    <div className="row mainLoginBg p-md-5 m-md-5 m-3  p-3">
                         <div className="col-md-6 col-12" >
                             <h1>
                                 Welcome back to PawPal

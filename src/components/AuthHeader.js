@@ -110,7 +110,7 @@ function AuthHeader({ logout }) {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse overlay" id="smallScreenNav">
-                        <ul className="navbar-nav mx-auto">
+                        <ul className="navbar-nav mx-auto p-4 p-md-0">
                             <li className="nav-item"><Link to="/auth" className="nav-link">Home</Link></li>
                             <li className="nav-item"><Link to="/appointment" className="nav-link">Appointment</Link>
                             </li>
