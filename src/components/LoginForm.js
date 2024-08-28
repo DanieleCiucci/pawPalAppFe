@@ -6,7 +6,7 @@ class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            active: "login", // Tracks the active form (login/register)
+            active: "login",
             firstName: "",
             lastName: "",
             login: "",

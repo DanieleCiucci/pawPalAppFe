@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import mainImage from '../assets/mainImageHome.svg';
+// import mainImage from '../assets/mainImageHome.svg';
+
+import mainImage2 from '../assets/image2.svg'
 import LoginFormWrapper from './LoginForm';
 import { request, setAuthToken } from "../axios_helper";
 
@@ -63,7 +65,7 @@ const WelcomeContent = ({ setUser }) => {
 
                         <div className="col-6 d-none d-md-flex">
                             <img
-                                src={mainImage}
+                                src={mainImage2}
                                 alt="Background Footer"
                                 className="loginImg"
                             />
