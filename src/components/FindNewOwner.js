@@ -8,7 +8,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import marker from '../assets/pin.svg';
 import { Icon } from 'leaflet';
 import { useNavigate } from "react-router-dom";
-import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component from react-bootstrap
+import Spinner from 'react-bootstrap/Spinner';
 
 const popUpIcon = new Icon({
     iconUrl: marker,
